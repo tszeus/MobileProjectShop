@@ -2,20 +2,30 @@ import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, {useState, useEffect} from "react";
 import CategoryHome from "./CategoryHome";
-import TypesProducts from "./TypesProducts";
 // import BottomNav from "../../navigation/ShopBottomNav";
 import { typesProduct } from "../../db";
+import axios from "axios";
+import { Config } from "../../config/Config";
+import ProductList from "../base/ProductList";
 const Home = ({ navigation }) => {
-	const [data, setData] = useState({});
-    const [types , setTypes] = useState(['Nike', 'Puma', 'Adidas', 'Vans'])
-	useEffect(() => {
+	const [data, setData] = useState({}); // data products
+    const [types , setTypes] = useState(['Nike', 'Puma', 'Adidas', 'Vans']) // Mảng type
+	useEffect(async () => {
+
+        try {
+            var res = await axios.get(`${Config.BaseUrl}category`)
+            setTypes(res.data);
+        } catch (error) {
+            console.error(error)
+        }
         types.forEach(type => {
             setData((prev) => ({
                 ...prev,
-                [type]: typesProduct[type]
+                [type.name]: typesProduct[type.name]
             }));
         });
 	}, []);
+
 	return (
 		<View style={styles.homePage}>
 			<View style={styles.homeSearch}>
@@ -32,7 +42,7 @@ const Home = ({ navigation }) => {
 				style={{ marginBottom: 250 }}
 			>
 				{types.map(item => 
-                    <TypesProducts key={item._id} data={data[item]} btnSeeMore={true} horizontal={true} type={item} />
+                    <ProductList key={item._id} data={data[item.name]} btnSeeMore={true} horizontal={true} type={item.name} />
                 )}
 			</ScrollView>
 			{/* <BottomNav /> */}

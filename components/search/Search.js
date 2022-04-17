@@ -16,19 +16,38 @@ const Search = ({ navigation }) => {
 	const textInputRef = useRef(null);
 	const isFocused = useIsFocused();
 
+    /**
+     * Xử lý khi input thay đổi
+     * @param {*} param0 
+     * @author: PVTRONG (17/4/2022)
+     */
 	const handleChange = ({ nativeEvent }) => {
 		const { text } = nativeEvent;
 		setKeyword(text);
 		debounceSearch(text);
 	};
+
+    /**
+     * reload lại khi dữ liệu bị thay đổi
+     * @author: PVTRONG (17/4/2022)
+     */
 	const reloadScreen = function () {
 		handleSearch(keyword);
 	};
 
+    /**
+     * debounce search
+     * @author: PVTRONG (17/4/2022)
+     */
 	const debounceSearch = useRef(
 		_.debounce((nextValue) => handleSearch(nextValue), 1000)
 	).current;
 
+    /**
+     * Gọi api search
+     * @param {*} value keyword 
+     * @author: PVTRONG (17/4/2022)
+     */
 	const handleSearch = async (value) => {
 		try {
 			var queryStr = Convert.objectToQueryString({
@@ -43,9 +62,15 @@ const Search = ({ navigation }) => {
 		}
 	};
     console.log(notFound)
+
+    /**
+     * Xử lý focus input mỗi khi màn hình được focus
+     */
 	useEffect(async () => {
 		textInputRef.current.focus();
 	}, [isFocused]);
+
+    
 	return (
 		<>
 			<View style={styles.searchPage}>

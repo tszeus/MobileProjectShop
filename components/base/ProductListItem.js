@@ -8,8 +8,13 @@ import {
 	Alert,
 } from "react-native";
 import axios from "axios";
+
+/**
+ * Item trong list product
+ * @param {*} param0 
+ * @returns 
+ */
 export default function ProductListItem({item, type}) {
-    console.log(item)
 	return (
 		<TouchableOpacity onPress={() => {}}>
 			<View style={styles.item}>
