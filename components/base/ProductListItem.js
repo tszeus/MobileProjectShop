@@ -14,9 +14,9 @@ import axios from "axios";
  * @param {*} param0 
  * @returns 
  */
-export default function ProductListItem({item, type}) {
+export default function ProductListItem({item, type, gap}) {
 	return (
-		<TouchableOpacity onPress={() => {}}>
+		<TouchableOpacity style={styles.productListItem} onPress={() => {}}>
 			<View style={styles.item}>
 				<View style={styles.itemImage}>
 					<Image
@@ -42,17 +42,20 @@ export default function ProductListItem({item, type}) {
 }
 
 const styles = StyleSheet.create({
+    productListItem: {
+        flex: 1
+    },  
     itemImage: { borderRadius: 5, paddingBottom: 16 },
     item: {
         borderColor: "#EBF0FF",
         borderWidth: 1,
-        width: 141,
-        // height: 238,
-        marginRight: 16,
+        marginHorizontal: 8,
         alignItems: "center",
         justifyContent: "flex-start",
         padding: 16,
         borderRadius: 8,
+        flex: 1,
+        marginHorizontal: 8
       },
       itemName: {
         color: "#223263",

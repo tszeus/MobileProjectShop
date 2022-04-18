@@ -24,7 +24,8 @@ const Home = ({ navigation }) => {
                 [type.name]: typesProduct[type.name]
             }));
         });
-	}, []);
+	}, [types]);
+
 
 	return (
 		<View style={styles.homePage}>
@@ -41,8 +42,8 @@ const Home = ({ navigation }) => {
 				// showsVerticalScrollIndicator={false}
 				style={{ marginBottom: 250 }}
 			>
-				{types.map(item => 
-                    <ProductList key={item._id} data={data[item.name]} btnSeeMore={true} horizontal={true} type={item.name} />
+				{types.map((item,index) => 
+                    <ProductList key={index} data={data[item.name]} btnSeeMore={true} horizontal={true} type={item.name} />
                 )}
 			</ScrollView>
 			{/* <BottomNav /> */}

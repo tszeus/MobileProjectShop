@@ -32,6 +32,10 @@ export default function SearchModel({ visible, data, notFound, reloadScreen }) {
 			</View>
 			<ProductList
 				data={data && data.data ? data.data : []}
+                btnSeeMore={false} 
+                horizontal={false} 
+                type={'Nike'}
+                header={false}
 				// reloadScreen={reloadScreen}
 			></ProductList>
 		</View>

@@ -55,6 +55,7 @@ const Search = ({ navigation }) => {
 			});
 			var res = await axios.get(`${Config.BaseUrl}products?${queryStr}`);
 			const data = res.data;
+            console.log(data);
 			setData(data);
 		} catch (err) {
 			setNotFound("Có lỗi xảy ra vui lòng thử lại!");
