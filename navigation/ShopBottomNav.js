@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
-import AccountScreen from "../Screens/AccountScreen";
-import CartScreen from "../Screens/CartScreen";
-import HomeScreen from "../Screens/HomeScreen";
-import SearchScreen from "../Screens/SearchScreen";
+import AccountScreen from "../screens/AccountScreen";
+import CartScreen from "../screens/CartScreen";
+import HomeScreen from "../screens/HomeScreen";
+import SearchScreen from "../screens/SearchScreen";
 // import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
@@ -61,6 +61,7 @@ function BottomNav() {
             fontSize: 14,
           },
         }}
+        q
       />
       <Tab.Screen
         name="cart"
