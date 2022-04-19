@@ -14,7 +14,7 @@ import axios from "axios";
  * @param {*} param0 
  * @returns 
  */
-export default function ProductListItem({item, type, gap}) {
+export default function ProductListItem({item, type}) {
 	return (
 		<TouchableOpacity style={styles.productListItem} onPress={() => {}}>
 			<View style={styles.item}>

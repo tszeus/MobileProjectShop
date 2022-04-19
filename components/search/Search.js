@@ -12,7 +12,7 @@ const Search = ({ navigation }) => {
 	const [keyword, setKeyword] = useState("");
 	const [data, setData] = useState([]);
 	const [notFound, setNotFound] = useState("");
-	const [visible, setVisible] = useState(true);
+	const [visible, setVisible] = useState(false);
 	const textInputRef = useRef(null);
 	const isFocused = useIsFocused();
 
@@ -55,8 +55,8 @@ const Search = ({ navigation }) => {
 			});
 			var res = await axios.get(`${Config.BaseUrl}products?${queryStr}`);
 			const data = res.data;
-            console.log(data);
 			setData(data);
+			// setVisible(true);
 		} catch (err) {
 			setNotFound("Có lỗi xảy ra vui lòng thử lại!");
 			console.log(err);
@@ -94,7 +94,7 @@ const Search = ({ navigation }) => {
 				</View>
 				<SearchModel
 					reloadScreen={reloadScreen}
-					visible={true}
+					visible={visible}
 					data={data}
 					notFound={notFound}
 				></SearchModel>

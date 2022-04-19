@@ -8,7 +8,6 @@ export default function SearchModel({ visible, data, notFound, reloadScreen }) {
 	const navigation = useNavigation();
 	const [activeSwipe, setActiveSwipe] = useState(null);
 	const isFocused = useIsFocused(false);
-	console.log("notFound: ", notFound);
 	useEffect(() => {
         // Nếu chưa gõ search
 		if (!visible) return null;
