@@ -8,7 +8,6 @@ export default function SearchModel({ visible, data, notFound, reloadScreen }) {
 	const navigation = useNavigation();
 	const [activeSwipe, setActiveSwipe] = useState(null);
 	const isFocused = useIsFocused(false);
-	console.log("notFound: ", notFound);
 	useEffect(() => {
         // Nếu chưa gõ search
 		if (!visible) return null;
@@ -32,6 +31,10 @@ export default function SearchModel({ visible, data, notFound, reloadScreen }) {
 			</View>
 			<ProductList
 				data={data && data.data ? data.data : []}
+                btnSeeMore={false} 
+                horizontal={false} 
+                type={'Nike'}
+                header={false}
 				// reloadScreen={reloadScreen}
 			></ProductList>
 		</View>
