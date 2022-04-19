@@ -7,7 +7,6 @@ import {
   Image,
   Alert,
 } from "react-native";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 /**
@@ -22,6 +21,7 @@ export default function ProductListItem({ item, type }) {
       onPress={() => {
         navigation.navigate("ProductDetail");
       }}
+       style={styles.productListItem} 
     >
       <View style={styles.item}>
         <View style={styles.itemImage}>
@@ -53,21 +53,19 @@ export default function ProductListItem({ item, type }) {
 
 const styles = StyleSheet.create({
     productListItem: {
-        flex: 1
+        flex: 1,
+        marginBottom: 16
     },  
     itemImage: { borderRadius: 5, paddingBottom: 16 },
     item: {
         borderColor: "#EBF0FF",
         borderWidth: 1,
-        marginHorizontal: 8,
         alignItems: "center",
         justifyContent: "flex-start",
-        padding: 16,
         borderRadius: 8,
         flex: 1,
         marginHorizontal: 8,
         // height: 238,
-        marginRight: 16,
       },
       itemName: {
         color: "#223263",

@@ -51,11 +51,10 @@ const Search = ({ navigation }) => {
 	const handleSearch = async (value) => {
 		try {
 			var queryStr = Convert.objectToQueryString({
-				q: value,
+				name: value,
 			});
-			var res = await axios.get(`${Config.BaseUrl}products?${queryStr}`);
-			const data = res.data;
-			setData(data);
+			var res = await axios.get(`${Config.BaseUrl}search?${queryStr}`);
+			setData(res.data);
 			// setVisible(true);
 		} catch (err) {
 			setNotFound("Có lỗi xảy ra vui lòng thử lại!");

@@ -48,7 +48,7 @@ const Home = ({ navigation }) => {
       <View style={styles.category}>
         <CategoryHome navigation={navigation} data={data} horizontal={true} />
       </View>
-      <ScrollView style={{ marginBottom: 250 }}>
+      <ScrollView style={{ marginBottom: 250, paddingHorizontal: 8 }}>
         {isLoading ? (
           <ActivityIndicator />
         ) : (
