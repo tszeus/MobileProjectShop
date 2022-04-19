@@ -1,67 +1,31 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-const CategoryHome = ({ navigation }) => {
+const CategoryHome = ({ navigation, data, horizontal }) => {
+  const types = [
+    { name: "Nike", url: require("../../static/images/nike.png") },
+    { name: "Puma", url: require("../../static/images/puma.png") },
+    { name: "Adidas", url: require("../../static/images/adidas.png") },
+    { name: "Vans", url: require("../../static/images/vans.png") },
+  ];
   return (
     <View style={styles.category}>
       <Text style={styles.heading}>Category</Text>
       <View style={styles.categoryList}>
-        <TouchableOpacity
-          style={styles.categoryItem}
-          onPress={() => {
-            navigation.navigate("TypeFullProduct");
-          }}
-        >
-          <View>
-            <Image
-              style={{ height: 50, width: 50 }}
-              source={require("../../static/images/simple-icons_nike.png")}
-            />
-          </View>
-          <Text style={styles.categoryText}>Nike</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.categoryItem}
-          onPress={() => {
-            navigation.navigate("TypeFullProduct");
-          }}
-        >
-          <View>
-            <Image
-              style={{ height: 50, width: 50 }}
-              source={require("../../static/images/pumalogo.png")}
-            />
-          </View>
-          <Text style={styles.categoryText}>Puma</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.categoryItem}
-          onPress={() => {
-            navigation.navigate("TypeFullProduct");
-          }}
-        >
-          <View>
-            <Image
-              style={{ height: 50, width: 50 }}
-              source={require("../../static/images/simple-icons_adidas.png")}
-            />
-          </View>
-          <Text style={styles.categoryText}>Adidas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.categoryItem}
-          onPress={() => {
-            navigation.navigate("TypeFullProduct");
-          }}
-        >
-          <View>
-            <Image
-              style={{ height: 50, width: 50 }}
-              source={require("../../static/images/Vans-logo.png")}
-            />
-          </View>
-          <Text style={styles.categoryText}>Vans</Text>
-        </TouchableOpacity>
+        {types.map((type, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.categoryItem}
+            onPress={() => {
+              navigation.navigate("TypeFullProduct", { data, horizontal });
+            }}
+          >
+            <View>
+              <Image style={{ height: 50, width: 50 }} source={type.url} />
+            </View>
+            <Text style={styles.categoryText}>{type.name}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );

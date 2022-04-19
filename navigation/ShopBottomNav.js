@@ -61,6 +61,7 @@ function BottomNav() {
             fontSize: 14,
           },
         }}
+        q
       />
       <Tab.Screen
         name="cart"
