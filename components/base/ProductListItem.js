@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import StarRating from "react-native-star-rating";
 
 /**
  * Item trong list product
@@ -20,21 +21,32 @@ export default function ProductListItem({ item, type }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("ProductDetail");
+        navigation.navigate("ProductDetail", { item });
       }}
+      style={styles.productItem}
     >
       <View style={styles.item}>
         <View style={styles.itemImage}>
           <Image
-            style={{ height: 109, width: 109, borderRadius: 5 }}
+            style={{ height: 148, width: 148, borderRadius: 6 }}
             source={{
-              uri: `https://sever-mobile-1.herokuapp.com${item.images[0]}`,
+              uri: item.images[0],
             }}
           />
         </View>
         <View style={styles.itemDisc}>
           <View>
             <Text style={styles.itemName}>{`${type} Product`}</Text>
+          </View>
+          <View style={styles.rating}>
+            <StarRating
+              disabled={true}
+              maxStars={5}
+              rating={3.5}
+              starSize={13}
+              starStyle={{}}
+              fullStarColor={"#ffce3d"}
+            />
           </View>
           <View>
             <Text style={styles.itemPrice}>{`$${item.price}`}</Text>
@@ -52,30 +64,38 @@ export default function ProductListItem({ item, type }) {
 }
 
 const styles = StyleSheet.create({
+  productItem: { marginBottom: 16, justifyContent: "space-around" },
   itemImage: { borderRadius: 5, paddingBottom: 16 },
+  itemDisc: { justifyContent: "flex-start" },
   item: {
     borderColor: "#EBF0FF",
     borderWidth: 1,
-    width: 141,
+    width: 180,
     // height: 238,
     marginRight: 16,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    // alignItems: "center",
+    // justifyContent: "flex-start",
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   itemName: {
     color: "#223263",
     fontWeight: "bold",
-    marginBottom: 12,
+    marginBottom: 8,
+    fontSize: 16,
   },
+  rating: { width: 80, marginBottom: 8 },
   itemPrice: {
     color: "#40BFFF",
     fontWeight: "bold",
   },
-  saleBox: { flexDirection: "row", marginTop: 12, justifyContent: "center" },
+  saleBox: {
+    flexDirection: "row",
+    marginTop: 12,
+    justifyContent: "space-between",
+  },
   itemOldPrice: {
-    fontSize: 12,
+    fontSize: 13,
     justifyContent: "center",
     alignContent: "center",
     marginRight: 12,
@@ -83,7 +103,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
   },
   itemSaleOff: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#FB7181",
     fontWeight: "bold",
   },

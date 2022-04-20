@@ -1,29 +1,48 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-const CategoryHome = ({ navigation, data, horizontal }) => {
-  const types = [
-    { name: "Nike", url: require("../../static/images/nike.png") },
-    { name: "Puma", url: require("../../static/images/puma.png") },
-    { name: "Adidas", url: require("../../static/images/adidas.png") },
-    { name: "Vans", url: require("../../static/images/vans.png") },
+const CategoryHome = ({ navigation, types }) => {
+  const categoryUrls = [
+    {
+      name: "Nike",
+      url: require("../../static/images/nike.png"),
+    },
+    {
+      name: "Puma",
+      url: require("../../static/images/puma.png"),
+    },
+    {
+      name: "Adidas",
+      url: require("../../static/images/adidas.png"),
+    },
+    {
+      name: "Vans",
+      url: require("../../static/images/vans.png"),
+    },
   ];
+
   return (
     <View style={styles.category}>
       <Text style={styles.heading}>Category</Text>
       <View style={styles.categoryList}>
-        {types.map((type, index) => (
+        {categoryUrls.map((categoryUrl, index) => (
           <TouchableOpacity
             key={index}
             style={styles.categoryItem}
             onPress={() => {
-              navigation.navigate("TypeFullProduct", { data, horizontal });
+              navigation.navigate("TypeFullProduct", {
+                type: categoryUrl.name,
+                data: types,
+              });
             }}
           >
             <View>
-              <Image style={{ height: 50, width: 50 }} source={type.url} />
+              <Image
+                style={{ height: 50, width: 50 }}
+                source={categoryUrl.url}
+              />
             </View>
-            <Text style={styles.categoryText}>{type.name}</Text>
+            <Text style={styles.categoryText}>{categoryUrl.name}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -40,7 +59,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: "#223263",
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
     textAlign: "center",
   },
@@ -53,5 +72,6 @@ const styles = StyleSheet.create({
   categoryText: {
     color: "#9098B1",
     textAlign: "center",
+    fontSize: 14,
   },
 });

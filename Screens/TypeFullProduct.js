@@ -2,9 +2,23 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
-import TypeList from "../components/home/TypeList";
+import CategoryProduct from "../components/home/CategoryProduct";
 
 const TypeFullProduct = ({ navigation, route }) => {
+  const { data, type } = route.params;
+  const renderProducts = data.map((item, index) => {
+    if (item.name === type) {
+      return (
+        <CategoryProduct
+          navigation={navigation}
+          type={item}
+          key={index}
+          horizontal={false}
+        />
+      );
+    }
+  });
+  renderProducts;
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -14,9 +28,9 @@ const TypeFullProduct = ({ navigation, route }) => {
         style={styles.goBackBox}
       >
         <MaterialIcons name="arrow-back-ios" style={styles.goBackIcon} />
-        <Text style={styles.categoryName}>Nike</Text>
+        <Text style={styles.categoryName}>{route.params.type}</Text>
       </TouchableOpacity>
-      <TypeList data={route.params.data} horizontal={route.params.horizontal} />
+      <View style={styles.products}>{renderProducts}</View>
     </View>
   );
 };
@@ -33,18 +47,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    height: 80,
+    height: 70,
     borderBottomColor: "#EBF0FF",
     borderBottomWidth: 1,
     paddingHorizontal: 16,
+    marginTop: 5,
   },
   goBackIcon: {
     fontSize: 16,
     color: "#9098B1",
   },
   categoryName: {
-    fontSize: 16,
+    fontSize: 17,
     color: "#223263",
     fontWeight: "bold",
+    marginLeft: 5,
+  },
+  products: {
+    padding: 16,
   },
 });

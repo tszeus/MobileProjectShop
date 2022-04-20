@@ -2,11 +2,11 @@ import HomeScreen from "../screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TypeFullProduct from "../screens/TypeFullProduct";
 import ProductListItem from "../components/base/ProductListItem";
-import ProductDetail from "../components/base/ProductDetail";
+import ProductDetail from "../components/base/detail/ProductDetail";
 
 const Stacks = createNativeStackNavigator();
 
-function CategoryNav() {
+function HomeNav() {
   return (
     <Stacks.Navigator screenOptions={{ headerShown: false }}>
       <Stacks.Screen name="Home" component={HomeScreen} />
@@ -16,4 +16,4 @@ function CategoryNav() {
   );
 }
 
-export default CategoryNav;
+export default HomeNav;

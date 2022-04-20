@@ -9,13 +9,12 @@ import SearchScreen from "../screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CategoryNav from "./CategoryNav";
+import HomeNav from "./HomeNav";
 // import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
 
 function BottomNav() {
-  // console.log(navigation);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -39,12 +38,11 @@ function BottomNav() {
           paddingBottom: 10,
           height: 70,
         },
-        // tabBarla
       })}
     >
       <Tab.Screen
         name="home"
-        component={CategoryNav}
+        component={HomeNav}
         options={{
           tabBarLabel: "Home",
           tabBarLabelStyle: {

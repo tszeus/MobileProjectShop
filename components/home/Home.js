@@ -1,36 +1,33 @@
-import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState, useEffect } from "react";
 import CategoryHome from "./CategoryHome";
-// import BottomNav from "../../navigation/ShopBottomNav";
-import { typesProduct } from "../../db";
-import axios from "axios";
-import { Config } from "../../config/Config";
-import ProductList from "../base/ProductList";
 import { ActivityIndicator } from "react-native-paper";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import homeApi from "../api/homeApi";
+import CategoryProduct from "./CategoryProduct";
 const Home = ({ navigation }) => {
-  const [types, setTypes] = useState(["Nike", "Puma", "Adidas", "Vans"]); // Mảng type
-  const [data, setData] = useState([]); // data products
+  const [types, setTypes] = useState([]); // Mảng type
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    getData();
-    return () => {};
+    fetchTypes();
   }, []);
-  const getData = async () => {
-    const apiURL = `${Config.BaseUrl}category/`;
-    fetch(apiURL)
-      .then((res) => res.json())
-      .then((resJson) => {
-        setData(resJson);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
+  const fetchTypes = async () => {
+    try {
+      const categoriesResponse = await homeApi.getProductsHome().finally(() => {
         setIsLoading(false);
       });
+      setTypes(categoriesResponse);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <View style={styles.homePage}>
@@ -46,26 +43,41 @@ const Home = ({ navigation }) => {
         />
       </View>
       <View style={styles.category}>
-        <CategoryHome navigation={navigation} data={data} horizontal={true} />
+        <CategoryHome navigation={navigation} types={types} />
       </View>
-      <ScrollView style={{ marginBottom: 250 }}>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <View>
-            {data.map((item, index) => (
-              <ProductList
+      {!isLoading ? (
+        <FlatList
+          // style={{ marginBottom: 250 }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item._id}
+          data={types}
+          renderItem={(item) => (
+            <View>
+              <View style={styles.productHeading}>
+                <Text style={styles.productName}>{item.item.name}</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("TypeFullProduct", {
+                      type: item.item.name,
+                      data: types,
+                    });
+                  }}
+                >
+                  <Text style={styles.productSeeMore}>See More</Text>
+                </TouchableOpacity>
+              </View>
+              <CategoryProduct
                 navigation={navigation}
-                key={index}
-                id={item?._id}
+                type={item.item}
                 horizontal={true}
-                type={item.name}
               />
-            ))}
-          </View>
-        )}
-      </ScrollView>
-      {/* <BottomNav /> */}
+            </View>
+          )}
+        />
+      ) : (
+        <ActivityIndicator />
+      )}
     </View>
   );
 };
@@ -74,7 +86,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   homePage: {
-    // flex: 1,
+    flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     paddingTop: 50,
@@ -96,5 +108,21 @@ const styles = StyleSheet.create({
   },
   category: {
     // position: "absolute",
+  },
+  productHeading: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  productName: {
+    fontSize: 17,
+    color: "#223263",
+    fontWeight: "bold",
+  },
+  productSeeMore: {
+    fontSize: 16,
+    color: "#40BFFF",
+    fontWeight: "bold",
   },
 });
