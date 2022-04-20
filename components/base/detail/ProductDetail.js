@@ -97,7 +97,7 @@ const ProductDetail = ({ route }) => {
               color: "#9098B1",
               lineHeight: 22,
               textAlign: "left",
-              letterSpacing: 0.7,
+              letterSpacing: 0.6,
             }}
           >
             The Nike Air Max 270 React ENG combines a full-length React foam
