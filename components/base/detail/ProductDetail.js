@@ -66,7 +66,7 @@ const ProductDetail = ({ route }) => {
               <Text style={styles.shown}>Shown:</Text>
 
               <Text style={styles.type}>
-                Laser Blue/Anthracite/Watermelon/White
+                Laser Blue/Anthracite/Watermelon/White/Yellow
               </Text>
             </View>
             <View
