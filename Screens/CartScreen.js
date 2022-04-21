@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View,ScrollView } from "react-native";
 import React from "react";
+import Cart from "../components/cart";
 
 const CartScreen = () => {
   return (
-    <View>
-      <Text>CartScreen</Text>
-    </View>
+    <ScrollView  style={{flex:1,paddingBottom:80,backgroundColor:'white'}}>
+      <Cart />
+    </ScrollView>
   );
 };
 
