@@ -16,18 +16,28 @@ const _ = require("lodash");
 import { useIsFocused } from "@react-navigation/native";
 import { Config } from "../../config/Config";
 import { Convert } from "../../utils/Convert";
-import { useNavigation, useRoute  } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { SortEnum } from "../../commons/enums/sort.enum";
+import Sort from "./Sort";
+import Filter from "./Filter";
 
 const Search = (clean = false) => {
-    const navigation = useNavigation();
-    const route = useRoute();
+	const navigation = useNavigation();
+	const route = useRoute();
 	const [keyword, setKeyword] = useState("");
 	const [data, setData] = useState([]);
 	const [notFound, setNotFound] = useState("");
 	const [visible, setVisible] = useState(false);
+	const [isShowSort, setIsShowSort] = useState(false);
+	const [isShowFilter, setIsShowFilter] = useState(false);
+	const [sortBy, setSortBy] = useState(SortEnum.TimeAsc);
+	const [preSortBy, setPreSortBy] = useState(SortEnum.TimeAsc);
+	const [preMin, setPreMin] = useState(null);
+	const [preMax, setPreMax] = useState(null);
+	const [min, setMin] = useState(null);
+	const [max, setMax] = useState(null);
 	const textInputRef = useRef(null);
 	const isFocused = useIsFocused();
-
 	/**
 	 * Xử lý khi input thay đổi
 	 * @param {*} param0
@@ -47,14 +57,20 @@ const Search = (clean = false) => {
 		handleSearch(keyword);
 	};
 
-    /**
-     * clean screen mỗi lần focus vào màn
-     */
-    const cleanScreen = function(){
-        setData([]);
-        setKeyword("")
-        setVisible(false)
-    }
+	/**
+	 * clean screen mỗi lần focus vào màn
+	 */
+	const cleanScreen = function () {
+		setData([]);
+		setKeyword("");
+        setMax(null);
+        setMin(null);
+        setPreMax(null);
+        setPreMin(null);
+        setPreSortBy(SortEnum.TimeAsc);
+        setSortBy(SortEnum.TimeAsc);
+		setVisible(false);
+	};
 
 	/**
 	 * debounce search
@@ -73,6 +89,9 @@ const Search = (clean = false) => {
 		try {
 			var queryStr = Convert.objectToQueryString({
 				name: value,
+				sort_by: sortBy,
+                min: min,
+                max: max
 			});
 			var res = await axios.get(`${Config.BaseUrl}search?${queryStr}`);
 			setData(res.data);
@@ -88,13 +107,34 @@ const Search = (clean = false) => {
 	 * Xử lý focus input mỗi khi màn hình được focus
 	 */
 	useEffect(async () => {
-        if(clean) cleanScreen();
+		if (clean) cleanScreen();
 		textInputRef.current.focus();
 	}, [isFocused]);
+
+    /**
+	 * Xử lý focus input mỗi khi màn hình được focus
+	 */
+	useEffect(async () => {
+		if (preSortBy != sortBy || min != preMin || preMax != max) {
+			reloadScreen();
+            setPreSortBy(sortBy)
+            setPreSortBy(min)
+            setPreSortBy(max)
+		}
+	}, [isShowSort, isShowFilter]);
 
 	return (
 		<>
 			<View style={styles.searchPage}>
+				{isShowSort && (
+					<Sort
+						setIsShowSort={setIsShowSort}
+						setSortBy={setSortBy}
+						sortBy={sortBy}
+						isShowSort={isShowSort}
+					></Sort>
+				)}
+				{isShowFilter && <Filter min={min} max={max} setMin={setMin} setMax={setMax} setIsShowFilter={setIsShowFilter}></Filter>}
 				<View style={styles.searchBoxAndFilter}>
 					<View style={styles.searchBox}>
 						<View style={styles.searchIcon}>
@@ -122,7 +162,9 @@ const Search = (clean = false) => {
 					</View>
 					{visible && (
 						<Icon
-							onPress={() => {navigation.navigate('Sort',)}}
+							onPress={() => {
+								setIsShowSort(true);
+							}}
 							style={styles.sort}
 							name="sort-ascending"
 						></Icon>
@@ -130,8 +172,8 @@ const Search = (clean = false) => {
 					{visible && (
 						<Icon
 							onPress={() => {
-                                navigation.navigate("Filter");
-                            }}
+								setIsShowFilter(true);
+							}}
 							style={styles.filter}
 							name="filter-outline"
 						></Icon>

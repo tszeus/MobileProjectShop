@@ -10,11 +10,13 @@ import { useIsFocused } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { SortTextConstant } from "../../commons/constants/sort.constant";
+import { SortEnum } from "../../commons/enums/sort.enum";
 
-const Sort = () => {
+const Sort = ({setIsShowSort, setSortBy, sortBy}) => {
 	const navigation = useNavigation();
 	const isFocused = useIsFocused();
-    const [activeOption, setActiveOption] = useState(0) // option đang được chọn
+
+
 	/**
 	 * Xử lý focus input mỗi khi màn hình được focus
 	 */
@@ -26,7 +28,7 @@ const Sort = () => {
 				<View style={styles.header}>
 					<TouchableOpacity
 						onPress={() => {
-							navigation.goBack();
+                            setIsShowSort(false)
 						}}
 					>
 						<Icon style={styles.navigateBack} name="navigate-before"></Icon>
@@ -36,7 +38,7 @@ const Sort = () => {
 				</View>
 				<View style={styles.body}>
 					{SortTextConstant.map((item, index) => (
-						<TouchableOpacity onPress={() => {setActiveOption(item.enum)}} style={[styles.optionSort, item.enum == activeOption && styles.activeOptionSort]} key={index}>
+						<TouchableOpacity onPress={() => {setSortBy(item.enum)}} style={[styles.optionSort, item.enum == sortBy && styles.activeOptionSort]} key={index}>
                             <Text style={styles.textSort}>{item.name}</Text>
                         </TouchableOpacity>
 					))}
@@ -52,9 +54,6 @@ const styles = StyleSheet.create({
 	wrapper: {
 		backgroundColor: "#fff",
 		height: "100%",
-	},
-	container: {
-		marginTop: 26,
 	},
 	header: {
 		height: "30%",

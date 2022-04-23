@@ -1,13 +1,13 @@
 export const SortEnum = {
     // Thời gian tăng dần
-    TimeAsc: 0,
+    TimeAsc: 'createdAt_asc',
 
     // Thời gian giảm dần
-    TimeDes: 1,
+    TimeDes: 'createdAt_desc',
 
     // Giá tăng dần
-    PriceAsc: 2,
+    PriceAsc: 'price_asc',
 
     // Giá giảm dần
-    PriceDes: 3
+    PriceDes: 'price_desc'
 }
