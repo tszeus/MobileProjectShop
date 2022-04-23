@@ -11,8 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 
 import ProductListItem from "../base/ProductListItem";
-import { Config } from "../../config/Config";
-import { useNavigation } from "@react-navigation/native";
 const ProductList = ({
 	navigation,
 	type,
@@ -24,7 +22,6 @@ const ProductList = ({
 	header = true,
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	console.log(data);
 	return (
 		<View style={styles.nikeProduct}>
 			<View style={styles.productHeading}>

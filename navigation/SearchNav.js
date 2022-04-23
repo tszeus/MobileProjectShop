@@ -1,15 +1,18 @@
 import SearchScreen from "../screens/SearchScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../components/home/Home";
+import Sort from "../components/search/Sort";
+import Filter from "../components/search/Filter";
 
 const Stacks = createNativeStackNavigator();
 
-function SearchNav() {
+function SearchNav({route}) {
   return (
     <Stacks.Navigator screenOptions={{ headerShown: false }}>
-      <Stacks.Screen name="Search" component={SearchScreen} />
+      <Stacks.Screen clean={route?.params?.clean} name="Search" component={SearchScreen} />
+      <Stacks.Screen name="Sort" component={Sort} />
+      <Stacks.Screen name="Filter" component={Filter} />
     </Stacks.Navigator>
   );
 }
 
-export default CategoryNav;
+export default SearchNav;

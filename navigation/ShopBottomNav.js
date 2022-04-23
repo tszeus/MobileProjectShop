@@ -10,6 +10,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CategoryNav from "./CategoryNav";
+import SearchNav from "./SearchNav";
 // import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
@@ -54,7 +55,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="search"
-        component={SearchScreen}
+        component={SearchNav}
         options={{
           tabBarLabel: "Search",
           tabBarLabelStyle: {
