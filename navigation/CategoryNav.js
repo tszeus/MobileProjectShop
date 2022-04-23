@@ -1,8 +1,9 @@
-import HomeScreen from "../screens/HomeScreen";
+// import HomeScreen from "../screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import TypeFullProduct from "../screens/TypeFullProduct";
-import ProductListItem from "../components/base/ProductListItem";
-import ProductDetail from "../components/base/ProductDetail";
+import TypeFullProduct from "./../Screens/TypeFullProduct";
+import ProductListItem from "./../components/base/ProductListItem";
+import ProductDetail from "./../components/base/ProductDetail";
+import HomeScreen from "./../Screens/HomeScreen";
 
 const Stacks = createNativeStackNavigator();
 

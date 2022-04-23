@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, Text, StyleSheet, View, CheckBox } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { CheckBox } from "react-native-elements";
+import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
 
-function Cart({ navigation }) {
+function Cart() {
+  const navigation = useNavigation();
   const listCart = [
     {
       _id: "1",
@@ -49,9 +53,79 @@ function Cart({ navigation }) {
       color: "red",
       userId: "1234",
     },
+    {
+      _id: "4",
+      product: {
+        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        price: 123,
+        images: [
+          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
+        ],
+        _id: "ooook",
+      },
+      quantity: 3,
+      size: 45,
+      color: "red",
+      userId: "1234",
+    },
+    {
+      _id: "5",
+      product: {
+        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        price: 123,
+        images: [
+          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
+        ],
+        _id: "ooook",
+      },
+      quantity: 3,
+      size: 45,
+      color: "red",
+      userId: "1234",
+    },
+    {
+      _id: "6",
+      product: {
+        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        price: 123,
+        images: [
+          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
+        ],
+        _id: "ooook",
+      },
+      quantity: 3,
+      size: 45,
+      color: "red",
+      userId: "1234",
+    },
+    {
+      _id: "7",
+      product: {
+        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        price: 123,
+        images: [
+          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
+        ],
+        _id: "ooook",
+      },
+      quantity: 3,
+      size: 45,
+      color: "red",
+      userId: "1234",
+    },
   ];
   const [listPayment, setListPayment] = useState([]);
   const [isSelectAll, setSelectAll] = useState(false);
+  const totalItems = listPayment.reduce((totalItems, item) => {
+    return (
+      totalItems + listCart.find((cartItem) => cartItem._id === item)?.quantity
+    );
+  }, 0);
+  const totalPrice = listPayment.reduce((totalPrice, item) => {
+    const currentItem = listCart.find((cartItem) => cartItem._id === item);
+    return totalPrice + currentItem?.product.price * currentItem.quantity;
+  }, 0);
+
   const addListPayment = (cartItem) => {
     if (!listPayment.includes(cartItem)) {
       setListPayment([...listPayment, cartItem]);
@@ -61,7 +135,9 @@ function Cart({ navigation }) {
     const newListPayment = listPayment.filter((item) => item !== paymentItem);
     setListPayment(newListPayment);
   };
-  console.log(listPayment);
+  const handleCheckOut = () => {
+    navigation.navigate("ShipTo");
+  };
   useEffect(() => {
     if (isSelectAll) {
       let listPayment = [];
@@ -70,9 +146,9 @@ function Cart({ navigation }) {
       }
       setListPayment(listPayment);
     } else {
-     if(listPayment.length === listCart.length){
-      setListPayment([]);
-     }
+      if (listPayment.length === listCart.length) {
+        setListPayment([]);
+      }
     }
   }, [isSelectAll]);
   useEffect(() => {
@@ -82,15 +158,12 @@ function Cart({ navigation }) {
       setSelectAll(true);
     }
   }, [listPayment]);
-  return (
+  return listCart.length > 0 ? (
     <View style={styles.container}>
-      <View style={styles.headerCart}>
-        <Text style={styles.title}>Your Cart</Text>
-      </View>
       <View style={styles.checkboxContainer}>
         <CheckBox
-          value={isSelectAll}
-          onValueChange={setSelectAll}
+          checked={isSelectAll}
+          onPress={() => setSelectAll(!isSelectAll)}
           style={styles.checkbox}
         />
         <Text style={styles.label}>Chọn tất cả</Text>
@@ -104,39 +177,27 @@ function Cart({ navigation }) {
         addListPayment={addListPayment}
         removePayment={removePayment}
       />
-
-      <View style={styles.invoice}>
-        <View style={styles.invoiceItem}>
-          <Text style={styles.invoiceTitle}>Item(3)</Text>
-          <Text style={styles.invoiceContent}>$123</Text>
-        </View>
-        <View style={styles.invoiceItem}>
-          <Text style={styles.invoiceTitle}>Shipping</Text>
-          <Text style={styles.invoiceContent}>$123</Text>
-        </View>
-        <View style={styles.invoiceItem}>
-          <Text style={styles.invoiceTitle}>Import charges</Text>
-          <Text style={styles.invoiceContent}>$124</Text>
-        </View>
-        <View style={[styles.invoiceItem, styles.totalPrice]}>
-          <Text
-            style={[
-              styles.invoiceTitle,
-              { fontWeight: "bold", color: "#223263" },
-            ]}
-          >
-            Total Price
-          </Text>
-          <Text
-            style={[
-              styles.invoiceContent,
-              { fontWeight: "bold", color: "#40BFFF" },
-            ]}
-          >
-            $123
-          </Text>
-        </View>
+      <View style={{marginTop:10}}>
+        <CartInvoice totalItems={totalItems} totalPrice={totalPrice} />
+        <TouchableOpacity
+          onPress={() => handleCheckOut()}
+          style={styles.buttonCheckOut}
+          disabled={totalItems === 0}
+        >
+          <Text style={{ textAlign: "center", color: "white" }}>Check Out</Text>
+        </TouchableOpacity>
       </View>
+    </View>
+  ) : (
+    <View style={styles.noCart}>
+      <Text style={styles.titleNocart}>
+        Chưa có sản phẩm nào trong giỏ hàng
+      </Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <Text style={{ fontSize: 12, color: "#40BFFF" }}>
+          Quay trở lại trang chủ
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -144,11 +205,10 @@ function Cart({ navigation }) {
 export default Cart;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    flex: 1,
     backgroundColor: "white",
+   
   },
   headerCart: {
     height: 70,
@@ -160,27 +220,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 5,
   },
-  invoice: {
-    width: 343,
-    padding: 10,
-    borderColor: "#EBF0FF",
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  invoiceItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  invoiceTitle: {
-    color: "#9098B1",
-    fontSize: 12,
-  },
-  invoiceContent: {
-    fontSize: 12,
-    color: "#223263",
-  },
+
   title: {
     color: "#223263",
     fontSize: 16,
@@ -188,13 +228,32 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: "row",
-    marginLeft: -220,
+    marginLeft: -185,
     marginBottom: -10,
+    justifyContent:'center',
+    alignItems:'center'
   },
   checkbox: {
     alignSelf: "center",
   },
   label: {
-    margin: 8,
+    margin: 0,
+  },
+  buttonCheckOut: {
+    width: 343,
+    height: 57,
+    backgroundColor: "#40BFFF",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  noCart: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 200,
+  },
+  titleNocart: {
+    fontSize: 12,
   },
 });

@@ -1,21 +1,19 @@
 import React from "react";
-import { View, FlatList } from "react-native";
-import { ScrollView, Text, StyleSheet, CheckBox } from "react-native";
-
+import { FlatList } from "react-native";
 import CartItem from "./CartItem";
+
 function CartList({
   listCart,
   listPayment,
-  setListPayment,
   isSelectAll,
-  setSelectAll,
   addListPayment,
   removePayment,
 }) {
   return (
     <FlatList
-      style={{ padding: 10 }}
+      style={{ padding: 10 ,height:400}}
       data={listCart}
+      keyExtractor={(item) => item?._id}
       renderItem={({ item }) => (
         <CartItem
           unSelectAll={listCart.length === listPayment.length}

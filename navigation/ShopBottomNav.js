@@ -1,15 +1,16 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
-import AccountScreen from "../screens/AccountScreen";
-import CartScreen from "../screens/CartScreen";
-import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "../screens/SearchScreen";
+import AccountScreen from "./../Screens/AccountScreen";
+import CartScreen from "./../Screens/CartScreen";
+import HomeScreen from "./../Screens/HomeScreen";
+import SearchScreen from "./../Screens/SearchScreen";
 // import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CategoryNav from "./CategoryNav";
+import CartNav from "./CartNav";
 // import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
@@ -65,7 +66,8 @@ function BottomNav() {
       />
       <Tab.Screen
         name="cart"
-        component={CartScreen}
+        component={CartNav}
+        
         options={{
           tabBarBadge: 3,
           tabBarLabel: "Cart",
