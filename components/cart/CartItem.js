@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
-
+import { Alert, Modal, Pressable } from "react-native";
 import { useEffect } from "react";
-
 function CartItem({
   item,
   addListPayment,
@@ -13,6 +12,7 @@ function CartItem({
   unSelectAll,
 }) {
   const [isSelected, setSelection] = useState(false);
+
   useEffect(() => {
     if (!isSelected) {
       removePayment(item._id);
@@ -72,6 +72,7 @@ function CartItem({
         </TouchableOpacity>
       </View>
       <Icon style={styles.iconDelete} name="trash" size={20} color="#9098B1" />
+     
     </View>
   );
 }

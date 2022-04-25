@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View ,ScrollView} from "react-native";
 import { CheckBox } from "react-native-elements";
 import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
@@ -136,7 +136,7 @@ function Cart() {
     setListPayment(newListPayment);
   };
   const handleCheckOut = () => {
-    navigation.navigate("ShipTo");
+    navigation.navigate("Ship To");
   };
   useEffect(() => {
     if (isSelectAll) {
@@ -159,7 +159,7 @@ function Cart() {
     }
   }, [listPayment]);
   return listCart.length > 0 ? (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.checkboxContainer}>
         <CheckBox
           checked={isSelectAll}
@@ -187,7 +187,7 @@ function Cart() {
           <Text style={{ textAlign: "center", color: "white" }}>Check Out</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   ) : (
     <View style={styles.noCart}>
       <Text style={styles.titleNocart}>

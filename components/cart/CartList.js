@@ -10,12 +10,8 @@ function CartList({
   removePayment,
 }) {
   return (
-    <FlatList
-      style={{ padding: 10 ,height:400}}
-      data={listCart}
-      keyExtractor={(item) => item?._id}
-      renderItem={({ item }) => (
-        <CartItem
+   listCart.map(item => (
+<CartItem
           unSelectAll={listCart.length === listPayment.length}
           isSelectAll={isSelectAll}
           addListPayment={addListPayment}
@@ -23,8 +19,15 @@ function CartList({
           key={item._id}
           item={item}
         />
-      )}
-    />
+   ))
+    // <FlatList
+    //   style={{ padding: 10 ,height:400}}
+    //   data={listCart}
+    //   keyExtractor={(item) => item?._id}
+    //   renderItem={({ item }) => (
+        
+    //   )}
+    // />
   );
 }
 

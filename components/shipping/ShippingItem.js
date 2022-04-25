@@ -1,10 +1,28 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import { View,StyleSheet, Text,TouchableOpacity } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
+import { ShippingContext } from '.';
 
 function ShippingItem({item,isSelected,setCurrenIdShipping}) {
+  const navigation = useNavigation();
+  const {dispatch} = useContext(ShippingContext);
   const handleOnPress = () => {
   setCurrenIdShipping(item._id)
+  }
+  const handleEditShipping = () => {
+  navigation.navigate('Edit shipping',{
+    title:'Edit shipping infomation',
+    shippingItem:item
+  })
+  }
+  const handleDeleteShippingItem = () => {
+    dispatch({
+      type:'DELETE_SHIPPING',
+      payload:{
+        id:item._id
+      }
+    })
   }
   return (
   <TouchableOpacity onPress={() => handleOnPress()} style={[styles.container,{borderColor:isSelected ?'#40BFFF' : '#EBF0FF' }]}>
@@ -12,10 +30,10 @@ function ShippingItem({item,isSelected,setCurrenIdShipping}) {
      <Text numberOfLines={3} style={styles.text}>{item.address}</Text>
      <Text  style={styles.text}>{item.phoneNumber}</Text>
      <View style={styles.action}>
-       <TouchableOpacity style={styles.buttonAction}>
+       <TouchableOpacity onPress={() => handleEditShipping()} style={styles.buttonAction}>
          <Text style={{color:'white',textAlign:'center'}}>Edit</Text>
        </TouchableOpacity>
-       <Icon style={styles.iconDelete} name="trash" size={24} color="#9098B1" />
+       <Icon onPress={() => handleDeleteShippingItem()} style={styles.iconDelete} name="trash" size={24} color="#9098B1" />
      </View>
    </TouchableOpacity>
   );
