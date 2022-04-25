@@ -1,8 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import AccountScreen from "../screens/AccountScreen";
-import CartScreen from "../screens/CartScreen";
-import SearchScreen from "../screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -73,7 +70,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="account"
-        component={AccountScreen}
+        component={AccountNav}
         options={{
           tabBarLabel: "Account",
           tabBarLabelStyle: {
