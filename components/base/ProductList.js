@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import ProductListItem from "../base/ProductListItem";
+import ProductItem from "./ProductItem";
 import { Config } from "../../config/Config";
 import { useNavigation } from "@react-navigation/native";
 const ProductList = ({
@@ -49,11 +49,11 @@ const ProductList = ({
 					showsHorizontalScrollIndicator={!horizontal}
 					keyExtractor={(item) => `${item._id}`}
 					renderItem={({ item }) => (
-						<ProductListItem
+							<ProductItem
 							item={item}
 							type={type}
 							keyExtractor={(item) => item.id}
-						></ProductListItem>
+							></ProductItem>
 					)}
 				></FlatList>
 			) : (

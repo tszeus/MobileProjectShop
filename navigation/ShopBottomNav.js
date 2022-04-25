@@ -1,21 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 import AccountScreen from "../screens/AccountScreen";
 import CartScreen from "../screens/CartScreen";
-import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
-// import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import CategoryNav from "./CategoryNav";
-// import CategoryNav from "./CategoryNav";
+import { useEffect } from "react";
+import HomeNav from "./HomeNav";
 
 const Tab = createBottomTabNavigator();
 
 function BottomNav() {
-  // console.log(navigation);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -39,12 +33,11 @@ function BottomNav() {
           paddingBottom: 10,
           height: 70,
         },
-        // tabBarla
       })}
     >
       <Tab.Screen
         name="home"
-        component={CategoryNav}
+        component={HomeNav}
         options={{
           tabBarLabel: "Home",
           tabBarLabelStyle: {
