@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeNav from "./HomeNav";
 import SearchNav from "./SearchNav";
+import CartNav from "./CartNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -60,7 +61,8 @@ function BottomNav() {
       />
       <Tab.Screen
         name="cart"
-        component={CartScreen}
+        component={CartNav}
+        
         options={{
           tabBarBadge: 3,
           tabBarLabel: "Cart",
