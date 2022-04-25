@@ -1,16 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import AccountScreen from "../screens/AccountScreen";
 import CartScreen from "../screens/CartScreen";
-import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "../screens/SearchScreen";
 // import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
 import CategoryNav from "./CategoryNav";
 import SearchNav from "./SearchNav";
+import AccountNav from "./AccountNav";
 // import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
@@ -77,7 +72,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="account"
-        component={AccountScreen}
+        component={AccountNav}
         options={{
           tabBarLabel: "Account",
           tabBarLabelStyle: {
