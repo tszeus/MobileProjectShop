@@ -7,7 +7,7 @@ const AccountScreen = ({ navigation }) => {
     <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
       <TouchableOpacity
         onPress={() => {
-          navigation.popToTop();
+          navigation.navigate("Login");
         }}
       >
         <Text>Logout</Text>

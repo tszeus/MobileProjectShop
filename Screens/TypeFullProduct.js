@@ -8,14 +8,7 @@ const TypeFullProduct = ({ navigation, route }) => {
   const { data, type } = route.params;
   const renderProducts = data.map((item, index) => {
     if (item.name === type) {
-      return (
-        <CategoryProduct
-          navigation={navigation}
-          type={item}
-          key={index}
-          horizontal={false}
-        />
-      );
+      return <CategoryProduct type={item} key={index} horizontal={false} />;
     }
   });
   renderProducts;

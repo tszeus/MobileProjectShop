@@ -1,33 +1,43 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import React from "react";
 
-import ProductListItem from "../base/ProductListItem";
+import ProductItem from "./ProductItem";
 const ProductList = ({ type, horizontal, data }) => {
   return (
     <View style={styles.nikeProduct}>
-      <FlatList
-        data={data}
-        style={styles.productList}
-        showsHorizontalScrollIndicator={false}
-        numColumns={!horizontal ? 2 : 10}
-        keyExtractor={(item) => `${item._id}`}
-        renderItem={({ item }) => (
-          <ProductListItem
-            item={item}
-            type={type}
-            keyExtractor={(item) => item.id}
-          ></ProductListItem>
-        )}
-      ></FlatList>
+      {horizontal ? (
+        <FlatList
+          data={data}
+          style={styles.productList}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          horizontal={true}
+          keyExtractor={(item) => `${item._id}`}
+          renderItem={({ item }) => (
+            <ProductItem
+              item={item}
+              type={type}
+              keyExtractor={(item) => item._id}
+            ></ProductItem>
+          )}
+        />
+      ) : (
+        <FlatList
+          data={data}
+          style={styles.productList}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          keyExtractor={(item) => `${item._id}`}
+          renderItem={({ item }) => (
+            <ProductItem
+              item={item}
+              type={type}
+              keyExtractor={(item) => item._id}
+            ></ProductItem>
+          )}
+        />
+      )}
     </View>
   );
 };

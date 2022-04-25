@@ -1,13 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
-import axios from "axios";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import StarRating from "react-native-star-rating";
 
@@ -16,7 +8,7 @@ import StarRating from "react-native-star-rating";
  * @param {*} param0
  * @returns
  */
-export default function ProductListItem({ item, type }) {
+export default function ProductItem({ item, type }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity

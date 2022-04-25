@@ -1,8 +1,8 @@
 import HomeScreen from "../screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TypeFullProduct from "../screens/TypeFullProduct";
-import ProductListItem from "../components/base/ProductListItem";
 import ProductDetail from "../components/base/detail/ProductDetail";
+import Search from "../components/search/Search";
 
 const Stacks = createNativeStackNavigator();
 
@@ -12,6 +12,7 @@ function HomeNav() {
       <Stacks.Screen name="Home" component={HomeScreen} />
       <Stacks.Screen name="TypeFullProduct" component={TypeFullProduct} />
       <Stacks.Screen name="ProductDetail" component={ProductDetail} />
+      <Stacks.Screen name="Search" component={Search} />
     </Stacks.Navigator>
   );
 }

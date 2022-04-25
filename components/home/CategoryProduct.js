@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import homeApi from "../api/homeApi";
 import ProductList from "../base/ProductList";
 
-const CategoryProduct = ({ navigation, type, horizontal }) => {
+const CategoryProduct = ({ type, horizontal }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -26,12 +26,7 @@ const CategoryProduct = ({ navigation, type, horizontal }) => {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ProductList
-          navigation={navigation}
-          data={data}
-          horizontal={horizontal}
-          type={type.name}
-        />
+        <ProductList data={data} horizontal={horizontal} type={type.name} />
       )}
     </View>
   );

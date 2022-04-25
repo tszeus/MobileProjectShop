@@ -1,16 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 import AccountScreen from "../screens/AccountScreen";
 import CartScreen from "../screens/CartScreen";
-import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
-// import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { useEffect } from "react";
 import HomeNav from "./HomeNav";
-// import CategoryNav from "./CategoryNav";
 
 const Tab = createBottomTabNavigator();
 
