@@ -4,8 +4,10 @@ import AccountScreen from "../screens/AccountScreen";
 import CartScreen from "../screens/CartScreen";
 import SearchScreen from "../screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import HomeNav from "./HomeNav";
+import SearchNav from "./SearchNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,7 +49,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="search"
-        component={SearchScreen}
+        component={SearchNav}
         options={{
           tabBarLabel: "Search",
           tabBarLabelStyle: {

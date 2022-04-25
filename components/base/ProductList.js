@@ -24,7 +24,6 @@ const ProductList = ({
 	header = true,
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	console.log(data);
 	return (
 		<View style={styles.nikeProduct}>
 			<View style={styles.productHeading}>

@@ -3,19 +3,21 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Config } from "../../config/Config";
 import ProductList from "../base/ProductList";
+import PopupNoti from "../base/PopupNoti";
 
-export default function SearchModel({ visible, data, notFound, reloadScreen }) {
+export default function SearchModel({ visible, data, reloadScreen }) {
 	const navigation = useNavigation();
-	const [activeSwipe, setActiveSwipe] = useState(null);
 	const isFocused = useIsFocused(false);
-	useEffect(() => {
-        // Nếu chưa gõ search
-		if (!visible) return null;
+	// Nếu chưa gõ search
+	if (!visible) return <Text></Text>;
 
-        // Nếu ko tìm thấy kết quả nào
-		if (!visible && data && data.total_products == 0 && !notFound) return null;
-	}, [visible, notFound, data]);
-	useEffect(async () => {}, []);
+	const onPress = () => navigation.navigate("home");
+	const button = { title: "Back to Home", onPress: onPress };
+
+	// useEffect(() => {
+
+	// }, [visible, notFound, data]);
+	// useEffect(async () => {}, []);
 	// notFound.length > 0 ? (
 	// 	(<View>
 	// 		<Text>{notFound}</Text>;
@@ -24,19 +26,30 @@ export default function SearchModel({ visible, data, notFound, reloadScreen }) {
 	return (
 		<View style={styles.model}>
 			<View>
-				<Text>
+				<Text style={styles.text}>
 					{(data && data.total_products > 0 ? data.total_products : 0) +
 						" Kết quả"}
 				</Text>
 			</View>
-			<ProductList
-				data={data && data.data ? data.data : []}
-                btnSeeMore={false} 
-                horizontal={false} 
-                type={'Nike'}
-                header={false}
-				// reloadScreen={reloadScreen}
-			></ProductList>
+			{data && data.total_products == 0 ? (
+				<View>
+					<PopupNoti
+						content={"thank you for shopping using suppershoes"}
+						header={"Product Not Found"}
+						button={button}
+						icon={{ name: "close" }}
+					></PopupNoti>
+				</View>
+			) : (
+				<ProductList
+					data={data && data.data ? data.data : []}
+					btnSeeMore={false}
+					horizontal={false}
+					type={"Nike"}
+					header={false}
+					// reloadScreen={reloadScreen}
+				></ProductList>
+			)}
 		</View>
 	);
 	// );
@@ -47,4 +60,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingBottom: 10,
 	},
+    text: {
+        color: "#223263",
+        fontSize: 12,
+        fontWeight: 'bold',
+        opacity: 0.5
+    }
 });
