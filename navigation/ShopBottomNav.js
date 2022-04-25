@@ -6,6 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeNav from "./HomeNav";
 import SearchNav from "./SearchNav";
 import CartNav from "./CartNav";
+import AccountNav from "./AccountNav";
+
 
 const Tab = createBottomTabNavigator();
 
