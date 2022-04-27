@@ -3,6 +3,7 @@ import React from "react";
 import Header from "../base/Header";
 import Field from "./Field";
 import { FieldRoleConstant } from "../../commons/constants/field-role.constant";
+import Login from "../login/Login";
 
 const Account = ({ navigation }) => {
 	return (
@@ -13,7 +14,7 @@ const Account = ({ navigation }) => {
                     key={index}
 					label={item.label}
 					iconName={item.iconName}
-                    onPress={() => navigation.navigate(item.label)}
+                    onPress={() => item.label !== 'Logout' ?  navigation.navigate(item.label) : navigation.navigate("Login")}
 				></Field>
 			))}
 		</View>

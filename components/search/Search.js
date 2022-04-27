@@ -17,9 +17,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { Config } from "../../config/Config";
 import { Convert } from "../../utils/Convert";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { SortEnum } from "../../commons/enums/sort.enum";
 import Sort from "./Sort";
 import Filter from "./Filter";
+import { SortEnum } from "../../commons/enums/sort.enum";
 
 const Search = (clean = false) => {
 	const navigation = useNavigation();

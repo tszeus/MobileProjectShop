@@ -1,5 +1,4 @@
-import { SortEnum } from "../enums/sort.enum";
-
+import { SortEnum } from "../enums/sort.enum"
 export const SortTextConstant = [
     // Thời gian tăng dần
     {

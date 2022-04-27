@@ -12,7 +12,7 @@ export const FieldRoleConstant = [
         label: 'Address'
     },
     {
-        iconName: "credit-card-outline",
-        label: 'Payment'
+        iconName: "map-marker-outline",
+        label: 'Logout'
     },
 ]
