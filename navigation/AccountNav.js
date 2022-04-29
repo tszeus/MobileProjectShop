@@ -4,7 +4,6 @@ import Address from "../components/account/Address/Address";
 import Order from "../components/account/order/Order";
 import Name from "../components/account/profile/Name";
 import Profile from "../components/account/profile/Profile";
-import Login from "../components/Login/Login";
 import LoginNav from "./LoginNav";
 
 const Stacks = createNativeStackNavigator();

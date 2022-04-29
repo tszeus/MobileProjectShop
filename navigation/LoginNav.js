@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import ResgisterForm from "../components/Login/ResgisterForm";
-import Login from "../components/Login/Login";
+import ResgisterForm from "../components/login/ResgisterForm";
+import Login from "../components/login/Login";
 
 const LoginNav = () => {
   const Stack = createStackNavigator();
