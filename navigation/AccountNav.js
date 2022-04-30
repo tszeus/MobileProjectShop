@@ -1,15 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Account from "../components/account/Account"
-import Address from "../components/account/address/Address"
+import Account from "../components/account/Account";
+import Address from "../components/account/Address/Address";
 import Order from "../components/account/order/Order";
-import Payment from "../components/account/payment/Payment";
 import Name from "../components/account/profile/Name";
 import Email from "../components/account/profile/Email";
 import Gender from "../components/account/profile/Gender";
 import PhoneNumber from "../components/account/profile/PhoneNumber";
 import ChangePassword from "../components/account/profile/ChangePassword";
 import Profile from "../components/account/profile/Profile";
-import Login from "../components/login/Login";
+import LoginNav from "./LoginNav";
 
 const Stacks = createNativeStackNavigator();
 
@@ -26,7 +25,7 @@ function AccountNav() {
         <Stacks.Screen name="Email" component={Email} />
         <Stacks.Screen name="PhoneNumber" component={PhoneNumber} />
         <Stacks.Screen name="ChangePassword" component={ChangePassword} />
-        <Stacks.Screen name="Login" component={Login} />
+          <Stacks.Screen name="LoginNav" component={LoginNav} />
     </Stacks.Navigator>
   );
 }
