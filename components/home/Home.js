@@ -46,7 +46,7 @@ const Home = ({ navigation }) => {
             <TextInput
               placeholder="Search Product"
               onFocus={() => {
-                navigation.navigate("search");
+                navigation.navigate("search", { clean: true });
               }}
             />
           </View>

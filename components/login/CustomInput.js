@@ -17,6 +17,7 @@ const CustomInput = ({
   placeholder,
   iconName,
   isHaveVisibility,
+  autoFocus = false,
 }) => {
   const renderVisibility = () => (
     <Pressable
@@ -56,6 +57,7 @@ const CustomInput = ({
         style={styles.loginIcon}
       />
       <TextInput
+      autoFocus={autoFocus}
         onFocus={() => setIndexInput(index)}
         value={value}
         placeholder={placeholder}
@@ -83,6 +85,9 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: "80%",
+    color: "#9098B1",
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 
   loginIcon: {
