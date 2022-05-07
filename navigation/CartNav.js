@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SuccessScreen from "../screens/SuccessScreen";
-import CartScreen from "../screens/CartScreen";
-import ShipToScreen from "../screens/ShipToScreen";
+import SuccessScreen from "./../screens/SuccessScreen"
+import CartScreen from "./../screens/CartScreen";
+import ShipToScreen from "./../screens/ShipToScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
-import EditShipingScreen from "../screens/EditShipingScreen";
+import EditShipingScreen from "./../screens/EditShipingScreen";
 
 const Stacks = createNativeStackNavigator();
 const screens = [

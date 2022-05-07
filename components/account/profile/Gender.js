@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Picker } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../../base/Header";
-import CustomInput from "../../login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
-import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
 
-const Name = ({ navigation, route }) => {
-	const [index, setIndex] = useState(0);
-	const [fullNameNew, setFullNameNew] = useState();
-	const [indexInput, setIndexInput] = useState(10);
+const Gender = ({ navigation, route }) => {
+    const [selectedValue, setSelectedValue] = useState(0);
     const isFocused = useIsFocused()
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-      } = useForm();
-
+    
     const save = () =>{
-        Convert.saveFieldProfile("fullName", fullNameNew);
+        Convert.saveFieldProfile("gender", selectedValue);
     }
 
     /**
@@ -27,29 +18,30 @@ const Name = ({ navigation, route }) => {
 	 */
 	useEffect(() => {
         // TODO fullName truyền từ profile động
-		setFullNameNew(route?.params?.fullName);
+		setSelectedValue(route?.params?.value);
 	}, [isFocused]);
+
 
 	return (
 		<View style={styles.wrapper}>
-			<Header style={styles.header} header="Name" haveBack={true}></Header>
-			<Text style={styles.label}>Full Name</Text>
-			<CustomInput
-				index={1}
-				setIndexInput={setIndexInput}
-				isActive={indexInput === 1}
-				value={fullNameNew}
-				setValue={setFullNameNew}
-				placeholder={"Full Name"}
-                autoFocus={true}
-                rule={{ required: "Your name is required" }}
-                control={control}
-                name="name"
-			></CustomInput>
+			<Header style={styles.header} header="Gender" haveBack={true}></Header>
+			<Text style={styles.label}>Choose Gender</Text>
+            <View style={styles.wrapperPicker}>
+            <Picker
+            style={styles.picker}
+				selectedValue={selectedValue}
+				onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+			>
+				<Picker.Item label="Nam" value="Nam" />
+				<Picker.Item label="Nữ" value="Nữ" />
+				<Picker.Item label="Khác" value="Khác" />
+			</Picker>
+            </View>
+			
 			<TouchableOpacity
 				style={styles.button}
 				activeOpacity={0.5}
-				onPress={handleSubmit(() => {save(); navigation.goBack()})}
+				onPress={() => {save(); navigation.goBack()}}
 			>
 				<Text style={styles.textButton}>Save</Text>
 			</TouchableOpacity>
@@ -57,7 +49,7 @@ const Name = ({ navigation, route }) => {
 	);
 };
 
-export default Name;
+export default Gender;
 
 const styles = StyleSheet.create({
 	wrapper: {
@@ -67,6 +59,16 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 		paddingTop: 116,
 	},
+    wrapperPicker: {
+        height: 48,
+        width: "100%",
+        borderWidth: 1,
+        borderColor: "#EBF0FF",
+        justifyContent:"center"
+    },
+    picker: {
+        width: "100%",
+    },
 	label: {
 		fontSize: 16,
 		fontWeight: "bold",

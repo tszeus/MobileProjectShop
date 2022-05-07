@@ -56,12 +56,14 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	header: {
-		height: "30%",
-		width: "100%",
-		borderBottomColor: "#EBF0FF",
-		borderBottomWidth: 1,   
-		alignItems: "center",
+		height: 60,
 		flexDirection: "row",
+		width: "100%",
+        borderBottomColor: "#EBF0FF",
+        borderBottomWidth: 1,
+        position: "absolute",
+        paddingBottom: 26,
+        alignItems: "flex-end",
 	},
 	headerText: {
 		fontSize: 16,
@@ -71,9 +73,9 @@ const styles = StyleSheet.create({
 	},
 	navigateBack: {
 		fontSize: 24,
-		marginLeft: 16,
 	},
 	body: {
+        paddingTop: 76,
 		flex: 1,
 	},
     textSort: {

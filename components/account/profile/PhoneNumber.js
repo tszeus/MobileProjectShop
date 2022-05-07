@@ -7,9 +7,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
 
-const Name = ({ navigation, route }) => {
+const PhoneNumber = ({ navigation, route }) => {
 	const [index, setIndex] = useState(0);
-	const [fullNameNew, setFullNameNew] = useState();
+	const [phoneNumberNew, setPhoneNumberNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
     const isFocused = useIsFocused()
     const {
@@ -19,7 +19,7 @@ const Name = ({ navigation, route }) => {
       } = useForm();
 
     const save = () =>{
-        Convert.saveFieldProfile("fullName", fullNameNew);
+        Convert.saveFieldProfile("phoneNumber", phoneNumberNew);
     }
 
     /**
@@ -27,24 +27,25 @@ const Name = ({ navigation, route }) => {
 	 */
 	useEffect(() => {
         // TODO fullName truyền từ profile động
-		setFullNameNew(route?.params?.fullName);
+		setPhoneNumberNew(route?.params?.phoneNumber);
 	}, [isFocused]);
 
 	return (
 		<View style={styles.wrapper}>
-			<Header style={styles.header} header="Name" haveBack={true}></Header>
-			<Text style={styles.label}>Full Name</Text>
-			<CustomInput
+			<Header style={styles.header} header="Phone Number" haveBack={true}></Header>
+			<Text style={styles.label}>Phone Number</Text>
+            <CustomInput
 				index={1}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === 1}
-				value={fullNameNew}
-				setValue={setFullNameNew}
-				placeholder={"Full Name"}
+				value={phoneNumberNew}
+				setValue={setPhoneNumberNew}
+				placeholder={"Phone Number"}
                 autoFocus={true}
-                rule={{ required: "Your name is required" }}
+                rule={{ required: "Your phone number is required" }}
                 control={control}
-                name="name"
+                name="phone number"
+                iconName="phone-iphone"
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
@@ -57,7 +58,7 @@ const Name = ({ navigation, route }) => {
 	);
 };
 
-export default Name;
+export default PhoneNumber;
 
 const styles = StyleSheet.create({
 	wrapper: {

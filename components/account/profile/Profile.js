@@ -10,7 +10,7 @@ const Profile = ({ navigation }) => {
 		<View style={styles.wrapper}>
 			<Header header="Profile" haveBack={true}></Header>
 			<View style={styles.content}>
-				<TouchableOpacity onPress={() => navigation.navigate("Name")} style={styles.avatarAndName}>
+				<TouchableOpacity onPress={() => navigation.navigate("Name",{fullName: "Zeus"} )} style={styles.avatarAndName}>
 					<Image
 						style={styles.avatar}
 						source={{
@@ -23,7 +23,7 @@ const Profile = ({ navigation }) => {
 					</View>
 				</TouchableOpacity>
                 <View>
-                    {FieldProfileConstant.map((item, index) => <FieldProfile key={index} label={item.label} iconName={item.iconName} value="rex4dom@gmail.com"></FieldProfile>)}
+                    {FieldProfileConstant.map((item, index) => <FieldProfile key={index} label={item.label} iconName={item.iconName} onPress={() => navigation.navigate(item.component )} value={item.value}></FieldProfile>)}
                 </View>
 			</View>
 		</View>
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
 		height: "100%",
 		width: "100%",
 		backgroundColor: "#fff",
+        paddingTop: 100
 	},
 	content: {
 		flex: 1,
