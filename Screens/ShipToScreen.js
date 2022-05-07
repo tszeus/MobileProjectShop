@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StatusBar, ScrollView } from "react-native";
-import Shipping from "./../components/shipping";
+import Shipping from "../components/shipping";
 
 function ShipToScreen(props) {
   return (

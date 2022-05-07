@@ -1,34 +1,25 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  Touchable,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import CustomInput from "./CustomInput";
+import { useForm, Controller } from "react-hook-form";
+import { min } from "react-native-reanimated";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [indexInput, setIndexInput] = useState(10);
-
-  const handlerChangeEmailText = (text) => {
-    setEmail(text);
-  };
-
-  const handlerChangePasswordText = (text) => {
-    setPassword(text);
-  };
-
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const handlerSetInput = (index) => {
     setIndexInput(index);
   };
 
+  const onSignInPressed = (data) => {
+    navigation.navigate("BottomNav");
+    console.log(data);
+  };
   const inputs = ["Email", "Password"];
 
   return (
@@ -42,41 +33,42 @@ const Login = ({ navigation }) => {
         <Text style={styles.title}>Sign in to continue</Text>
       </View>
       <View style={styles.loginForm}>
-        <FlatList
-          horizontal={false}
-          showsHorizontalScrollIndicator={false}
-          data={inputs}
-          renderItem={({ item, index }) =>
-            item === "Email" ? (
-              <CustomInput
-                index={index}
-                setIndexInput={handlerSetInput}
-                isActive={indexInput === index}
-                placeholder="Your Email"
-                value={email}
-                setValue={handlerChangeEmailText}
-                iconName="mail-outline"
-              />
-            ) : (
-              <CustomInput
-                index={index}
-                setIndexInput={handlerSetInput}
-                isActive={indexInput === index}
-                placeholder="Password"
-                value={password}
-                setValue={handlerChangePasswordText}
-                isHaveVisibility={true}
-                iconName="lock-outline"
-              />
-            )
-          }
-          keyExtractor={(item) => item}
-        />
+        {inputs.map((item, index) =>
+          item === "Email" ? (
+            <CustomInput
+              rule={{ required: "Your email is required" }}
+              key={index}
+              index={index}
+              isActive={indexInput === index}
+              setIndexInput={handlerSetInput}
+              placeholder="Your Email"
+              iconName="mail-outline"
+              name="youremail"
+              control={control}
+            />
+          ) : (
+            <CustomInput
+              rule={{
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password should be minimum 6 characters long",
+                },
+              }}
+              key={index}
+              index={index}
+              setIndexInput={handlerSetInput}
+              isActive={indexInput === index}
+              placeholder="Password"
+              isHaveVisibility={true}
+              iconName="lock-outline"
+              name="password"
+              control={control}
+            />
+          )
+        )}
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("BottomNav");
-            console.log(email + " " + password);
-          }}
+          onPress={handleSubmit(onSignInPressed)}
           style={styles.signInButton}
         >
           <Text style={styles.signInButtonText}>Sign In</Text>

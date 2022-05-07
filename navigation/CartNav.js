@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SuccessScreen from "../screens/SuccessScreen"
-import CartScreen from "./../screens/CartScreen";
-import ShipToScreen from "./../screens/ShipToScreen";
+import SuccessScreen from "../screens/SuccessScreen";
+import CartScreen from "../screens/CartScreen";
+import ShipToScreen from "../screens/ShipToScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import EditShipingScreen from "../screens/EditShipingScreen";
@@ -18,9 +18,11 @@ const screens = [
     headerRight: (navigation) => () =>
       (
         <Icon
-          onPress={() => navigation.navigate("Edit shipping",{
-            title:'Add shipping information'
-          })}
+          onPress={() =>
+            navigation.navigate("Edit shipping", {
+              title: "Add shipping information",
+            })
+          }
           name="plus"
           size={24}
           color="#40BFFF"
@@ -32,9 +34,9 @@ const screens = [
     component: SuccessScreen,
   },
   {
-    name:'Edit shipping',
-    component:EditShipingScreen
-  }
+    name: "Edit shipping",
+    component: EditShipingScreen,
+  },
 ];
 
 function CartNav() {
@@ -46,22 +48,20 @@ function CartNav() {
           key={item.name}
           name={item.name}
           component={item.component}
-          options={({route}) => (
-            {
-              title:route?.params?.title || item?.name,
-              headerRight:
-                typeof item?.headerRight === "function"
-                  ? item?.headerRight(navigation)
-                  : null,
-              headerStyle: {},
-              headerTintColor: "#223263",
-              headerTitleStyle: {
-                fontWeight: "bold",
-                color: "#223263",
-                fontSize: 16,
-              },
-            }
-          )}
+          options={({ route }) => ({
+            title: route?.params?.title || item?.name,
+            headerRight:
+              typeof item?.headerRight === "function"
+                ? item?.headerRight(navigation)
+                : null,
+            headerStyle: {},
+            headerTintColor: "#223263",
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: "#223263",
+              fontSize: 16,
+            },
+          })}
         />
       ))}
     </Stacks.Navigator>

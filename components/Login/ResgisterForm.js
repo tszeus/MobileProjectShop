@@ -1,183 +1,151 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import CustomInput from "./CustomInput";
+import { useForm } from "react-hook-form";
 
 const ResgisterForm = ({ navigation }) => {
-  const [fullNameFocus, setFullNameFocus] = useState(false);
-  const [mailInputFocus, setMailInputFocus] = useState(false);
-  const [passInputFocus, setPassInputFocus] = useState(false);
-  const [passAgainInputFocus, setPassAgainInputFocus] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordAgain, setPasswordAgain] = useState("");
+  const { control, handleSubmit, watch } = useForm();
+  const pwd = watch("Password");
+  const onSignUpPressed = (data) => {
+    navigation.navigate("BottomNav");
+    console.log(data);
+  };
+  const [indexInput, setIndexInput] = useState(10);
+  const handlerSetInput = (index) => {
+    setIndexInput(index);
+  };
+
+  const inputs = ["FullName", "YourEmail", "Password", "PasswordAgain"];
+
+  const renderInput = (inputName, index) => {
+    switch (inputName) {
+      case "FullName":
+        return (
+          <CustomInput
+            control={control}
+            rule={{ required: "Full name is required" }}
+            name={inputName}
+            key={index}
+            index={index}
+            setIndexInput={handlerSetInput}
+            isActive={indexInput === index}
+            placeholder="Full Name"
+            iconName="person-outline"
+          />
+        );
+      case "YourEmail":
+        return (
+          <CustomInput
+            control={control}
+            rule={{ required: "Your email is required" }}
+            name={inputName}
+            key={index}
+            index={index}
+            setIndexInput={handlerSetInput}
+            isActive={indexInput === index}
+            placeholder="Your email"
+            iconName="mail-outline"
+          />
+        );
+      case "Password":
+        return (
+          <CustomInput
+            control={control}
+            rule={{
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password should be minimum 6 characters long",
+              },
+            }}
+            name={inputName}
+            key={index}
+            index={index}
+            setIndexInput={handlerSetInput}
+            isActive={indexInput === index}
+            placeholder="Password"
+            iconName="lock-outline"
+            isHaveVisibility={true}
+          />
+        );
+      case "PasswordAgain":
+        return (
+          <CustomInput
+            control={control}
+            rule={{
+              validate: (value) => value === pwd || "Password is not match",
+            }}
+            name={inputName}
+            key={index}
+            index={index}
+            setIndexInput={handlerSetInput}
+            isActive={indexInput === index}
+            placeholder="Password Again"
+            iconName="lock-outline"
+            isHaveVisibility={true}
+          />
+        );
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.logoPrimary}
-          source={require("../../static/images/Vector_primary.png")}
-        />
-        <Text style={styles.welcome}>Let's Get Started</Text>
-        <Text style={styles.title}>Create a new account</Text>
-      </View>
-      <View style={styles.loginForm}>
-        {/* Full name -------------------------------------------------*/}
-        <View
-          style={[
-            { borderColor: fullNameFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="person-outline"
-            color={!fullNameFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
-          />
-          <TextInput
-            value={fullName}
-            placeholder="Full Name"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(true);
-              setMailInputFocus(false);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setFullName}
-            textContentType="emailAddress"
-            style={styles.loginInputText}
-          />
-        </View>
-        {/* Email-------------------------------------------------- */}
-        <View
-          style={[
-            { borderColor: mailInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="mail-outline"
-            color={!mailInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
-          />
-          <TextInput
-            value={email}
-            placeholder="Your email"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(true);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setEmail}
-            textContentType="emailAddress"
-            style={styles.loginInputText}
-          />
-        </View>
-        {/* Password -------------------------------------------- */}
-        <View
-          style={[
-            { borderColor: passInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="lock-outline"
-            color={!passInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
-          />
-          <TextInput
-            value={password}
-            placeholder="Password"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(false);
-              setPassInputFocus(true);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            style={styles.loginInputText}
-          />
-          <TouchableOpacity
-            onPress={() => {}}
-            style={styles.visibilityIcon}
-          ></TouchableOpacity>
-        </View>
-        {/* Password again */}
-        <View
-          style={[
-            { borderColor: passAgainInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="lock-outline"
-            color={!passAgainInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
-          />
-          <TextInput
-            value={passwordAgain}
-            placeholder="Password Again"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(false);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(true);
-            }}
-            onChangeText={setPasswordAgain}
-            secureTextEntry={true}
-            style={styles.loginInputText}
-          />
-          <TouchableOpacity
-            onPress={() => {}}
-            style={styles.visibilityIcon}
-          ></TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("BottomNav");
-            console.log(email + " " + password);
-          }}
-          style={styles.signInButton}
-        >
-          <Text style={styles.signInButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            paddingTop: 12,
-          }}
-        >
-          <Text style={styles.haveAAccount}>Have an account? </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Login");
-            }}
-          >
-            <Text style={styles.register}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <>
+            <View style={styles.header}>
+              <Image
+                style={styles.logoPrimary}
+                source={require("../../static/images/Vector_primary.png")}
+              />
+              <Text style={styles.welcome}>Let's Get Started</Text>
+              <Text style={styles.title}>Create a new account</Text>
+            </View>
+            <View style={styles.loginForm}>
+              {inputs.map((item, index) => renderInput(item, index))}
 
-      {/* <Start /> */}
+              <TouchableOpacity
+                onPress={handleSubmit(onSignUpPressed)}
+                style={styles.signInButton}
+              >
+                <Text style={styles.signInButtonText}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.footer}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  paddingTop: 12,
+                }}
+              >
+                <Text style={styles.haveAAccount}>Have an account? </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Login");
+                  }}
+                >
+                  <Text style={styles.register}>Sign In</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 };
