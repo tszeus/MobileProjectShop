@@ -1,6 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
 import { Config } from "../../config/Config";
+import * as SecureStore from "expo-secure-store";
+
 const axiosClient = axios.create({
   baseURL: Config.BaseUrl,
   headers: {
@@ -27,5 +29,22 @@ axiosClient.interceptors.response.use(
     throw error;
   }
 );
+axiosClient.interceptors.request.use(async (config) => {
+  const customHeaders = {};
+
+  const token = await SecureStore.getItemAsync("token");
+
+  if (token) {
+    customHeaders.Authorization = token;
+  }
+
+  return {
+    ...config,
+    headers: {
+      ...customHeaders, // auto attach token
+      ...config.headers, // but you can override for some requests
+    },
+  };
+});
 
 export default axiosClient;

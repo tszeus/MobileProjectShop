@@ -9,7 +9,7 @@ import Payment from "../components/account/payment/Payment"
 import PhoneNumber from "../components/account/profile/PhoneNumber";
 import ChangePassword from "../components/account/profile/ChangePassword";
 import Profile from "../components/account/profile/Profile";
-import LoginNav from "./LoginNav";
+import Login from "../components/login/Login";
 
 const Stacks = createNativeStackNavigator();
 
@@ -26,7 +26,7 @@ function AccountNav() {
         <Stacks.Screen name="Email" component={Email} />
         <Stacks.Screen name="PhoneNumber" component={PhoneNumber} />
         <Stacks.Screen name="ChangePassword" component={ChangePassword} />
-          <Stacks.Screen name="LoginNav" component={LoginNav} />
+          <Stacks.Screen name="Login" component={Login} />
     </Stacks.Navigator>
   );
 }

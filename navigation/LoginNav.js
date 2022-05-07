@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from '../components/login/Login'
 import ResgisterForm from "../components/login/ResgisterForm";
-import Login from "../components/login/Login";
+import SplashScreen from "./../screens/SplashScreen";
 
 const LoginNav = () => {
-  const Stack = createStackNavigator();
+  const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
