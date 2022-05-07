@@ -1,152 +1,216 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigation } from "@react-navigation/native";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useState } from "react";
+import Icon from "react-native-vector-icons/FontAwesome";
+
+import { useForm } from "react-hook-form";
 import {
-  FlatList,
   Image,
-  Keyboard,
   KeyboardAvoidingView,
-  Platform,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
-import React, { useState } from "react";
+import {
+  ALERT_TYPE, Root,
+  Toast
+} from "react-native-alert-notification";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import CustomInput from "./CustomInput";
-import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import InputForm from "../../commons/formHelper/InputForm";
+import SelectForm from "../../commons/formHelper/SelectForm";
+import { registerAction } from "../../redux/actions/userActions";
+import { userAction } from "../../redux/slice/userSlice";
 
 const ResgisterForm = ({ navigation }) => {
-  const { control, handleSubmit, watch } = useForm();
-  const pwd = watch("Password");
-  const onSignUpPressed = (data) => {
-    navigation.navigate("BottomNav");
-    console.log(data);
-  };
-  const [indexInput, setIndexInput] = useState(10);
-  const handlerSetInput = (index) => {
-    setIndexInput(index);
-  };
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] =
+    useState(false);
+    const [err, seterr] = useState();
 
-  const inputs = ["FullName", "YourEmail", "Password", "PasswordAgain"];
+  const dispatch = useDispatch();
+  const naviagtion = useNavigation();
+  const phoneRegExp = /^0[0-9]{9}/;
+  const schema = yup
+    .object({
+      fullName: yup.string().required(),
+      address: yup.string().required().min(5),
+      email: yup.string().required().email(),
+      phoneNumber: yup
+        .string()
+        .matches(phoneRegExp, "Phone number is not valid"),
+      password: yup.string().required().min(6),
+      confirmPassword: yup
+        .string()
+        .required()
+        .oneOf([yup.ref("password"), null], "Passwords must match"),
+      gender: yup.string().required(),
+    })
+    .required();
 
-  const renderInput = (inputName, index) => {
-    switch (inputName) {
-      case "FullName":
-        return (
-          <CustomInput
-            control={control}
-            rule={{ required: "Full name is required" }}
-            name={inputName}
-            key={index}
-            index={index}
-            setIndexInput={handlerSetInput}
-            isActive={indexInput === index}
-            placeholder="Full Name"
-            iconName="person-outline"
-          />
-        );
-      case "YourEmail":
-        return (
-          <CustomInput
-            control={control}
-            rule={{ required: "Your email is required" }}
-            name={inputName}
-            key={index}
-            index={index}
-            setIndexInput={handlerSetInput}
-            isActive={indexInput === index}
-            placeholder="Your email"
-            iconName="mail-outline"
-          />
-        );
-      case "Password":
-        return (
-          <CustomInput
-            control={control}
-            rule={{
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password should be minimum 6 characters long",
-              },
-            }}
-            name={inputName}
-            key={index}
-            index={index}
-            setIndexInput={handlerSetInput}
-            isActive={indexInput === index}
-            placeholder="Password"
-            iconName="lock-outline"
-            isHaveVisibility={true}
-          />
-        );
-      case "PasswordAgain":
-        return (
-          <CustomInput
-            control={control}
-            rule={{
-              validate: (value) => value === pwd || "Password is not match",
-            }}
-            name={inputName}
-            key={index}
-            index={index}
-            setIndexInput={handlerSetInput}
-            isActive={indexInput === index}
-            placeholder="Password Again"
-            iconName="lock-outline"
-            isHaveVisibility={true}
-          />
-        );
+  const onSubmit = async (data) => {
+    const dataSubmit = { ...data };
+    delete dataSubmit.confirmPassword;
+    try {
+      const user = await dispatch(registerAction(dataSubmit));
+      const result = unwrapResult(user);
+      dispatch(userAction.setUser(result));
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "SUCCESS",
+        textBody: "Successful Registration",
+        autoClose: 2000,
+      });
+      naviagtion.navigate("Login", {
+        email: data.email,
+        password: data.password,
+      });
+    } catch (error) {
+      seterr(error)
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <>
-            <View style={styles.header}>
-              <Image
-                style={styles.logoPrimary}
-                source={require("../../static/images/Vector_primary.png")}
-              />
-              <Text style={styles.welcome}>Let's Get Started</Text>
-              <Text style={styles.title}>Create a new account</Text>
-            </View>
-            <View style={styles.loginForm}>
-              {inputs.map((item, index) => renderInput(item, index))}
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+     
+    },
+  });
 
-              <TouchableOpacity
-                onPress={handleSubmit(onSignUpPressed)}
-                style={styles.signInButton}
-              >
-                <Text style={styles.signInButtonText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.footer}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  paddingTop: 12,
-                }}
-              >
-                <Text style={styles.haveAAccount}>Have an account? </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("Login");
-                  }}
-                >
-                  <Text style={styles.register}>Sign In</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </View>
+  return (
+    <Root>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Image
+            style={styles.logoPrimary}
+            source={require("../../static/images/Vector_primary.png")}
+          />
+          <Text style={styles.welcome}>Let's Get Started</Text>
+          <Text style={styles.title}>Create a new account</Text>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+           {err && (
+          <View style={styles.boxErr}>
+            <Icon
+              style={styles.icon}
+              name="warning"
+              size={20}
+              color="red"
+            />
+            <Text style={styles.textErr}>{err}</Text>
+          </View>
+        )}
+          <InputForm
+            placeholder="Full name"
+            iconname="user"
+            name="fullName"
+            control={control}
+            errors={errors}
+          />
+
+          <InputForm
+            placeholder="Address"
+            iconname="address-book"
+            name="address"
+            control={control}
+            errors={errors}
+          />
+
+          <InputForm
+            placeholder="Phone Number"
+            iconname="phone-square"
+            name="phoneNumber"
+            control={control}
+            errors={errors}
+          />
+
+          <InputForm
+            placeholder="Email"
+            iconname="envelope-o"
+            name="email"
+            control={control}
+            errors={errors}
+          />
+
+          <InputForm
+            placeholder="password"
+            iconname="lock"
+            name="password"
+            control={control}
+            errors={errors}
+            secureTextEntry={!toggleVisibilityPassword}
+            secondIcon={`${
+              toggleVisibilityPassword ? "visibility" : "visibility-off"
+            }`}
+            setToggleVisibilityPassword={() =>
+              setToggleVisibilityPassword(!toggleVisibilityPassword)
+            }
+          />
+
+          <InputForm
+            placeholder="Confirm Password"
+            iconname="lock"
+            name="confirmPassword"
+            control={control}
+            errors={errors}
+            secureTextEntry={!toggleVisibilityPassword}
+            secondIcon={`${
+              toggleVisibilityPassword ? "visibility" : "visibility-off"
+            }`}
+            setToggleVisibilityPassword={() =>
+              setToggleVisibilityPassword(!toggleVisibilityPassword)
+            }
+          />
+          <SelectForm
+            errors={errors}
+            iconname="transgender"
+            name="gender"
+            control={control}
+            items={[
+              { label: "Nam", value: "Nam" },
+              {
+                label: "Nữ",
+                value: "Nữ",
+              },
+            ]}
+          />
+
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.signInButton}
+          >
+            <Text style={styles.signInButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+
+        <View style={styles.footer}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              paddingTop: 12,
+            }}
+          >
+            <Text style={styles.haveAAccount}>Have an account? </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+            >
+              <Text style={styles.register}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </Root>
   );
 };
 
@@ -154,10 +218,11 @@ export default ResgisterForm;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 80,
+    paddingTop: 60,
     paddingHorizontal: 16,
+    alignItems: "center",
+    paddingBottom: 40,
   },
   header: { alignItems: "center", marginTop: 50, marginBottom: 32 },
   logoPrimary: { width: 75, height: 72, marginBottom: 16 },
@@ -174,22 +239,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: "#9098B1",
   },
-  loginInput: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 12,
-  },
-  loginIcon: {
-    marginRight: 10,
-    marginLeft: 6,
-  },
-  loginInputText: {
-    width: "80%",
-  },
+
   visibilityIcon: { marginHorizontal: 10 },
   signInButton: {
     backgroundColor: "#40BFFF",
@@ -260,5 +310,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#40BFFF",
     lineHeight: 18,
+  },
+  textErr: {
+    fontSize: 10,
+    color: "red",
+    marginTop: -7,
+    marginBottom: 10,
+  },
+  boxErr: {
+    width: 343,
+    borderWidth: 1,
+    borderColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  textErr: {
+    color: "red",
+    marginLeft:10
   },
 });

@@ -9,8 +9,8 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState, useEffect } from "react";
 import CategoryHome from "./CategoryHome";
-import homeApi from "../api/homeApi";
-import ProductList from "../base/ProductList";
+import homeApi from "./../api/homeApi";
+import ProductList from "./../base/ProductList";
 import SplashScreen from "../../screens/SplashScreen";
 
 const Home = ({ navigation }) => {
