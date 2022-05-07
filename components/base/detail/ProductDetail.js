@@ -8,6 +8,7 @@ import StarRating from "react-native-star-rating";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ColorsAndSizes from "./colorsAndSizes/ColorsAndSizes";
 import ProductDescription from "./ProductDescription";
+import Comment from "./Comment";
 
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
@@ -59,6 +60,7 @@ const ProductDetail = ({ route }) => {
           {/* Size and Color */}
           <ColorsAndSizes sizes={sizes} />
           <ProductDescription />
+          <Comment />
           <TouchableOpacity>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>
