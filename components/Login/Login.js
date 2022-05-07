@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Root } from "react-native-alert-notification";
 import { TouchableOpacity } from "react-native-gesture-handler";

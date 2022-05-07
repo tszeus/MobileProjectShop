@@ -6,7 +6,7 @@ import ResgisterForm from "../components/login/ResgisterForm";
 import SplashScreen from "./../screens/SplashScreen";
 
 const LoginNav = () => {
-  const Stack = createStackNavigator();
+  const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}

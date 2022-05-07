@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import CategoryHome from "./CategoryHome";
 import homeApi from "./../api/homeApi";
 import ProductList from "./../base/ProductList";
-import SplashScreen from "../../Screens/SplashScreen";
+import SplashScreen from "../../screens/SplashScreen";
 
 const Home = ({ navigation }) => {
   const [homeData, setHomeData] = useState([]); // Mảng type
