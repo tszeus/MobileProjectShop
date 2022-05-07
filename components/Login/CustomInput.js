@@ -20,6 +20,7 @@ const CustomInput = ({
   placeholder,
   iconName,
   isHaveVisibility,
+  autoFocus
 }) => {
   const renderVisibility = () => (
     <Pressable
@@ -76,6 +77,7 @@ const CustomInput = ({
               onBlur={onBlur}
               secureTextEntry={isVisibility}
               style={styles.inputText}
+              autoFocus={autoFocus}
             />
             {isHaveVisibility ? renderVisibility() : true}
           </View>

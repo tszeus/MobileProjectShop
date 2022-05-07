@@ -14,4 +14,16 @@ export const Convert = {
 		return str.join("&");
 	},
 
+    async saveFieldProfile(fieldName, value){
+        try {
+            // TODO lấy userId từ redux để bind động vào
+			var res = await axios.get(`${Config.BaseUrl}/user/62640118bff0c1f05f6ea5de`, {
+                fieldName: value
+            });
+            // TODO Cập nhật vào secure storage
+		} catch (err) {
+			console.log(err);
+		}
+    }
+
 }

@@ -4,23 +4,22 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../../base/Header";
 import CustomInput from "../../login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
+import { useForm, Controller } from "react-hook-form";
+import { Convert } from "../../../utils/Convert";
 
 const Name = ({ navigation, route }) => {
 	const [index, setIndex] = useState(0);
 	const [fullNameNew, setFullNameNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
     const isFocused = useIsFocused()
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+      } = useForm();
 
-    const saveName = async () =>{
-        try {
-            // TODO lấy userId từ redux để bind động vào
-			var res = await axios.get(`${Config.BaseUrl}/user/62640118bff0c1f05f6ea5de`, {
-                fullName: fullNameNew
-            });
-            // TODO Cập nhật vào secure storage
-		} catch (err) {
-			console.log(err);
-		}
+    const save = () =>{
+        Convert.saveFieldProfile("fullName", fullNameNew);
     }
 
     /**
@@ -43,11 +42,14 @@ const Name = ({ navigation, route }) => {
 				setValue={setFullNameNew}
 				placeholder={"Full Name"}
                 autoFocus={true}
+                rule={{ required: "Your name is required" }}
+                control={control}
+                name="name"
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
 				activeOpacity={0.5}
-				onPress={() => {saveName(); navigation.goBack()}}
+				onPress={handleSubmit(() => {save(); navigation.goBack()})}
 			>
 				<Text style={styles.textButton}>Save</Text>
 			</TouchableOpacity>

@@ -23,7 +23,7 @@ const Profile = ({ navigation }) => {
 					</View>
 				</TouchableOpacity>
                 <View>
-                    {FieldProfileConstant.map((item, index) => <FieldProfile key={index} label={item.label} iconName={item.iconName} onPress={() => navigation.navigate(item.component )} value="rex4dom@gmail.com"></FieldProfile>)}
+                    {FieldProfileConstant.map((item, index) => <FieldProfile key={index} label={item.label} iconName={item.iconName} onPress={() => navigation.navigate(item.component )} value={item.value}></FieldProfile>)}
                 </View>
 			</View>
 		</View>

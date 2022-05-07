@@ -4,18 +4,53 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../../base/Header";
 import CustomInput from "../../login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
+import { useForm, Controller } from "react-hook-form";
+import { Convert } from "../../../utils/Convert";
 
 const Email = ({ navigation, route }) => {
-	
+	const [index, setIndex] = useState(1);
+	const [emailNew, setEmailNew] = useState();
+	const [indexInput, setIndexInput] = useState(10);
+    const isFocused = useIsFocused()
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+      } = useForm();
+
+    const saveEmail = () =>{
+        Convert.saveFieldProfile("email", emailNew);
+    }
+
+    /**
+	 * Xử lý focus input mỗi khi màn hình được focus
+	 */
+	useEffect(() => {
+        // TODO fullName truyền từ profile động
+		setEmailNew(route?.params?.email);
+	}, [isFocused]);
 
 	return (
 		<View style={styles.wrapper}>
 			<Header style={styles.header} header="Email" haveBack={true}></Header>
 			<Text style={styles.label}>Change Email</Text>
+            <CustomInput
+				index={1}
+				setIndexInput={setIndexInput}
+				isActive={indexInput === 1}
+				value={emailNew}
+				setValue={setEmailNew}
+				placeholder={"Email"}
+                autoFocus={true}
+                rule={{ required: "Your email is required" }}
+                control={control}
+                name="email"
+                iconName="mail-outline"
+			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
 				activeOpacity={0.5}
-				onPress={() => {}}
+				onPress={handleSubmit(() => {saveEmail(); navigation.goBack()})}
 			>
 				<Text style={styles.textButton}>Save</Text>
 			</TouchableOpacity>

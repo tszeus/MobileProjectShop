@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: "#fff",
     height: "100%",
+    paddingTop: 100
   },
   header: {
     height: 80,
