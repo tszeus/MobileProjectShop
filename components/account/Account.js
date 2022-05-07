@@ -3,7 +3,7 @@ import React from "react";
 import Header from "../base/Header";
 import Field from "./Field";
 import { FieldRoleConstant } from "../../commons/constants/field-role.constant";
-import Login from "../login/Login";
+import Login from "./../Login/Login";
 
 const Account = ({ navigation }) => {
 	return (

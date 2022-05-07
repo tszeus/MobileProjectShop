@@ -1,184 +1,216 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigation } from "@react-navigation/native";
+import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+
+import { useForm } from "react-hook-form";
+import {
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
+import {
+  ALERT_TYPE, Root,
+  Toast
+} from "react-native-alert-notification";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import InputForm from "../../commons/formHelper/InputForm";
+import SelectForm from "../../commons/formHelper/SelectForm";
+import { registerAction } from "../../redux/actions/userActions";
+import { userAction } from "../../redux/slice/userSlice";
 
 const ResgisterForm = ({ navigation }) => {
-  const [fullNameFocus, setFullNameFocus] = useState(false);
-  const [mailInputFocus, setMailInputFocus] = useState(false);
-  const [passInputFocus, setPassInputFocus] = useState(false);
-  const [passAgainInputFocus, setPassAgainInputFocus] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordAgain, setPasswordAgain] = useState("");
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] =
+    useState(false);
+    const [err, seterr] = useState();
+
+  const dispatch = useDispatch();
+  const naviagtion = useNavigation();
+  const phoneRegExp = /^0[0-9]{9}/;
+  const schema = yup
+    .object({
+      fullName: yup.string().required(),
+      address: yup.string().required().min(5),
+      email: yup.string().required().email(),
+      phoneNumber: yup
+        .string()
+        .matches(phoneRegExp, "Phone number is not valid"),
+      password: yup.string().required().min(6),
+      confirmPassword: yup
+        .string()
+        .required()
+        .oneOf([yup.ref("password"), null], "Passwords must match"),
+      gender: yup.string().required(),
+    })
+    .required();
+
+  const onSubmit = async (data) => {
+    const dataSubmit = { ...data };
+    delete dataSubmit.confirmPassword;
+    try {
+      const user = await dispatch(registerAction(dataSubmit));
+      const result = unwrapResult(user);
+      dispatch(userAction.setUser(result));
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "SUCCESS",
+        textBody: "Successful Registration",
+        autoClose: 2000,
+      });
+      naviagtion.navigate("Login", {
+        email: data.email,
+        password: data.password,
+      });
+    } catch (error) {
+      seterr(error)
+    }
+  };
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+     
+    },
+  });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.logoPrimary}
-          source={require("../../static/images/Vector_primary.png")}
-        />
-        <Text style={styles.welcome}>Let's Get Started</Text>
-        <Text style={styles.title}>Create a new account</Text>
-      </View>
-      <View style={styles.loginForm}>
-        {/* Full name -------------------------------------------------*/}
-        <View
-          style={[
-            { borderColor: fullNameFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="person-outline"
-            color={!fullNameFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
+    <Root>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Image
+            style={styles.logoPrimary}
+            source={require("../../static/images/Vector_primary.png")}
           />
-          <TextInput
-            value={fullName}
-            placeholder="Full Name"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(true);
-              setMailInputFocus(false);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setFullName}
-            textContentType="emailAddress"
-            style={styles.loginInputText}
-          />
+          <Text style={styles.welcome}>Let's Get Started</Text>
+          <Text style={styles.title}>Create a new account</Text>
         </View>
-        {/* Email-------------------------------------------------- */}
-        <View
-          style={[
-            { borderColor: mailInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <MaterialIcons
-            name="mail-outline"
-            color={!mailInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
+           {err && (
+          <View style={styles.boxErr}>
+            <Icon
+              style={styles.icon}
+              name="warning"
+              size={20}
+              color="red"
+            />
+            <Text style={styles.textErr}>{err}</Text>
+          </View>
+        )}
+          <InputForm
+            placeholder="Full name"
+            iconname="user"
+            name="fullName"
+            control={control}
+            errors={errors}
           />
-          <TextInput
-            value={email}
-            placeholder="Your email"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(true);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setEmail}
-            textContentType="emailAddress"
-            style={styles.loginInputText}
+
+          <InputForm
+            placeholder="Address"
+            iconname="address-book"
+            name="address"
+            control={control}
+            errors={errors}
           />
-        </View>
-        {/* Password -------------------------------------------- */}
-        <View
-          style={[
-            { borderColor: passInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="lock-outline"
-            color={!passInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
+
+          <InputForm
+            placeholder="Phone Number"
+            iconname="phone-square"
+            name="phoneNumber"
+            control={control}
+            errors={errors}
           />
-          <TextInput
-            value={password}
-            placeholder="Password"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(false);
-              setPassInputFocus(true);
-              setPassAgainInputFocus(false);
-            }}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            style={styles.loginInputText}
+
+          <InputForm
+            placeholder="Email"
+            iconname="envelope-o"
+            name="email"
+            control={control}
+            errors={errors}
           />
+
+          <InputForm
+            placeholder="password"
+            iconname="lock"
+            name="password"
+            control={control}
+            errors={errors}
+            secureTextEntry={!toggleVisibilityPassword}
+            secondIcon={`${
+              toggleVisibilityPassword ? "visibility" : "visibility-off"
+            }`}
+            setToggleVisibilityPassword={() =>
+              setToggleVisibilityPassword(!toggleVisibilityPassword)
+            }
+          />
+
+          <InputForm
+            placeholder="Confirm Password"
+            iconname="lock"
+            name="confirmPassword"
+            control={control}
+            errors={errors}
+            secureTextEntry={!toggleVisibilityPassword}
+            secondIcon={`${
+              toggleVisibilityPassword ? "visibility" : "visibility-off"
+            }`}
+            setToggleVisibilityPassword={() =>
+              setToggleVisibilityPassword(!toggleVisibilityPassword)
+            }
+          />
+          <SelectForm
+            errors={errors}
+            iconname="transgender"
+            name="gender"
+            control={control}
+            items={[
+              { label: "Nam", value: "Nam" },
+              {
+                label: "Nữ",
+                value: "Nữ",
+              },
+            ]}
+          />
+
           <TouchableOpacity
-            onPress={() => {}}
-            style={styles.visibilityIcon}
-          ></TouchableOpacity>
-        </View>
-        {/* Password again */}
-        <View
-          style={[
-            { borderColor: passAgainInputFocus ? "#40BFFF" : "#EBF0FF" },
-            styles.loginInput,
-          ]}
-        >
-          <MaterialIcons
-            name="lock-outline"
-            color={!passAgainInputFocus ? "#9098B1" : "#40BFFF"}
-            size={24}
-            style={styles.loginIcon}
-          />
-          <TextInput
-            value={passwordAgain}
-            placeholder="Password Again"
-            placeholderTextColor="#9098B1"
-            maxFontSizeMultiplier={12}
-            onFocus={() => {
-              setFullNameFocus(false);
-              setMailInputFocus(false);
-              setPassInputFocus(false);
-              setPassAgainInputFocus(true);
-            }}
-            onChangeText={setPasswordAgain}
-            secureTextEntry={true}
-            style={styles.loginInputText}
-          />
-          <TouchableOpacity
-            onPress={() => {}}
-            style={styles.visibilityIcon}
-          ></TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("BottomNav");
-            console.log(email + " " + password);
-          }}
-          style={styles.signInButton}
-        >
-          <Text style={styles.signInButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            paddingTop: 12,
-          }}
-        >
-          <Text style={styles.haveAAccount}>Have an account? </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Login");
+            onPress={handleSubmit(onSubmit)}
+            style={styles.signInButton}
+          >
+            <Text style={styles.signInButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+
+        <View style={styles.footer}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              paddingTop: 12,
             }}
           >
-            <Text style={styles.register}>Sign In</Text>
-          </TouchableOpacity>
+            <Text style={styles.haveAAccount}>Have an account? </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+            >
+              <Text style={styles.register}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      {/* <Start /> */}
-    </View>
+      </ScrollView>
+    </Root>
   );
 };
 
@@ -186,10 +218,11 @@ export default ResgisterForm;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 80,
+    paddingTop: 60,
     paddingHorizontal: 16,
+    alignItems: "center",
+    paddingBottom: 40,
   },
   header: { alignItems: "center", marginTop: 50, marginBottom: 32 },
   logoPrimary: { width: 75, height: 72, marginBottom: 16 },
@@ -206,22 +239,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: "#9098B1",
   },
-  loginInput: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 12,
-  },
-  loginIcon: {
-    marginRight: 10,
-    marginLeft: 6,
-  },
-  loginInputText: {
-    width: "80%",
-  },
+
   visibilityIcon: { marginHorizontal: 10 },
   signInButton: {
     backgroundColor: "#40BFFF",
@@ -292,5 +310,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#40BFFF",
     lineHeight: 18,
+  },
+  textErr: {
+    fontSize: 10,
+    color: "red",
+    marginTop: -7,
+    marginBottom: 10,
+  },
+  boxErr: {
+    width: 343,
+    borderWidth: 1,
+    borderColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  textErr: {
+    color: "red",
+    marginLeft:10
   },
 });

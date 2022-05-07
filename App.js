@@ -1,17 +1,22 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { LogBox, StyleSheet } from "react-native";
+import { Provider } from "react-redux";
 import AppNav from "./navigation/AppNav";
-// import ShopBottomNavigation from "./navigation/ShopBottomNav";
-import { LogBox } from 'react-native';
+import { store } from "./redux/store";
+
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
+  "Non-serializable values were found in the navigation state",
 ]);
 
 export default function App() {
+  
   return (
     // <View>
-    <AppNav style={styles.container} />
+    <Provider store={store}>
+     
+      <AppNav style={styles.container} />
+    </Provider>
+
     /* <CategoryNav /> */
     /* </View> */
   );

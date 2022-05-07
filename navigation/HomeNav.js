@@ -1,6 +1,6 @@
-import HomeScreen from "../screens/HomeScreen";
+import HomeScreen from "./../Screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import TypeFullProduct from "./../screens/TypeFullProduct";
+import TypeFullProduct from "./../Screens/TypeFullProduct";
 import ProductDetail from "./../components/base/detail/ProductDetail";
 import Search from "./../components/search/Search";
 import ProductItem from "./../components/base/ProductItem";

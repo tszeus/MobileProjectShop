@@ -1,122 +1,144 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  Touchable,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
-import CustomInput from "./CustomInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Root } from "react-native-alert-notification";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import InputForm from "../../commons/formHelper/InputForm";
+import { loginAction } from "../../redux/actions/userActions";
+import { userAction } from "../../redux/slice/userSlice";
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [indexInput, setIndexInput] = useState(10);
+const schema = yup
+  .object({
+    password: yup.string().required().min(6),
+    email: yup.string().required().email(),
+  })
+  .required();
 
-  const handlerChangeEmailText = (text) => {
-    setEmail(text);
+const Login = ({ route, navigation }) => {
+  const [toggleVisibilityPassword, setToggleVisibilityPassword] =
+    useState(false);
+  const dispatch = useDispatch();
+  const [err, seterr] = useState();
+
+  const onSubmit = async (data) => {
+    try {
+      const user = await dispatch(loginAction(data));
+      const result = unwrapResult(user);
+      dispatch(userAction.setUser(result));
+      navigation.navigate("BottomNav");
+    } catch (error) {
+      seterr(error);
+    }
   };
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handlerChangePasswordText = (text) => {
-    setPassword(text);
-  };
-
-  const handlerSetInput = (index) => {
-    setIndexInput(index);
-  };
-
-  const inputs = ["Email", "Password"];
+  useEffect(() => {
+    if (route?.params?.email && route?.params?.password) {
+      setValue("email", route?.params?.email);
+      setValue("password", route?.params?.password);
+    }
+  }, [route?.params]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.logoPrimary}
-          source={require("../../static/images/Vector_primary.png")}
-        />
-        <Text style={styles.welcome}>Welcome to SuperShoes</Text>
-        <Text style={styles.title}>Sign in to continue</Text>
-      </View>
-      <View style={styles.loginForm}>
-        <FlatList
-          horizontal={false}
-          showsHorizontalScrollIndicator={false}
-          data={inputs}
-          renderItem={({ item, index }) =>
-            item === "Email" ? (
-              <CustomInput
-                index={index}
-                setIndexInput={handlerSetInput}
-                isActive={indexInput === index}
-                placeholder="Your Email"
-                value={email}
-                setValue={handlerChangeEmailText}
-                iconName="mail-outline"
-              />
-            ) : (
-              <CustomInput
-                index={index}
-                setIndexInput={handlerSetInput}
-                isActive={indexInput === index}
-                placeholder="Password"
-                value={password}
-                setValue={handlerChangePasswordText}
-                isHaveVisibility={true}
-                iconName="lock-outline"
-              />
-            )
-          }
-          keyExtractor={(item) => item}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("BottomNav");
-            console.log(email + " " + password);
-          }}
-          style={styles.signInButton}
-        >
-          <Text style={styles.signInButtonText}>Sign In</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <View style={styles.orBox}>
-          <Text style={styles.line}></Text>
-          <Text style={styles.or}>OR</Text>
-          <Text style={styles.line}></Text>
+    <Root>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image
+            style={styles.logoPrimary}
+            source={require("../../static/images/Vector_primary.png")}
+          />
+          <Text style={styles.welcome}>Welcome to SuperShoes</Text>
+          <Text style={styles.title}>Sign in to continue</Text>
         </View>
-        <TouchableOpacity style={styles.loginWith}>
-          <Image
-            source={require("../../static/images/login/Google.png")}
-            style={styles.socialIconGoogle}
+        {err && (
+          <View style={styles.boxErr}>
+            <Icon
+              style={styles.icon}
+              name="warning"
+              size={20}
+              color="red"
+            />
+            <Text style={styles.textErr}>{err}</Text>
+          </View>
+        )}
+        <View style={styles.loginForm}>
+          <InputForm
+            placeholder="Email"
+            iconname="envelope-o"
+            name="email"
+            control={control}
+            errors={errors}
           />
-          <Text style={styles.loginWithText}>Login with Google</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginWith}>
-          <Image
-            source={require("../../static/images/login/Vector.png")}
-            style={styles.socialIconFacebook}
+          <InputForm
+            placeholder="Password"
+            iconname="lock"
+            name="password"
+            control={control}
+            errors={errors}
+            secureTextEntry={!toggleVisibilityPassword}
+            secondIcon={`${
+              toggleVisibilityPassword ? "visibility" : "visibility-off"
+            }`}
+            setToggleVisibilityPassword={() =>
+              setToggleVisibilityPassword(!toggleVisibilityPassword)
+            }
           />
-          <Text style={styles.loginWithText}>Login with Facebook</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.forgotPass}>Forgot Password?</Text>
-        </TouchableOpacity>
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={styles.haveAAccount}>Don't have an account? </Text>
+
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Register");
-            }}
+            onPress={handleSubmit(onSubmit)}
+            style={styles.signInButton}
           >
-            <Text style={styles.register}>Register</Text>
+            <Text style={styles.signInButtonText}>Sign In</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.footer}>
+          <View style={styles.orBox}>
+            <Text style={styles.line}></Text>
+            <Text style={styles.or}>OR</Text>
+            <Text style={styles.line}></Text>
+          </View>
+          <TouchableOpacity style={styles.loginWith}>
+            <Image
+              source={require("../../static/images/login/Google.png")}
+              style={styles.socialIconGoogle}
+            />
+            <Text style={styles.loginWithText}>Login with Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.loginWith}>
+            <Image
+              source={require("../../static/images/login/Vector.png")}
+              style={styles.socialIconFacebook}
+            />
+            <Text style={styles.loginWithText}>Login with Facebook</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.forgotPass}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <Text style={styles.haveAAccount}>Don't have an account? </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Register");
+              }}
+            >
+              <Text style={styles.register}>Register</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
+    </Root>
   );
 };
 
@@ -213,5 +235,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#40BFFF",
     lineHeight: 18,
+  },
+  boxErr: {
+    width: 343,
+    borderWidth: 1,
+    borderColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  textErr: {
+    color: "red",
+    marginLeft:10
   },
 });
