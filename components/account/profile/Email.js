@@ -7,9 +7,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
 
-const Name = ({ navigation, route }) => {
-	const [index, setIndex] = useState(0);
-	const [fullNameNew, setFullNameNew] = useState();
+const Email = ({ navigation, route }) => {
+	const [index, setIndex] = useState(1);
+	const [emailNew, setEmailNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
     const isFocused = useIsFocused()
     const {
@@ -18,8 +18,8 @@ const Name = ({ navigation, route }) => {
         formState: { errors },
       } = useForm();
 
-    const save = () =>{
-        Convert.saveFieldProfile("fullName", fullNameNew);
+    const saveEmail = () =>{
+        Convert.saveFieldProfile("email", emailNew);
     }
 
     /**
@@ -27,29 +27,30 @@ const Name = ({ navigation, route }) => {
 	 */
 	useEffect(() => {
         // TODO fullName truyền từ profile động
-		setFullNameNew(route?.params?.fullName);
+		setEmailNew(route?.params?.email);
 	}, [isFocused]);
 
 	return (
 		<View style={styles.wrapper}>
-			<Header style={styles.header} header="Name" haveBack={true}></Header>
-			<Text style={styles.label}>Full Name</Text>
-			<CustomInput
+			<Header style={styles.header} header="Email" haveBack={true}></Header>
+			<Text style={styles.label}>Change Email</Text>
+            <CustomInput
 				index={1}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === 1}
-				value={fullNameNew}
-				setValue={setFullNameNew}
-				placeholder={"Full Name"}
+				value={emailNew}
+				setValue={setEmailNew}
+				placeholder={"Email"}
                 autoFocus={true}
-                rule={{ required: "Your name is required" }}
+                rule={{ required: "Your email is required" }}
                 control={control}
-                name="name"
+                name="email"
+                iconName="mail-outline"
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
 				activeOpacity={0.5}
-				onPress={handleSubmit(() => {save(); navigation.goBack()})}
+				onPress={handleSubmit(() => {saveEmail(); navigation.goBack()})}
 			>
 				<Text style={styles.textButton}>Save</Text>
 			</TouchableOpacity>
@@ -57,7 +58,7 @@ const Name = ({ navigation, route }) => {
 	);
 };
 
-export default Name;
+export default Email;
 
 const styles = StyleSheet.create({
 	wrapper: {

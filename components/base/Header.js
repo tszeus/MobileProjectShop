@@ -19,18 +19,21 @@ export default Header;
 
 const styles = StyleSheet.create({
 	header: {
-		height: "15%",
-		alignItems: "center",
+		height: 100,
 		flexDirection: "row",
 		width: "100%",
         marginLeft: 16,
         borderBottomColor: "#EBF0FF",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        position: "absolute",
+        paddingBottom: 26,
+        alignItems: "flex-end"
 	},
 	title: {
 		fontSize: 16,
 		fontWeight: "bold",
 		color: "#223263",
+        marginBottom: 2
 	},
 	navigateBack: {
 		fontSize: 24,

@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 5,
         height: 57,
-        justifyContent: "center"
+        justifyContent: "center",
+        alignContent: "flex-end",
 	},
     textButton: {
         color: "#fff",
