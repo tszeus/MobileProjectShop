@@ -2,12 +2,12 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "react-native-star-rating";
-import WriteComment from "./WriteReview";
+import WriteReview from "./WriteReview";
 import ReviewItem from "./ReviewItem";
 import { useNavigation } from "@react-navigation/native";
 import reviewsApi from "../../../api/reviewsApi";
 
-const Comment = ({ id, avgVote }) => {
+const Review = ({ id, avgVote }) => {
   const [reviews, setReviews] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [avgRate, setAvgRate] = useState(avgVote);
@@ -43,7 +43,7 @@ const Comment = ({ id, avgVote }) => {
 
   return (
     <>
-      <WriteComment
+      <WriteReview
         id={id}
         reviews={reviews}
         setReviews={setReviews}
@@ -111,7 +111,7 @@ const Comment = ({ id, avgVote }) => {
   );
 };
 
-export default Comment;
+export default Review;
 
 const styles = StyleSheet.create({
   header: { marginTop: 24 },

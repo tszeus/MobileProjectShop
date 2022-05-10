@@ -63,7 +63,7 @@ const ReviewItem = ({
       }
     });
     console.log(data.content);
-    setReviews(arrayOfReviews[0].content);
+    setReviews(arrayOfReviews);
   };
   return (
     <View style={styles.container}>
