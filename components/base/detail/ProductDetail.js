@@ -1,6 +1,6 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import CarouselImage from "../Carousel";
+
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -8,11 +8,11 @@ import StarRating from "react-native-star-rating";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ColorsAndSizes from "./colorsAndSizes/ColorsAndSizes";
 import ProductDescription from "./ProductDescription";
-import Comment from "./Comment";
+import Comment from "./comment/Review";
+import CarouselImage from "./Carousel";
 
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
-
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -46,10 +46,11 @@ const ProductDetail = ({ route }) => {
             <StarRating
               disabled={true}
               maxStars={5}
-              rating={3.5}
+              rating={route.params.item.vote_average}
               starSize={16}
               starStyle={{}}
               fullStarColor={"#FFC833"}
+              emptyStarColor={"#EBF0FF"}
             />
           </View>
           <View style={styles.price}>
@@ -60,7 +61,11 @@ const ProductDetail = ({ route }) => {
           {/* Size and Color */}
           <ColorsAndSizes sizes={sizes} />
           <ProductDescription />
-          <Comment />
+          <Comment
+            id={route.params.item._id}
+            voteCount={route.params.item.vote_count}
+            avgVote={route.params.item.vote_average}
+          />
           <TouchableOpacity>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>

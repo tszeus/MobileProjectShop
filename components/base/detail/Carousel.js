@@ -1,12 +1,15 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { Dimensions, View } from "react-native";
+import { createRef, useState } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
+
+import React from "react";
 import { Tile } from "react-native-elements";
 
 const CarouselImage = ({ data }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const { width: viewportWidth } = Dimensions.get("window");
-  let _carousel = React.createRef(null);
+  let _carousel = createRef(null);
+
   const _renderItem = ({ item }) => {
     return (
       <View>
@@ -60,6 +63,5 @@ const CarouselImage = ({ data }) => {
     </View>
   );
 };
-export default CarouselImage;
 
-const styles = StyleSheet.create({});
+export default CarouselImage;
