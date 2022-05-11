@@ -6,20 +6,28 @@ import CustomInput from "../../Login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
+import { useSelector, useDispatch } from 'react-redux'
+import { userAction } from "../../../redux/slice/userSlice";
+import {updateUserAction} from "../../../redux/actions/userActions"
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const Name = ({ navigation, route }) => {
+    const user = useSelector((state) => state.user.user);
 	const [index, setIndex] = useState(0);
 	const [fullNameNew, setFullNameNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
     const isFocused = useIsFocused()
+    const dispatch = useDispatch();
     const {
         control,
         handleSubmit,
         formState: { errors },
       } = useForm();
 
-    const save = () =>{
-        Convert.saveFieldProfile("fullName", fullNameNew);
+    const save = async () =>{
+        const userNew = await dispatch(updateUserAction({id: user._id, data: {field: "fullName", value: fullNameNew}}));
+        const result = unwrapResult(userNew);
+        dispatch(userAction.setUser(result));
     }
 
     /**
@@ -38,7 +46,7 @@ const Name = ({ navigation, route }) => {
 				index={1}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === 1}
-				value={fullNameNew}
+				defaultValue={fullNameNew}
 				setValue={setFullNameNew}
 				placeholder={"Full Name"}
                 autoFocus={true}

@@ -15,7 +15,7 @@ import StarRating from "react-native-star-rating";
  * @param {*} param0
  * @returns
  */
-export default function ProductItem({ item, type }) {
+export default function ProductItem({ item, type = "Puma" }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -29,13 +29,13 @@ export default function ProductItem({ item, type }) {
           <Image
             style={{ height: 148, width: 148, borderRadius: 6 }}
             source={{
-              uri: item.images[0],
+              uri: item && item.images && item.images.length > 0 ? item.images[0] : "https://res.cloudinary.com/thhh/image/upload/v1650387521/mwy0iafro8qz2b8dynad.jpg",
             }}
           />
         </View>
         <View style={styles.itemDisc}>
           <View>
-            <Text style={styles.itemName}>{`${type} Product`}</Text>
+            <Text style={styles.itemName}>{`${item.name}`}</Text>
           </View>
           <View style={styles.rating}>
             <StarRating

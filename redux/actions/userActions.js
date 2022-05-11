@@ -18,6 +18,26 @@ export const registerAction = createAsyncThunk(
     }
   }
 );
+
+export const updateUserAction = createAsyncThunk(
+    "user",
+    async (data, { rejectWithValue, dispatch }) => {
+      try {
+        var objectParam = {}
+        objectParam[data.data.field] = data.data.value;
+        const user = await userApi.updateProfile(data.id, objectParam);
+        return user;
+      } catch (error) {
+        const { status } = error.response;
+        if (status === 400) {
+          return rejectWithValue("User Profile is not updated");
+        } else {
+          return rejectWithValue("Failed");
+        }
+      }
+    }
+  );
+
 export const loginAction = createAsyncThunk(
   "auth/login",
   async (data, { rejectWithValue }) => {

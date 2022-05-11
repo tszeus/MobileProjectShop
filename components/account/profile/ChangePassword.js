@@ -6,101 +6,136 @@ import CustomInput from "../../Login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
+import { useSelector, useDispatch } from "react-redux";
+import { userAction } from "../../../redux/slice/userSlice";
+import { updateUserAction } from "../../../redux/actions/userActions";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { ALERT_TYPE, Root, Toast } from "react-native-alert-notification";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const ChangePassword = ({ navigation, route }) => {
+	const user = useSelector((state) => state.user.user);
 	const [index, setIndex] = useState(1);
 	const [newPassword, setNewPassword] = useState();
 	const [oldPassword, setOldPassword] = useState();
 	const [confirmPassword, setConfirmPassword] = useState();
 	const [indexInput, setIndexInput] = useState(10);
-    const isFocused = useIsFocused()
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-      } = useForm();
+    const [err, seterr] = useState();
+	const isFocused = useIsFocused();
+	const dispatch = useDispatch();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
-    const save = () =>{
-        Convert.saveFieldProfile("password", newPassword);
-    }
+	const save = async () => {
+		if (oldPassword === user.password) {
+			const userNew = await dispatch(
+				updateUserAction({
+					id: user._id,
+					data: { field: route?.params?.field, value: newPassword },
+				})
+			);
+			const result = unwrapResult(userNew);
+			dispatch(userAction.setUser(result));
+			navigation.goBack();
+            seterr("")
+		} else {
+            seterr("Old password is not correct")
+		}
+	};
 
-    /**
+	/**
 	 * Xử lý focus input mỗi khi màn hình được focus
 	 */
 	useEffect(() => {
-        // TODO password truyền từ profile động
+		// TODO password truyền từ profile động
 		setNewPassword("");
 	}, [isFocused]);
 
 	return (
 		<View style={styles.wrapper}>
-			<Header style={styles.header} header="ChangePassword" haveBack={true}></Header>
+			<Header
+				style={styles.header}
+				header="ChangePassword"
+				haveBack={true}
+			></Header>
+			{err && (
+				<View style={styles.boxErr}>
+					<Icon style={styles.icon} name="warning" size={20} color="red" />
+					<Text style={styles.textErr}>{err}</Text>
+				</View>
+			)}
 			<Text style={styles.label}>Old Password</Text>
-            <CustomInput
+			<CustomInput
 				index={index}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === index}
 				value={oldPassword}
 				setValue={setOldPassword}
 				placeholder={"Old password"}
-                autoFocus={true}
-                rule={{
-                    required: "Old password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Old password should be minimum 6 characters long",
-                    },
-                  }}
-                control={control}
-                name="old password"
-                iconName="lock-outline"
-                isHaveVisibility={true}
+				autoFocus={true}
+				rule={{
+					required: "Old password is required",
+					minLength: {
+						value: 6,
+						message: "Old password should be minimum 6 characters long",
+					},
+				}}
+				control={control}
+				name="old password"
+				iconName="lock-outline"
+				isHaveVisibility={true}
 			></CustomInput>
-            <Text style={styles.label}>New Password</Text>
-            <CustomInput
+			<Text style={styles.label}>New Password</Text>
+			<CustomInput
 				index={index}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === index}
 				value={newPassword}
 				setValue={setNewPassword}
 				placeholder={"New password"}
-                rule={{
-                    required: "New password is required",
-                    minLength: {
-                      value: 6,
-                      message: "New password should be minimum 6 characters long",
-                    },
-                  }}
-                control={control}
-                name="new password"
-                iconName="lock-outline"
-                isHaveVisibility={true}
+				rule={{
+					required: "New password is required",
+					minLength: {
+						value: 6,
+						message: "New password should be minimum 6 characters long",
+					},
+				}}
+				control={control}
+				name="new password"
+				iconName="lock-outline"
+				isHaveVisibility={true}
 			></CustomInput>
-            <Text style={styles.label}>New Password Again</Text>
-            <CustomInput
-                rule={{
-                    validate: (value) => value === newPassword || 'The passwords do not match',
-                    required: "New password again is required",
-                    minLength: {
-                    value: 6,
-                    message: "New password again should be minimum 6 characters long",
-                    },
-                }}
+			<Text style={styles.label}>New Password Again</Text>
+			<CustomInput
+				rule={{
+					validate: (value) =>
+						value === newPassword || "The passwords do not match",
+					required: "New password again is required",
+					minLength: {
+						value: 6,
+						message: "New password again should be minimum 6 characters long",
+					},
+				}}
 				index={index}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === index}
 				value={confirmPassword}
 				setValue={setConfirmPassword}
 				placeholder={"New password again"}
-                control={control}
-                name="confirm password"
-                iconName="lock-outline"
-                isHaveVisibility={true}
+				control={control}
+				name="confirm password"
+				iconName="lock-outline"
+				isHaveVisibility={true}
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
 				activeOpacity={0.5}
-				onPress={handleSubmit(() => {save(); navigation.goBack()})}
+				onPress={handleSubmit(() => {
+					save();
+				})}
 			>
 				<Text style={styles.textButton}>Save</Text>
 			</TouchableOpacity>
@@ -124,6 +159,20 @@ const styles = StyleSheet.create({
 		color: "#223263",
 		marginBottom: 12,
 	},
+    boxErr: {
+        width: "100%",
+        borderWidth: 1,
+        borderColor: "red",
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 20,
+        flexDirection:'row',
+        alignItems:'center'
+      },
+      textErr: {
+        color: "red",
+        marginLeft:10
+      },
 	button: {
 		marginTop: 16,
 		backgroundColor: "#40BFFF",

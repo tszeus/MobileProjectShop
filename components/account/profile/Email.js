@@ -6,8 +6,10 @@ import CustomInput from "../../Login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
+import { useSelector } from 'react-redux'
 
 const Email = ({ navigation, route }) => {
+    const user = useSelector((state) => state.user.user);
 	const [index, setIndex] = useState(1);
 	const [emailNew, setEmailNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
@@ -19,7 +21,7 @@ const Email = ({ navigation, route }) => {
       } = useForm();
 
     const saveEmail = () =>{
-        Convert.saveFieldProfile("email", emailNew);
+        Convert.saveFieldProfile("email", emailNew, user._id);
     }
 
     /**
@@ -38,7 +40,6 @@ const Email = ({ navigation, route }) => {
 				index={1}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === 1}
-				value={emailNew}
 				setValue={setEmailNew}
 				placeholder={"Email"}
                 autoFocus={true}
@@ -46,6 +47,7 @@ const Email = ({ navigation, route }) => {
                 control={control}
                 name="email"
                 iconName="mail-outline"
+                defaultValue={emailNew}
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}

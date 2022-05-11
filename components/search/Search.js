@@ -11,7 +11,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import React, { useState, useRef, useEffect } from "react";
 import SearchModel from "./SearchModel";
-import axios from "axios";
 const _ = require("lodash");
 import { useIsFocused } from "@react-navigation/native";
 import { Config } from "../../config/Config";
@@ -20,6 +19,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Sort from "./Sort";
 import Filter from "./Filter";
 import { SortEnum } from "../../commons/enums/sort.enum";
+import homeApi from "../api/homeApi"
 
 const Search = (clean = false) => {
 	const navigation = useNavigation();
@@ -87,14 +87,13 @@ const Search = (clean = false) => {
 	 */
 	const handleSearch = async (value) => {
 		try {
-			var queryStr = Convert.objectToQueryString({
+			var res = await homeApi.searchProduct({
 				name: value,
 				sort_by: sortBy,
                 min: min,
                 max: max
 			});
-			var res = await axios.get(`${Config.BaseUrl}search?${queryStr}`);
-			setData(res.data);
+			setData(res);
 			setVisible(true);
 		} catch (err) {
 			setData([]);

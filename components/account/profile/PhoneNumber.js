@@ -6,29 +6,37 @@ import CustomInput from "../../Login/CustomInput";
 import { useIsFocused } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { Convert } from "../../../utils/Convert";
+import { useSelector, useDispatch } from 'react-redux'
+import { userAction } from "../../../redux/slice/userSlice";
+import {updateUserAction} from "../../../redux/actions/userActions"
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const PhoneNumber = ({ navigation, route }) => {
+    const user = useSelector((state) => state.user.user);
 	const [index, setIndex] = useState(0);
 	const [phoneNumberNew, setPhoneNumberNew] = useState();
 	const [indexInput, setIndexInput] = useState(10);
     const isFocused = useIsFocused()
+    const dispatch = useDispatch();
     const {
         control,
         handleSubmit,
         formState: { errors },
       } = useForm();
 
-    const save = () =>{
-        Convert.saveFieldProfile("phoneNumber", phoneNumberNew);
+      const save = async () =>{
+        const userNew = await dispatch(updateUserAction({id: user._id, data: {field: route?.params?.field, value: phoneNumberNew}}));
+        const result = unwrapResult(userNew);
+        dispatch(userAction.setUser(result));
     }
 
     /**
 	 * Xử lý focus input mỗi khi màn hình được focus
 	 */
 	useEffect(() => {
-        // TODO fullName truyền từ profile động
-		setPhoneNumberNew(route?.params?.phoneNumber);
+		setPhoneNumberNew(route?.params?.value);
 	}, [isFocused]);
+
 
 	return (
 		<View style={styles.wrapper}>
@@ -38,7 +46,6 @@ const PhoneNumber = ({ navigation, route }) => {
 				index={1}
 				setIndexInput={setIndexInput}
 				isActive={indexInput === 1}
-				value={phoneNumberNew}
 				setValue={setPhoneNumberNew}
 				placeholder={"Phone Number"}
                 autoFocus={true}
@@ -46,6 +53,7 @@ const PhoneNumber = ({ navigation, route }) => {
                 control={control}
                 name="phone number"
                 iconName="phone-iphone"
+                defaultValue={phoneNumberNew}
 			></CustomInput>
 			<TouchableOpacity
 				style={styles.button}
