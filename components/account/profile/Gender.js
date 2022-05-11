@@ -4,13 +4,22 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../../base/Header";
 import { useIsFocused } from "@react-navigation/native";
 import { Convert } from "../../../utils/Convert";
+import { GenderConstant } from "../../../commons/constants/gender.constant";
+import { userAction } from "../../../redux/slice/userSlice";
+import { useSelector, useDispatch } from 'react-redux'
+import {updateUserAction} from "../../../redux/actions/userActions"
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const Gender = ({ navigation, route }) => {
+    const user = useSelector((state) => state.user.user);
     const [selectedValue, setSelectedValue] = useState(0);
     const isFocused = useIsFocused()
+    const dispatch = useDispatch();
     
-    const save = () =>{
-        Convert.saveFieldProfile("gender", selectedValue);
+    const save = async () =>{
+        const userNew = await dispatch(updateUserAction({id: user._id, data: {field: route?.params?.field, value: selectedValue}}));
+        const result = unwrapResult(userNew);
+        dispatch(userAction.setUser(result));
     }
 
     /**
@@ -20,7 +29,6 @@ const Gender = ({ navigation, route }) => {
         // TODO fullName truyền từ profile động
 		setSelectedValue(route?.params?.value);
 	}, [isFocused]);
-
 
 	return (
 		<View style={styles.wrapper}>
@@ -32,9 +40,7 @@ const Gender = ({ navigation, route }) => {
 				selectedValue={selectedValue}
 				onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
 			>
-				<Picker.Item label="Nam" value="Nam" />
-				<Picker.Item label="Nữ" value="Nữ" />
-				<Picker.Item label="Khác" value="Khác" />
+                {GenderConstant.map((item, index) => <Picker.Item label={item.label} value={item.value} key={index}/>)}
 			</Picker>
             </View>
 			

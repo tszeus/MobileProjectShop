@@ -14,6 +14,11 @@ const userApi  = {
   getUserbyId:(id) => {
     const url = `uses/${id}`;
     return axiosClient.get(url);
+  },
+
+  updateProfile:(id, data) => {
+    const url = `user/${id}`;
+    return axiosClient.put(url, data);
   }
 }
 export default userApi;

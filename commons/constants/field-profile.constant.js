@@ -3,24 +3,24 @@ export const FieldProfileConstant = [
         iconName: "gender-male-female",
         label: 'Gender',
         component: 'Gender',
-        value: "Nam"
+        field: "gender"
     },
     {
         iconName: "email-outline",
         label: 'Email',
         component: "Email",
-        value: "rex4dom@gmail.com"
+        field: "email"
     },
     {
         iconName: "cellphone",
         label: 'Phone Number',
         component: "PhoneNumber",
-        value: "(307) 555-0133"
+        field: "phoneNumber"
     },
     {
         iconName: "shield-lock-outline",
         label: 'Change Password',
         component: "ChangePassword",
-        value: "•••••••••••••••••"
+        field: "password"
     },
 ]

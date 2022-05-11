@@ -8,10 +8,10 @@ const FieldProfile = ({label, iconName, onPress = () => {}, value, }) => {
 		<TouchableOpacity onPress={() => onPress()} style={styles.field}>
 			<MaterialCommunityIcons style={styles.icon} name={iconName}></MaterialCommunityIcons>
             <Text style={styles.label}>{label}</Text>
-            <Text style={styles.value}>{value}</Text>
-            <TouchableOpacity  onPress={() => onPress()}>
+            <Text style={styles.value}>{label === "Change Password" ? "*********" : value}</Text>
+            {label !== "Email" && <TouchableOpacity  onPress={() => onPress()}>
 				<Icon style={styles.navigateNext} name="navigate-next"></Icon>
-			</TouchableOpacity>
+			</TouchableOpacity>}
 		</TouchableOpacity>
 	);
 };

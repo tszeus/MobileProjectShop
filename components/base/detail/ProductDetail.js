@@ -39,8 +39,8 @@ const ProductDetail = ({ route }) => {
         <CarouselImage data={route.params.item.images} />
         <View style={styles.body} showsVerticalScrollIndicator={false}>
           <Text style={styles.productDetailNameBody}>
-            {/* {route.params.item.name} */}
-            Nike Air Zoom Pegasus 36 Miami
+            {route.params.item.name}
+            
           </Text>
           <View style={styles.rating}>
             <StarRating
