@@ -9,11 +9,11 @@ LogBox.ignoreLogs([
 ]);
 
 export default function App() {
+
   
   return (
     // <View>
     <Provider store={store}>
-     
       <AppNav style={styles.container} />
     </Provider>
 

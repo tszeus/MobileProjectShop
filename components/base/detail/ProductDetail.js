@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CarouselImage from "../Carousel";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -9,13 +9,87 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ColorsAndSizes from "./colorsAndSizes/ColorsAndSizes";
 import ProductDescription from "./ProductDescription";
 import Comment from "./Comment";
-
+import { useDispatch, useSelector } from "react-redux";
+import { productApi } from "../../api/productApi";
+import SizeChoose from "./colorsAndSizes/SizeChoose";
+import ColorChoose from "./colorsAndSizes/ColorChoose";
+import { addCartAction } from "./../../../redux/actions/cartAction";
+import Loading from "./../../../commons/Loading";
+import Notifycation from "../../../commons/Notifycation";
+import { unwrapResult } from "@reduxjs/toolkit";
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
-
+  const { _id } = route.params.item;
+  const [currentProduct, setCurrentProduct] = useState();
   const navigation = useNavigation();
+  const { user } = useSelector((state) => state.user);
+  const { isLoading } = useSelector((state) => state.cart);
+  const [color, setColor] = useState();
+  const [size, setSize] = useState();
+  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    productApi
+      .getProductById(_id)
+      .then((product) => setCurrentProduct(product))
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [_id]);
+  const handleAddToCart = async () => {
+    if (user) {
+      if (color && size) {
+        const data = {
+          product_id: currentProduct?._id,
+          quantity: 1,
+          size,
+          color,
+          user_id: user._id,
+        };
+        try {
+          const res = await dispatch(addCartAction(data));
+          const result = unwrapResult(res);
+          setMessages([...messages,{
+            content:" Added success",
+            color:"green",
+            icon:"check-circle"
+          }]);
+        } catch (error) {
+          setMessages([...messages,{
+            content:"Failed",
+            color:"red"
+          }]);
+          
+        }
+      } else if (!color && size) {
+        setMessages([...messages,{
+          content:"Please choose color",
+          color:"orange",
+          icon:"warning"
+        }]);
+      } else if (color && !size) {
+        setMessages([...messages,{
+          content:"Please choose size",
+          color:"orange",
+          icon:"warning"
+        }]);
+
+      } else  {
+        setMessages([...messages,{
+          content:"Please choose size and color",
+          color:"orange",
+          icon:"warning",
+          icon:"stop-circle"
+          
+        }]);
+      }
+    } else {
+      navigation.navigate("LoginNav");
+    }
+  };
   return (
     <View style={styles.container}>
+      <Notifycation messages={messages} setMessages={setMessages} />
       <View style={styles.heading}>
         <TouchableOpacity
           onPress={() => {
@@ -58,10 +132,17 @@ const ProductDetail = ({ route }) => {
             >{`$${route.params.item.price}`}</Text>
           </View>
           {/* Size and Color */}
-          <ColorsAndSizes sizes={sizes} />
+          {/* <ColorsAndSizes
+          colors={currentProduct?.colors}
+          sizes={currentProduct?.sizes}
+          setColor={setColor}
+          setSize={setSize}
+        /> */}
+          <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />
+          <ColorChoose colors={currentProduct?.colors} setColor={setColor} />
           <ProductDescription />
           <Comment />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleAddToCart()}>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>
         </View>

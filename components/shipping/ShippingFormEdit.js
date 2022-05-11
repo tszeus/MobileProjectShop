@@ -1,44 +1,90 @@
-import React, { useState } from "react";
-import {
-  StyleSheet, Text, TouchableOpacity, View
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ShippingInputForm from "./ShippingInputForm";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import InputForm from "../../commons/formHelper/InputForm";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { shippingAction } from "../../redux/slice/shippingSlice";
+import {
+  addShippingAction,
+  updateShippingAction,
+} from "../../redux/actions/shippingInfoAction";
+const phoneRegExp = /^0[0-9]{9}/;
+const schema = yup
+  .object({
+    fullName: yup.string().required(),
+    address: yup.string().required().min(5),
+    phoneNumber: yup.string().matches(phoneRegExp, "Phone number is not valid"),
+  })
+  .required();
 
 function ShippingFormEdit({ shippingItem }) {
-  const [infomationShipping, setInfomationShipping] = useState({
-    name: shippingItem?.name || "",
-    address: shippingItem?.address || "",
-    phoneNumber: shippingItem?.phoneNumber || "",
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { listShipping } = useSelector((state) => state.shipping);
+  const navigation = useNavigation();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      fullName: shippingItem?.fullName || "",
+      address: shippingItem?.address || "",
+      phoneNumber: shippingItem?.phoneNumber || "",
+    },
   });
-  const handleChange = (key) => (value) =>
-    setInfomationShipping({
-      ...infomationShipping,
-      [key]: value,
-    });
-    const handleSubmit = () => {
-      console.log(infomationShipping);
+  const onSubmit = async (data) => {
+    if (shippingItem) {
+      if (!isDirty) {
+        navigation.navigate("Ship To");
+      } else {
+        await dispatch(updateShippingAction({ id: shippingItem?._id, data }));
+        navigation.navigate("Ship To");
+      }
+    } else {
+      console.log("add")
+      const newShipping = {
+        ...data,
+        user_id: user?._id,
+        default: `${listShipping.length === 0 ? true : false}`,
+      };
+      await dispatch(addShippingAction(newShipping));
+      navigation.navigate("Ship To");
     }
+  };
+
   return (
     <View>
-      <ShippingInputForm
-        handleChange={handleChange('name')}
-        value={infomationShipping.name}
+      <InputForm
+        placeholder="Full name"
         iconname="user"
-        placeholder="Name"
+        name="fullName"
+        control={control}
+        errors={errors}
       />
-      <ShippingInputForm
-        handleChange={handleChange('address')}
-        value={infomationShipping.address}
-        iconname="address-book"
+      <InputForm
         placeholder="Address"
+        iconname="address-book"
+        name="address"
+        control={control}
+        errors={errors}
       />
-      <ShippingInputForm
-        handleChange={handleChange('phoneNumber')}
-        value={infomationShipping.phoneNumber}
-        iconname="phone"
-        placeholder="Phone number"
+      <InputForm
+        placeholder="Phone Number"
+        iconname="phone-square"
+        name="phoneNumber"
+        control={control}
+        errors={errors}
       />
-      <TouchableOpacity onPress={() => handleSubmit()} style={styles.buttonAction}>
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        style={styles.buttonAction}
+      >
         <Text style={styles.textAction}>Save</Text>
       </TouchableOpacity>
     </View>

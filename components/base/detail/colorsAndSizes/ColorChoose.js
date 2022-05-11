@@ -2,10 +2,13 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import ColorBox from "./ColorBox";
 
-const ColorChoose = ({ data }) => {
-  const [indexColor, setIndexColor] = useState(0);
+const ColorChoose = ({ colors, setColor }) => {
+  const [indexColor, setIndexColor] = useState();
+  const data =
+    colors?.length > 0 ? colors : ["red", "green", "yellow", "black", "blue"];
   return (
     <FlatList
+      style={{ marginTop: 20, marginBottom: 20 }}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       data={data}
@@ -13,6 +16,7 @@ const ColorChoose = ({ data }) => {
         <TouchableOpacity
           onPress={() => {
             setIndexColor(index);
+            setColor(item);
           }}
         >
           <ColorBox isActive={index === indexColor} color={item} key={item} />

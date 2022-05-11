@@ -33,6 +33,9 @@ axiosClient.interceptors.request.use(async (config) => {
   const customHeaders = {};
 
   const token = await SecureStore.getItemAsync("token");
+  
+
+
 
   if (token) {
     customHeaders.Authorization = token;

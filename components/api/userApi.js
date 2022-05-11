@@ -12,7 +12,7 @@ const userApi  = {
     return axiosClient.post(url,data)
   },
   getUserbyId:(id) => {
-    const url = `uses/${id}`;
+    const url = `user/${id}`;
     return axiosClient.get(url);
   }
 }

@@ -1,40 +1,47 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox } from "react-native-elements";
-import { Alert, Modal, Pressable } from "react-native";
-import { useEffect } from "react";
-function CartItem({
-  item,
-  addListPayment,
-  removePayment,
-  isSelectAll,
-  unSelectAll,
-}) {
-  const [isSelected, setSelection] = useState(false);
-
-  useEffect(() => {
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteCartAction,
+  updateCartAction,
+} from "../../redux/actions/cartAction";
+import { cartAction } from "../../redux/slice/cartSlice";
+function CartItem({ item }) {
+  const { listPayment } = useSelector((state) => state.cart);
+  const isSelected =
+    listPayment.findIndex((paymentItem) => paymentItem === item?._id) >= 0;
+  const dispatch = useDispatch();
+  const handleDeleteCart = () => {
+    dispatch(deleteCartAction(item?._id));
+  };
+  const handleAddListPayment = () => {
     if (!isSelected) {
-      removePayment(item._id);
+      dispatch(cartAction.addListPayment(item?._id));
     } else {
-      addListPayment(item._id);
+      dispatch(cartAction.deletePayment(item?._id));
     }
-  }, [isSelected]);
-  useEffect(() => {
-    if (isSelectAll) {
-      setSelection(true);
+  };
+  const handleUpdateQuantity = (num) => {
+    if (item?.quantity + num === 0) {
+      dispatch(deleteCartAction(item?._id));
     } else {
-      if (unSelectAll) {
-        setSelection(false);
-      }
+      dispatch(
+        updateCartAction({
+          id: item?._id,
+          data: { quantity: item?.quantity + num },
+        })
+      );
     }
-  }, [isSelectAll]);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.infoProduct}>
         <CheckBox
           checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
+          onPress={() => handleAddListPayment()}
           co
           style={styles.checkbox}
         />
@@ -47,19 +54,22 @@ function CartItem({
         <View style={styles.wrapInfoText}>
           <View style={styles.wrapNameSize}>
             <Text numberOfLines={1} style={styles.text}>
-              {item.product.name}
+              {item.product?.name}
             </Text>
             <Text style={styles.text}>
-              {item.size} {item.color}
+              {item.size} {item?.color}
             </Text>
           </View>
           <Text style={[styles.text, { color: "#40BFFF" }]}>
-            ${item.product.price}
+            ${item?.product?.price}
           </Text>
         </View>
       </View>
       <View style={styles.action}>
-        <TouchableOpacity style={styles.buttonAction}>
+        <TouchableOpacity
+          onPress={() => handleUpdateQuantity(-1)}
+          style={styles.buttonAction}
+        >
           <Text style={styles.textButtonAction}>-</Text>
         </TouchableOpacity>
         <View
@@ -67,12 +77,20 @@ function CartItem({
         >
           <Text style={[styles.textButtonAction]}>{item.quantity}</Text>
         </View>
-        <TouchableOpacity style={styles.buttonAction}>
+        <TouchableOpacity
+          onPress={() => handleUpdateQuantity(1)}
+          style={styles.buttonAction}
+        >
           <Text style={styles.textButtonAction}>+</Text>
         </TouchableOpacity>
       </View>
-      <Icon style={styles.iconDelete} name="trash" size={20} color="#9098B1" />
-     
+      <Icon
+        onPress={() => handleDeleteCart()}
+        style={styles.iconDelete}
+        name="trash"
+        size={20}
+        color="#9098B1"
+      />
     </View>
   );
 }
@@ -110,7 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   action: {
-    width: 124,
+    width: 100,
     height: 24,
     borderColor: "#EBF0FF",
     borderWidth: 1,
@@ -121,7 +139,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   buttonAction: {
-    width: 40,
+    width: 30,
     height: 24,
     justifyContent: "center",
     alignItems: "center",

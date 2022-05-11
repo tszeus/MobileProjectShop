@@ -2,31 +2,22 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { View,StyleSheet, Text,TouchableOpacity } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useDispatch } from 'react-redux';
 import { ShippingContext } from '.';
+import { deleteShippingAction } from '../../redux/actions/shippingInfoAction';
 
 function ShippingItem({item,isSelected,setCurrenIdShipping}) {
   const navigation = useNavigation();
-  const {dispatch} = useContext(ShippingContext);
   const handleOnPress = () => {
   setCurrenIdShipping(item._id)
   }
-  const handleEditShipping = () => {
-  navigation.navigate('Edit shipping',{
-    title:'Edit shipping infomation',
-    shippingItem:item
-  })
-  }
-  const handleDeleteShippingItem = () => {
-    dispatch({
-      type:'DELETE_SHIPPING',
-      payload:{
-        id:item._id
-      }
-    })
+  const dispatch = useDispatch();
+  const handleDeleteShippingItem = ()=> {
+   dispatch(deleteShippingAction(item._id))
   }
   return (
   <TouchableOpacity onPress={() => handleOnPress()} style={[styles.container,{borderColor:isSelected ?'#40BFFF' : '#EBF0FF' }]}>
-     <Text style={styles.name}>{item.name}</Text>
+     <Text style={styles.name}>{item?.fullName}</Text>
      <Text numberOfLines={3} style={styles.text}>{item.address}</Text>
      <Text  style={styles.text}>{item.phoneNumber}</Text>
      <View style={styles.action}>
