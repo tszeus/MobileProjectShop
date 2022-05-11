@@ -5,9 +5,9 @@ const reviewsApi = {
     const url = `/comments`;
     return axiosClient.post(url, data);
   },
-  getReview: (id, params) => {
-    const url = `comments?product_id=${id}`;
-    return axiosClient.get(url, { params });
+  getReview: (id, page) => {
+    const url = `comments?product_id=${id}&page=${page}`;
+    return axiosClient.get(url);
   },
   deleteReview: (id) => {
     const url = `comments/${id}`;

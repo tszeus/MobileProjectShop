@@ -26,6 +26,7 @@ const WriteComment = ({
   const navigation = useNavigation();
 
   const handleReview = async () => {
+    // if (!review === "") {
     addNewComment();
     const date = new Date();
     setReviews([
@@ -50,6 +51,7 @@ const WriteComment = ({
     } catch (error) {
       console.log("Add review error");
     }
+    // }
   };
 
   const handleCancel = () => {

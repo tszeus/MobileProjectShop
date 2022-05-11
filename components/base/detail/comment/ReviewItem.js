@@ -25,6 +25,7 @@ const ReviewItem = ({
   const handleMore = () => {
     setMore(!more);
   };
+
   const handleEdit = () => {
     navigation.navigate("WriteReview", {
       rating,
@@ -36,6 +37,7 @@ const ReviewItem = ({
     });
     setMore(false);
   };
+
   const handleDelete = async () => {
     deleteById();
     deleteAComment();
@@ -56,7 +58,7 @@ const ReviewItem = ({
   };
 
   const handleChange = (id, data) => {
-    const arrayOfReviews = reviews;
+    const arrayOfReviews = [...reviews];
     arrayOfReviews.forEach((item, index) => {
       if (item._id === id) {
         arrayOfReviews[index] = data;

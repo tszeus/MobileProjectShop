@@ -61,14 +61,14 @@ const ProductDetail = ({ route }) => {
           {/* Size and Color */}
           <ColorsAndSizes sizes={sizes} />
           <ProductDescription />
+          <TouchableOpacity>
+            <Text style={styles.addBtn}>Add To Cart</Text>
+          </TouchableOpacity>
           <Comment
             id={route.params.item._id}
             voteCount={route.params.item.vote_count}
             avgVote={route.params.item.vote_average}
           />
-          <TouchableOpacity>
-            <Text style={styles.addBtn}>Add To Cart</Text>
-          </TouchableOpacity>
         </View>
         <View style={{ height: 75 }} />
       </ScrollView>
