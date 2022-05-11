@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Root } from "react-native-alert-notification";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,9 +11,6 @@ import * as yup from "yup";
 import InputForm from "../../commons/formHelper/InputForm";
 import { loginAction } from "../../redux/actions/userActions";
 import { userAction } from "../../redux/slice/userSlice";
-import { min } from "react-native-reanimated";
-import { useForm, Controller } from "react-hook-form";
-import CustomInput from "./CustomInput";
 
 const schema = yup
   .object({
@@ -32,7 +30,9 @@ const Login = ({ route, navigation }) => {
       const user = await dispatch(loginAction(data));
       const result = unwrapResult(user);
       dispatch(userAction.setUser(result));
-      navigation.navigate("BottomNav");
+      navigation.navigate("BottomNav", {
+        screen: "home",
+      });
     } catch (error) {
       seterr(error);
     }
@@ -66,12 +66,7 @@ const Login = ({ route, navigation }) => {
         </View>
         {err && (
           <View style={styles.boxErr}>
-            <Icon
-              style={styles.icon}
-              name="warning"
-              size={20}
-              color="red"
-            />
+            <Icon style={styles.icon} name="warning" size={20} color="red" />
             <Text style={styles.textErr}>{err}</Text>
           </View>
         )}
@@ -245,11 +240,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   textErr: {
     color: "red",
-    marginLeft:10
+    marginLeft: 10,
   },
 });

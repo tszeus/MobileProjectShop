@@ -8,12 +8,12 @@ import SearchNav from "./SearchNav";
 import CartNav from "./CartNav";
 import AccountNav from "./AccountNav";
 
-
 const Tab = createBottomTabNavigator();
 
 function BottomNav() {
   return (
     <Tab.Navigator
+      initialRouteName="home"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ color }) => {
@@ -61,7 +61,6 @@ function BottomNav() {
       <Tab.Screen
         name="cart"
         component={CartNav}
-        
         options={{
           tabBarBadge: 3,
           tabBarLabel: "Cart",

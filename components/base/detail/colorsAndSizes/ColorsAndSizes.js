@@ -3,14 +3,14 @@ import React from "react";
 import SizeChoose from "./SizeChoose";
 import ColorChoose from "./ColorChoose";
 
-const ColorsAndSizes = ({ sizes }) => {
-  const colors = [
-    "#FFC833",
-    "#40BFFF",
-    "#FB7181",
-    "#53D1B6",
-    "#5C61F4",
-    "#223263",
+const ColorsAndSizes = ({ sizes,listColor }) => {
+  const colors = listColor  ||  [
+    "red",
+    "green",
+    "yellow",
+    "white",
+    "black",
+    "blue",
   ];
   return (
     <View>

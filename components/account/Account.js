@@ -4,8 +4,12 @@ import Header from "../base/Header";
 import Field from "./Field";
 import { FieldRoleConstant } from "../../commons/constants/field-role.constant";
 import Login from "./../login/Login";
+import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import { userAction } from "../../redux/slice/userSlice";
 
 const Account = ({ navigation }) => {
+  const dispatch = useDispatch();
   return (
     <View style={styles.wrapper}>
       <Header header="Account"></Header>
@@ -14,11 +18,18 @@ const Account = ({ navigation }) => {
           key={index}
           label={item.label}
           iconName={item.iconName}
-          onPress={() =>
-            item.label !== "Logout"
-              ? navigation.navigate(item.label)
-              : navigation.navigate("Login")
-          }
+          onPress={async() => {
+            if (item.label == "Logout") {
+              console.log("logout");
+              await SecureStore.deleteItemAsync("token");
+              dispatch(userAction.setUser(null));
+              
+              navigation.navigate("LoginNav");
+              return ;
+            }
+
+            navigation.navigate(item.label);
+          }}
         ></Field>
       ))}
     </View>
@@ -31,7 +42,7 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: "#fff",
     height: "100%",
-    paddingTop: 100
+    paddingTop: 100,
   },
   header: {
     height: 80,

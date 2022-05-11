@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StatusBar, ScrollView } from "react-native";
 import Shipping from "../components/shipping";
 
-function ShipToScreen(props) {
+function ShipToScreen({route}) {
   return (
     <View
       style={{

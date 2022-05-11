@@ -1,195 +1,97 @@
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View ,ScrollView} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import { CheckBox } from "react-native-elements";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../commons/Loading";
+import { fetchListCartAction } from "../../redux/actions/cartAction";
+import { cartAction } from "../../redux/slice/cartSlice";
+import axiosClient from "../api/axiosClient";
 import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
+import Notify from './../../commons/Notifycation';
 
 function Cart() {
   const navigation = useNavigation();
-  const listCart = [
-    {
-      _id: "1",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "1",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "2",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "3",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "4",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "5",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "6",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-    {
-      _id: "7",
-      product: {
-        name: "hehessssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        price: 123,
-        images: [
-          "https://web5s.com.vn/cach-chup-anh-giay-dep/hinh-anh-cach-chup-anh-giay-dep_3_70527_700.jpg",
-        ],
-        _id: "ooook",
-      },
-      quantity: 3,
-      size: 45,
-      color: "red",
-      userId: "1234",
-    },
-  ];
-  const [listPayment, setListPayment] = useState([]);
-  const [isSelectAll, setSelectAll] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { listCart, isLoading } = useSelector((state) => state.cart);
+  useEffect(() => {
+    dispatch(fetchListCartAction(user?._id));
+  }, [user]);
+
+  const { listPayment } = useSelector((state) => state.cart);
+
   const totalItems = listPayment.reduce((totalItems, item) => {
     return (
-      totalItems + listCart.find((cartItem) => cartItem._id === item)?.quantity
+      totalItems + listCart.find((cartItem) => cartItem?._id === item)?.quantity
     );
   }, 0);
   const totalPrice = listPayment.reduce((totalPrice, item) => {
-    const currentItem = listCart.find((cartItem) => cartItem._id === item);
-    return totalPrice + currentItem?.product.price * currentItem.quantity;
+    const currentItem = listCart.find((cartItem) => cartItem?._id === item);
+    return totalPrice + currentItem?.product?.price * currentItem?.quantity;
   }, 0);
 
-  const addListPayment = (cartItem) => {
-    if (!listPayment.includes(cartItem)) {
-      setListPayment([...listPayment, cartItem]);
-    }
-  };
-  const removePayment = (paymentItem) => {
-    const newListPayment = listPayment.filter((item) => item !== paymentItem);
-    setListPayment(newListPayment);
-  };
   const handleCheckOut = () => {
-    navigation.navigate("Ship To");
+    navigation.navigate("Ship To", {
+      quantity_items: totalItems,
+      total_price: totalPrice,
+    });
   };
-  useEffect(() => {
-    if (isSelectAll) {
-      let listPayment = [];
-      for (let cartItem of listCart) {
-        listPayment.push(cartItem._id);
-      }
-      setListPayment(listPayment);
-    } else {
-      if (listPayment.length === listCart.length) {
-        setListPayment([]);
-      }
+  const setAllPayment = () => {
+    if (listPayment?.length === listCart?.length) {
+      dispatch(cartAction.setListPayment([]));
+      return;
     }
-  }, [isSelectAll]);
-  useEffect(() => {
-    if (listPayment.length !== listCart.length) {
-      setSelectAll(false);
-    } else {
-      setSelectAll(true);
+
+    let payments = [];
+    for (let cartItem of listCart) {
+      payments.push(cartItem._id);
     }
-  }, [listPayment]);
+    dispatch(cartAction.setListPayment(payments));
+  };
+
   return listCart.length > 0 ? (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          checked={isSelectAll}
-          onPress={() => setSelectAll(!isSelectAll)}
-          style={styles.checkbox}
-        />
-        <Text style={styles.label}>Chọn tất cả</Text>
-      </View>
-      <CartList
-        listPayment={listPayment}
-        setListPayment={setListPayment}
-        listCart={listCart}
-        isSelectAll={isSelectAll}
-        setSelectAll={setSelectAll}
-        addListPayment={addListPayment}
-        removePayment={removePayment}
-      />
-      <View style={{marginTop:10}}>
-        <CartInvoice totalItems={totalItems} totalPrice={totalPrice} />
-        <TouchableOpacity
-          onPress={() => handleCheckOut()}
-          style={styles.buttonCheckOut}
-          disabled={totalItems === 0}
-        >
-          <Text style={{ textAlign: "center", color: "white" }}>Check Out</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  ) : (
+    !isLoading ? (
+      
+      <ScrollView contentContainerStyle={styles.container}>
+        
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            checked={listPayment.length === listCart.length}
+            onPress={() => setAllPayment()}
+            style={styles.checkbox}
+          />
+          <Text style={styles.label}>Chọn tất cả</Text>
+        </View>
+        <CartList listCart={listCart} />
+        <View style={{ marginTop: 10 }}>
+          <CartInvoice totalItems={totalItems} totalPrice={totalPrice} />
+          <TouchableOpacity
+            onPress={() => handleCheckOut()}
+            style={styles.buttonCheckOut}
+            disabled={totalItems === 0}
+          >
+            <Text style={{ textAlign: "center", color: "white" }}>
+              Check Out
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    ) : (
+      <Loading />
+    )
+  ) : !isLoading ? (
     <View style={styles.noCart}>
+             
+
       <Text style={styles.titleNocart}>
         Chưa có sản phẩm nào trong giỏ hàng
       </Text>
@@ -199,6 +101,8 @@ function Cart() {
         </Text>
       </TouchableOpacity>
     </View>
+  ) : (
+    <Loading />
   );
 }
 
@@ -208,7 +112,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "white",
-   
   },
   headerCart: {
     height: 70,
@@ -230,8 +133,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: -185,
     marginBottom: -10,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   checkbox: {
     alignSelf: "center",

@@ -2,17 +2,18 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import SizeBox from "./SizeBox";
 
-const SizeChoose = ({ data }) => {
-  const [indexSize, setIndexSize] = useState(0);
+const SizeChoose = ({ sizes,setSize }) => {
+  const [indexSize, setIndexSize] = useState();
   return (
     <FlatList
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      data={data}
+      data={sizes}
       renderItem={({ item, index }) => (
         <TouchableOpacity
           onPress={() => {
             setIndexSize(index);
+            setSize(item);
           }}
         >
           <SizeBox isActive={index === indexSize} num={item} key={item} />

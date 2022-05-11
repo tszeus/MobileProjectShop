@@ -65,10 +65,11 @@ export const loginAction = createAsyncThunk(
 export const getUserbyIdAction = createAsyncThunk(
   "userById",async(id,{rejectWithValue}) => {
     try {
-      const user = await getUserbyId(id);
+      const user = await userApi.getUserbyId(id);
       return user;
       
     } catch (error) {
+      console.log(error.message)
       const { status } = error.response;
       if (status === 400) {
         return rejectWithValue("Failed");
