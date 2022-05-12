@@ -13,7 +13,7 @@ function ShipToScreen({route}) {
         paddingBottom: 80,
       }}
     >
-      <Shipping />
+      <Shipping inCart={route?.params?.inCart} />
     </View>
   );
 }

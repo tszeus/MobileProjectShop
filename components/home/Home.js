@@ -78,9 +78,9 @@ const Home = ({ navigation }) => {
                 <ProductList
                   navigation={navigation}
                   data={item.data}
-                        horizontal={true}
-                        btnSeeMore={true}
-                        id={item?._id}
+                  horizontal={true}
+                  btnSeeMore={true}
+                  id={item?._id}
                   type={item.name}
                 />
               </View>

@@ -1,9 +1,9 @@
 import HomeScreen from "./../screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TypeFullProduct from "./../screens/TypeFullProduct";
-import ProductDetail from "./../components/base/detail/ProductDetail";
 import Search from "./../components/search/Search";
-
+import ProductDetail from "../components/base/detail/ProductDetail";
+import WriteReview from "../components/base/detail/comment/WriteReview";
 const Stacks = createNativeStackNavigator();
 
 function HomeNav() {
@@ -12,6 +12,8 @@ function HomeNav() {
       <Stacks.Screen name="Home" component={HomeScreen} />
       <Stacks.Screen name="TypeFullProduct" component={TypeFullProduct} />
       <Stacks.Screen name="ProductDetail" component={ProductDetail} />
+      <Stacks.Screen name="WriteReview" component={WriteReview} />
+
       <Stacks.Screen name="Search" component={Search} />
     </Stacks.Navigator>
   );
