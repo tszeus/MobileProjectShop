@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
+import ShipToScreen from "../../../screens/ShipToScreen";
 import Header from "../../base/Header";
 
 const Address = ({ navigation }) => {
 	return (
-		<Header header="Address" haveBack={true} ></Header>
+		<ShipToScreen />
 	);
 };
 

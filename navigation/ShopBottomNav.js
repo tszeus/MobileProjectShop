@@ -1,16 +1,17 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState, useEffect } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSelector } from "react-redux";
+import AccountNav from "./AccountNav";
+import CartNav from "./CartNav";
 import HomeNav from "./HomeNav";
 import SearchNav from "./SearchNav";
-import CartNav from "./CartNav";
-import AccountNav from "./AccountNav";
 
 const Tab = createBottomTabNavigator();
 
 function BottomNav() {
+  const { listCart } = useSelector((state) => state.cart);
+
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -56,18 +57,26 @@ function BottomNav() {
             fontSize: 14,
           },
         }}
-        q
       />
       <Tab.Screen
         name="cart"
         component={CartNav}
-        options={{
-          tabBarBadge: 3,
-          tabBarLabel: "Cart",
-          tabBarLabelStyle: {
-            fontSize: 14,
-          },
-        }}
+        options={() =>
+          listCart.length > 0
+            ? {
+                tabBarBadge: listCart.length,
+                tabBarLabel: "Cart",
+                tabBarLabelStyle: {
+                  fontSize: 14,
+                },
+              }
+            : {
+                tabBarLabel: "Cart",
+                tabBarLabelStyle: {
+                  fontSize: 14,
+                },
+              }
+        }
       />
       <Tab.Screen
         name="account"

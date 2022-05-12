@@ -11,6 +11,7 @@ import BottomNav from "./ShopBottomNav";
 import LoginNav from "./LoginNav";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserbyIdAction } from "../redux/actions/userActions";
+import { fetchListCartAction } from "../redux/actions/cartAction";
 
 const Nav = () => {
   const {user} = useSelector(state => state.user)
@@ -25,6 +26,7 @@ const Nav = () => {
         setToken(token);
         const  {_id} = jwt_decode(token);
         dispatch(getUserbyIdAction(_id));
+        dispatch(fetchListCartAction(_id));
       }
       else {
         console.log("Da dang xuat")
@@ -38,9 +40,6 @@ const Nav = () => {
       initialRouteName="BottomNav"
       screenOptions={{ headerShown: false }}
     >
-      {/* <Stack.Screen  name="Login" component={LoginScreen} /> */}
-      {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
-      {/* {!token && <Stack.Screen name="LoginNav" component={LoginNav} />} */}
         {!user && <Stack.Screen name="LoginNav" component={LoginNav} /> }
 
       <Stack.Screen name="BottomNav" component={BottomNav} />

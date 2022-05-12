@@ -13,10 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { productApi } from "../../api/productApi";
 import SizeChoose from "./colorsAndSizes/SizeChoose";
 import ColorChoose from "./colorsAndSizes/ColorChoose";
-import { addCartAction } from "./../../../redux/actions/cartAction";
+import {
+  addCartAction,
+  updateCartAction,
+} from "./../../../redux/actions/cartAction";
 import Loading from "./../../../commons/Loading";
 import Notifycation from "../../../commons/Notifycation";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Quantity from "./Quantity";
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
   const { _id } = route.params.item;
@@ -27,7 +31,9 @@ const ProductDetail = ({ route }) => {
   const [color, setColor] = useState();
   const [size, setSize] = useState();
   const [messages, setMessages] = useState([]);
+  const [quantity,setQuantity] = useState(1);
   const dispatch = useDispatch();
+  const { listCart } = useSelector((state) => state.cart);
   useEffect(() => {
     productApi
       .getProductById(_id)
@@ -38,50 +44,96 @@ const ProductDetail = ({ route }) => {
   }, [_id]);
   const handleAddToCart = async () => {
     if (user) {
-      if (color && size) {
-        const data = {
-          product_id: currentProduct?._id,
-          quantity: 1,
-          size,
-          color,
-          user_id: user._id,
-        };
+      const cartItem = listCart.find(
+        (item) =>
+          item?.product?._id === currentProduct?._id &&
+          item.color === color &&
+          item?.size === size
+      );
+      if (cartItem) {
         try {
-          const res = await dispatch(addCartAction(data));
+          const res = await dispatch(
+            updateCartAction({id:cartItem?._id, data:{
+              ...cartItem,
+              quantity: cartItem.quantity + 1,
+            }})
+          );
           const result = unwrapResult(res);
-          setMessages([...messages,{
-            content:" Added success",
-            color:"green",
-            icon:"check-circle"
-          }]);
+          setMessages([
+            ...messages,
+            {
+              content: " Added success",
+              color: "green",
+              icon: "check-circle",
+            },
+          ]);
         } catch (error) {
-          setMessages([...messages,{
-            content:"Failed",
-            color:"red"
-          }]);
-          
+          setMessages([
+            ...messages,
+            {
+              content: "Failed",
+              color: "red",
+            },
+          ]);
         }
-      } else if (!color && size) {
-        setMessages([...messages,{
-          content:"Please choose color",
-          color:"orange",
-          icon:"warning"
-        }]);
-      } else if (color && !size) {
-        setMessages([...messages,{
-          content:"Please choose size",
-          color:"orange",
-          icon:"warning"
-        }]);
-
-      } else  {
-        setMessages([...messages,{
-          content:"Please choose size and color",
-          color:"orange",
-          icon:"warning",
-          icon:"stop-circle"
-          
-        }]);
+      } else {
+        if (color && size) {
+          const data = {
+            product_id: currentProduct?._id,
+            quantity,
+            size,
+            color,
+            user_id: user._id,
+          };
+          try {
+            const res = await dispatch(addCartAction(data));
+            const result = unwrapResult(res);
+            setMessages([
+              ...messages,
+              {
+                content: " Added success",
+                color: "green",
+                icon: "check-circle",
+              },
+            ]);
+          } catch (error) {
+            setMessages([
+              ...messages,
+              {
+                content: "Failed",
+                color: "red",
+              },
+            ]);
+          }
+        } else if (!color && size) {
+          setMessages([
+            ...messages,
+            {
+              content: "Please choose color",
+              color: "orange",
+              icon: "warning",
+            },
+          ]);
+        } else if (color && !size) {
+          setMessages([
+            ...messages,
+            {
+              content: "Please choose size",
+              color: "orange",
+              icon: "warning",
+            },
+          ]);
+        } else {
+          setMessages([
+            ...messages,
+            {
+              content: "Please choose size and color",
+              color: "orange",
+              icon: "warning",
+              icon: "stop-circle",
+            },
+          ]);
+        }
       }
     } else {
       navigation.navigate("LoginNav");
@@ -114,7 +166,6 @@ const ProductDetail = ({ route }) => {
         <View style={styles.body} showsVerticalScrollIndicator={false}>
           <Text style={styles.productDetailNameBody}>
             {route.params.item.name}
-            
           </Text>
           <View style={styles.rating}>
             <StarRating
@@ -131,15 +182,10 @@ const ProductDetail = ({ route }) => {
               style={styles.priceText}
             >{`$${route.params.item.price}`}</Text>
           </View>
-          {/* Size and Color */}
-          {/* <ColorsAndSizes
-          colors={currentProduct?.colors}
-          sizes={currentProduct?.sizes}
-          setColor={setColor}
-          setSize={setSize}
-        /> */}
+         
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />
           <ColorChoose colors={currentProduct?.colors} setColor={setColor} />
+          <Quantity quantity={quantity} setQuantity={setQuantity} />
           <ProductDescription />
           <Comment />
           <TouchableOpacity onPress={() => handleAddToCart()}>
