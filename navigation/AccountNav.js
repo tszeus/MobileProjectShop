@@ -18,17 +18,20 @@ const Stacks = createNativeStackNavigator();
 
 function AccountNav() {
   return (
-    <Stacks.Navigator initialRouteName="Account" screenOptions={{ headerShown: false }}>
-        <Stacks.Screen name="Account" component={Account} />
-        <Stacks.Screen name="Profile" component={Profile} />
-        <Stacks.Screen name="Order" component={Order} />
-        {/* <Stacks.Screen name="Address" component={ShipToScreen} /> */}
-        <Stacks.Screen
-          name='Address'
-          component={ShipToScreen}
-          options={({ route }) => ({
-            title: "Address",
-            headerRight: (navigation) => () =>
+    <Stacks.Navigator
+      initialRouteName="Account"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stacks.Screen name="Account" component={Account} />
+      <Stacks.Screen name="Profile" component={Profile} />
+      <Stacks.Screen name="Order" component={Order} />
+      {/* <Stacks.Screen name="Address" component={ShipToScreen} /> */}
+      <Stacks.Screen
+        name="Address"
+        component={ShipToScreen}
+        options={({ route }) => ({
+          title: "Address",
+          headerRight: (navigation) => () =>
             (
               <Icon
                 onPress={() =>
@@ -41,24 +44,23 @@ function AccountNav() {
                 color="#40BFFF"
               />
             ),
-            headerStyle: {},
-            headerTintColor: "#223263",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              color: "#223263",
-              fontSize: 16,
-            },
-          })}
-        />
-        <Stacks.Screen name="Payment" component={Payment} />
-        <Stacks.Screen name="Name" component={Name} />
-        <Stacks.Screen name="Gender" component={Gender} />
-        <Stacks.Screen name="Email" component={Email} />
-        <Stacks.Screen name="PhoneNumber" component={PhoneNumber} />
-        <Stacks.Screen name="ChangePassword" component={ChangePassword} />
-          <Stacks.Screen name="Login" component={Login} />
-          <Stacks.Screen name="OrderDetail" component={OrderDetail} />
-          <Stacks.Screen name="Address" component={Address} />
+          headerStyle: {},
+          headerTintColor: "#223263",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "#223263",
+            fontSize: 16,
+          },
+        })}
+      />
+      <Stacks.Screen name="Payment" component={Payment} />
+      <Stacks.Screen name="Name" component={Name} />
+      <Stacks.Screen name="Gender" component={Gender} />
+      <Stacks.Screen name="Email" component={Email} />
+      <Stacks.Screen name="PhoneNumber" component={PhoneNumber} />
+      <Stacks.Screen name="ChangePassword" component={ChangePassword} />
+      <Stacks.Screen name="Login" component={Login} />
+      <Stacks.Screen name="OrderDetail" component={OrderDetail} />
     </Stacks.Navigator>
   );
 }

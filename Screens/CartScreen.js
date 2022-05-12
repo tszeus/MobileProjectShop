@@ -6,14 +6,13 @@ import Cart from "../components/cart";
 import { fetchListCartAction } from "../redux/actions/cartAction";
 
 const CartScreen = () => {
-  const { user } 
-  = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   useFocusEffect(
     React.useCallback(() => {
-      if(!user){
-        navigation.navigate("Login")
+      if (!user) {
+        navigation.navigate("LoginNav");
       }
       dispatch(fetchListCartAction(user?._id));
       return () => {};

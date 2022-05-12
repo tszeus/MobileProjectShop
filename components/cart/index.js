@@ -16,7 +16,7 @@ import { cartAction } from "../../redux/slice/cartSlice";
 import axiosClient from "../api/axiosClient";
 import CartInvoice from "./CartInvoice";
 import CartList from "./CartList";
-import Notify from './../../commons/Notifycation';
+import Notify from "./../../commons/Notifycation";
 
 function Cart() {
   const navigation = useNavigation();
@@ -43,7 +43,7 @@ function Cart() {
     navigation.navigate("Ship To", {
       quantity_items: totalItems,
       total_price: totalPrice,
-      inCart:true
+      inCart: true,
     });
   };
   const setAllPayment = () => {
@@ -61,16 +61,14 @@ function Cart() {
 
   return listCart.length > 0 ? (
     !isLoading ? (
-      
       <ScrollView contentContainerStyle={styles.container}>
-        
         <View style={styles.checkboxContainer}>
           <CheckBox
             checked={listPayment.length === listCart.length}
             onPress={() => setAllPayment()}
             style={styles.checkbox}
           />
-          <Text style={styles.label}>Chọn tất cả</Text>
+          <Text style={styles.label}>Select all</Text>
         </View>
         <CartList listCart={listCart} />
         <View style={{ marginTop: 10 }}>
@@ -91,15 +89,9 @@ function Cart() {
     )
   ) : !isLoading ? (
     <View style={styles.noCart}>
-             
-
-      <Text style={styles.titleNocart}>
-        Chưa có sản phẩm nào trong giỏ hàng
-      </Text>
+      <Text style={styles.titleNocart}>No product in your cart</Text>
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-        <Text style={{ fontSize: 12, color: "#40BFFF" }}>
-          Quay trở lại trang chủ
-        </Text>
+        <Text style={{ fontSize: 12, color: "#40BFFF" }}>Back to home</Text>
       </TouchableOpacity>
     </View>
   ) : (

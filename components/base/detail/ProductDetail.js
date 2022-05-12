@@ -1,14 +1,11 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import CarouselImage from "../Carousel";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "react-native-star-rating";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ColorsAndSizes from "./colorsAndSizes/ColorsAndSizes";
 import ProductDescription from "./ProductDescription";
-import Comment from "./Comment";
 import { useDispatch, useSelector } from "react-redux";
 import { productApi } from "../../api/productApi";
 import SizeChoose from "./colorsAndSizes/SizeChoose";
@@ -21,8 +18,8 @@ import Loading from "./../../../commons/Loading";
 import Notifycation from "../../../commons/Notifycation";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Quantity from "./Quantity";
-import Comment from "./comment/Review";
 import CarouselImage from "./Carousel";
+import Review from "./comment/Review";
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
   const { _id } = route.params.item;
@@ -33,7 +30,7 @@ const ProductDetail = ({ route }) => {
   const [color, setColor] = useState();
   const [size, setSize] = useState();
   const [messages, setMessages] = useState([]);
-  const [quantity,setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const { listCart } = useSelector((state) => state.cart);
   useEffect(() => {
@@ -55,10 +52,13 @@ const ProductDetail = ({ route }) => {
       if (cartItem) {
         try {
           const res = await dispatch(
-            updateCartAction({id:cartItem?._id, data:{
-              ...cartItem,
-              quantity: cartItem.quantity + 1,
-            }})
+            updateCartAction({
+              id: cartItem?._id,
+              data: {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+              },
+            })
           );
           const result = unwrapResult(res);
           setMessages([
@@ -185,16 +185,15 @@ const ProductDetail = ({ route }) => {
               style={styles.priceText}
             >{`$${route.params.item.price}`}</Text>
           </View>
-         
+
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />
           <ColorChoose colors={currentProduct?.colors} setColor={setColor} />
           <Quantity quantity={quantity} setQuantity={setQuantity} />
           <ProductDescription />
-          <Comment />
           <TouchableOpacity onPress={() => handleAddToCart()}>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>
-          <Comment
+          <Review
             id={route.params.item._id}
             voteCount={route.params.item.vote_count}
             avgVote={route.params.item.vote_average}

@@ -26,32 +26,34 @@ const WriteComment = ({
   const navigation = useNavigation();
 
   const handleReview = async () => {
-    // if (!review === "") {
-    addNewComment(rate);
-    const date = new Date();
-    setReviews([
-      {
-        content: review,
-        rating: rate,
-        product_id: id,
-        createdAt: date.toISOString(),
-        user: user,
-      },
-      ...reviews,
-    ]);
-    setRate(0);
-    setReview("");
-    try {
-      await reviewsApi.postReview({
-        user_id: user._id,
-        product_id: id,
-        content: review,
-        rating: rate,
-      });
-    } catch (error) {
-      console.log("Add review error");
+    if (user !== null) {
+      addNewComment(rate);
+      const date = new Date();
+      setReviews([
+        {
+          content: review,
+          rating: rate,
+          product_id: id,
+          createdAt: date.toISOString(),
+          user: user,
+        },
+        ...reviews,
+      ]);
+      setRate(0);
+      setReview("");
+      try {
+        await reviewsApi.postReview({
+          user_id: user._id,
+          product_id: id,
+          content: review,
+          rating: rate,
+        });
+      } catch (error) {
+        console.log("Add review error");
+      }
+    } else {
+      navigation.navigate("LoginNav");
     }
-    // }
   };
 
   const handleCancel = () => {
@@ -59,6 +61,14 @@ const WriteComment = ({
   };
 
   const handleSubmit = async () => {
+    try {
+      await reviewsApi.editReview(route?.params?.commentId, {
+        content: review,
+        rating: rate,
+      });
+    } catch (error) {
+      console.log("Submit error");
+    }
     const date = new Date();
     const reviewItem = {
       content: review,
@@ -71,15 +81,7 @@ const WriteComment = ({
     navigation.goBack();
     setRate(0);
     setReview("");
-    route?.params?._handleEdit();
-    try {
-      await reviewsApi.editReview(route?.params?.commentId, {
-        content: review,
-        rating: rate,
-      });
-    } catch (error) {
-      console.log("Submit error");
-    }
+    // route?.params?._handleEdit(rate);
   };
   return (
     <View style={styles.container}>
