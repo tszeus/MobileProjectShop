@@ -21,6 +21,8 @@ import Loading from "./../../../commons/Loading";
 import Notifycation from "../../../commons/Notifycation";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Quantity from "./Quantity";
+import Comment from "./comment/Review";
+import CarouselImage from "./Carousel";
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
   const { _id } = route.params.item;
@@ -171,10 +173,11 @@ const ProductDetail = ({ route }) => {
             <StarRating
               disabled={true}
               maxStars={5}
-              rating={3.5}
+              rating={route.params.item.vote_average}
               starSize={16}
               starStyle={{}}
               fullStarColor={"#FFC833"}
+              emptyStarColor={"#EBF0FF"}
             />
           </View>
           <View style={styles.price}>
@@ -191,6 +194,11 @@ const ProductDetail = ({ route }) => {
           <TouchableOpacity onPress={() => handleAddToCart()}>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>
+          <Comment
+            id={route.params.item._id}
+            voteCount={route.params.item.vote_count}
+            avgVote={route.params.item.vote_average}
+          />
         </View>
         <View style={{ height: 75 }} />
       </ScrollView>

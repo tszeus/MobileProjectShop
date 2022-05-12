@@ -13,7 +13,7 @@ function SuccessScreen(props) {
       <Text style={styles.text}>Thank you</Text>
       <TouchableOpacity
         style={styles.buttonBack}
-        onPress={() => navigation.navigate("home")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Text style={styles.textButtonBack}>Back To Order</Text>
       </TouchableOpacity>
