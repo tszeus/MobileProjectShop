@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
 import { getListShippingAction } from "../../redux/actions/shippingInfoAction";
-import { orderApi } from "../api/orderApi";
+import  orderApi  from "../api/orderApi";
 import ShippingList from "./ShippingList";
 export const ShippingContext = React.createContext();
 
@@ -70,12 +70,11 @@ function Shipping(props) {
       orders_id: listPayment,
     };
     try {
-      console.log(newOrder);
       await orderApi.addOrder(newOrder);
 
       navigation.navigate("Success");
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
