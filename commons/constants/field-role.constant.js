@@ -12,7 +12,7 @@ export const FieldRoleConstant = [
         label: 'Address'
     },
     {
-        iconName: "map-marker-outline",
+        iconName: "logout",
         label: 'Logout'
     },
 ]

@@ -11,6 +11,8 @@ import ChangePassword from "../components/account/profile/ChangePassword";
 import Profile from "../components/account/profile/Profile";
 import Login from "../components/login/Login";
 import OrderDetail from "../components/base/detail/OrderDetail";
+import Icon from "react-native-vector-icons/FontAwesome";
+import ShipToScreen from "../screens/ShipToScreen";
 
 const Stacks = createNativeStackNavigator();
 
@@ -20,7 +22,34 @@ function AccountNav() {
         <Stacks.Screen name="Account" component={Account} />
         <Stacks.Screen name="Profile" component={Profile} />
         <Stacks.Screen name="Order" component={Order} />
-        <Stacks.Screen name="Address" component={Address} />
+        {/* <Stacks.Screen name="Address" component={ShipToScreen} /> */}
+        <Stacks.Screen
+          name='Address'
+          component={ShipToScreen}
+          options={({ route }) => ({
+            title: "Address",
+            headerRight: (navigation) => () =>
+            (
+              <Icon
+                onPress={() =>
+                  navigation.navigate("Edit shipping", {
+                    title: "Add shipping information",
+                  })
+                }
+                name="plus"
+                size={24}
+                color="#40BFFF"
+              />
+            ),
+            headerStyle: {},
+            headerTintColor: "#223263",
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: "#223263",
+              fontSize: 16,
+            },
+          })}
+        />
         <Stacks.Screen name="Payment" component={Payment} />
         <Stacks.Screen name="Name" component={Name} />
         <Stacks.Screen name="Gender" component={Gender} />

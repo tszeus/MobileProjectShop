@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useReducer, useState } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
 import {
   View,
@@ -12,13 +12,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../commons/Loading";
 import { getListShippingAction } from "../../redux/actions/shippingInfoAction";
-import { orderApi } from "../api/orderApi";
+import orderApi from "../api/orderApi";
 import ShippingList from "./ShippingList";
 export const ShippingContext = React.createContext();
 
-function Shipping(props) {
+function Shipping({ inCart }) {
   const { user } = useSelector((state) => state.user);
-  const { listShipping,isLoading } = useSelector((state) => state.shipping);
+  const { listShipping, isLoading } = useSelector((state) => state.shipping);
   const { listCart, listPayment } = useSelector((state) => state.cart);
   const [currentIdShipping, setCurrenIdShipping] = useState();
   const navigation = useNavigation();
@@ -37,19 +37,6 @@ function Shipping(props) {
     };
     getListShipping();
   }, [user]);
-  useFocusEffect(
-    React.useCallback(() => {
-      // Do something when the screen is focused
-      console.log("day ne")
-
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );
-
-
 
   const handleFinish = async () => {
     const totalItems = listPayment.reduce((totalItems, item) => {
@@ -70,39 +57,46 @@ function Shipping(props) {
       orders_id: listPayment,
     };
     try {
-      console.log(newOrder);
       await orderApi.addOrder(newOrder);
 
       navigation.navigate("Success");
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
   return (
     <View>
       {listShipping.length > 0 ? (
-        !isLoading?<View contentContainerStyle={styles.container}>
-          <ScrollView>
-            <ShippingList
-              listShipping={listShipping}
-              currentIdShipping={currentIdShipping}
-              setCurrenIdShipping={setCurrenIdShipping}
-            />
-            <TouchableOpacity
-              onPress={() => handleFinish()}
-              style={styles.actionButton}
-            >
-              <Text style={styles.textAction}>Finish</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View> : <Loading />
-      ) : (
-       !isLoading? <View style={styles.noShipping}>
+        !isLoading ? (
+          <View contentContainerStyle={styles.container}>
+            <ScrollView>
+              <ShippingList
+                listShipping={listShipping}
+                currentIdShipping={currentIdShipping}
+                setCurrenIdShipping={setCurrenIdShipping}
+              />
+              {inCart && (
+                <TouchableOpacity
+                  onPress={() => handleFinish()}
+                  style={styles.actionButton}
+                >
+                  <Text style={styles.textAction}>Finish</Text>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+          </View>
+        ) : (
+          <Loading />
+        )
+      ) : !isLoading ? (
+        <View style={styles.noShipping}>
           <Text style={styles.textNoshipping}>
             Chưa có địa chỉ,nhấn vào biểu tượng bên góc trên bên phải để thêm
           </Text>
-        </View> :<Loading />
+        </View>
+      ) : (
+        <Loading />
       )}
     </View>
   );

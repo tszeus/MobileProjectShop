@@ -43,6 +43,7 @@ function Cart() {
     navigation.navigate("Ship To", {
       quantity_items: totalItems,
       total_price: totalPrice,
+      inCart:true
     });
   };
   const setAllPayment = () => {

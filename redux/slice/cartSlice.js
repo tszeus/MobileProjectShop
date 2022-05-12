@@ -47,17 +47,16 @@ const cartSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(deleteCartAction.pending, (state) => {
-        state.isLoading = true;
+       
       })
       .addCase(deleteCartAction.fulfilled, (state, action) => {
-        console.log("ok");
-        state.isLoading = false;
+     
         state.listCart = state.listCart.filter(
           (item) => item._id != action.payload._id
         );
       })
       .addCase(deleteCartAction.rejected, (state, action) => {
-        state.isLoading = false;
+      
       })
       .addCase(updateCartAction.pending, (state) => {
        

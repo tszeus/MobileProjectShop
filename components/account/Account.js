@@ -27,6 +27,7 @@ const Account = ({ navigation }) => {
               navigation.navigate("LoginNav");
               return ;
             }
+           
 
             navigation.navigate(item.label);
           }}
