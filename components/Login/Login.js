@@ -77,6 +77,7 @@ const Login = ({ route, navigation }) => {
             name="email"
             control={control}
             errors={errors}
+            autofocus={true}
           />
           <InputForm
             placeholder="Password"
@@ -147,6 +148,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 50,
     paddingHorizontal: 16,
+  },
+  loginForm: {
+    width: "100%",
   },
   header: { alignItems: "center", marginTop: 50, marginBottom: 32 },
   logoPrimary: { width: 75, height: 72, marginBottom: 16 },

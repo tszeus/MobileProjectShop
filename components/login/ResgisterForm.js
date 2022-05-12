@@ -95,7 +95,6 @@ const ResgisterForm = ({ navigation }) => {
           <Text style={styles.title}>Create a new account</Text>
         </View>
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
            {err && (
           <View style={styles.boxErr}>

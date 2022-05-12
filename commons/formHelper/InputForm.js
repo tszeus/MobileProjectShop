@@ -20,7 +20,8 @@ function InputForm({
   name,
   errors,
   defaultValue,
-  type
+  type,
+  autofocus = false
 }) {
   const [borderColor, setBorderColor] = useState("#EBF0FF");
 
@@ -39,6 +40,7 @@ function InputForm({
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
+                autofocus={autofocus}
               value={value}
               onFocus={() => setBorderColor("#40BFFF")}
               onBlur={() => setBorderColor("#EBF0FF")}
@@ -74,7 +76,7 @@ function InputForm({
 export default InputForm;
 const styles = StyleSheet.create({
   wrapInput: {
-    width: 343,
+    width: "100%",
     height: 48,
     borderWidth: 1,
     borderRadius: 5,
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     padding: 10,
-
+    minWidth: 343,
     marginBottom: 20,
   },
   icon: {
