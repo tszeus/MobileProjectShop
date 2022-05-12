@@ -16,6 +16,7 @@ const ReviewItem = ({
   reviews,
   setReviews,
   deleteAComment,
+  addNewComment,
   date,
   id,
 }) => {
@@ -33,6 +34,8 @@ const ReviewItem = ({
       commentId,
       reviews,
       handleChange,
+      deleteAComment,
+      _handleEdit,
       id,
     });
     setMore(false);
@@ -40,7 +43,7 @@ const ReviewItem = ({
 
   const handleDelete = async () => {
     deleteById();
-    deleteAComment();
+    deleteAComment(rating);
     setMore(false);
     try {
       await reviewsApi.deleteReview(commentId);
@@ -66,6 +69,11 @@ const ReviewItem = ({
     });
     console.log(data.content);
     setReviews(arrayOfReviews);
+  };
+
+  const _handleEdit = () => {
+    deleteAComment(rating);
+    addNewComment(rating);
   };
   return (
     <View style={styles.container}>

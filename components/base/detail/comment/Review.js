@@ -13,30 +13,31 @@ const Review = ({ id, avgVote }) => {
   const [avgRate, setAvgRate] = useState(avgVote);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
   const [page, setPage] = useState(1);
-  const [isReviewed, setIsReviewed] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
-  const checkUserReviewed = (array) => {
-    array.forEach((item) => {
-      if (item.user._id === user._id) {
-        setIsReviewed(true);
+  // const checkUserReviewed = (array) => {
+  //   array.forEach((item) => {
+  //     if (item.user._id === user._id) {
+  //       setIsReviewed(true);
 
-        return;
-      }
-    });
+  //       return;
+  //     }
+  //   });
+  // };
 
-    console.log(isReviewed);
-  };
+  // useEffect(() => {
+  //   let sum = 0;
+  //   reviews.forEach((item) => {
+  //     sum += item.rating;
+  //   });
+  //   setAvgRate(Math.round((sum / totalComments) * 10) / 10);
+  // }, [reviews]);
 
-  useEffect(() => {
-    let sum = 0;
-    reviews.forEach((item) => {
-      sum += item.rating;
-    });
-    setAvgRate(Math.round((sum / totalComments) * 10) / 10);
-  }, [reviews]);
-
+  // useEffect(() => {
+  //   checkUserReviewed(reviews);
+  // }, [totalComments]);
   // Get reviews
   useEffect(() => {
     fetchReviews();
@@ -48,29 +49,39 @@ const Review = ({ id, avgVote }) => {
       });
       setTotalComments(reviewsList.total_comments);
       setReviews(reviewsList.data);
-      checkUserReviewed(reviewsList.data);
+      // checkUserReviewed(reviewsList.data);
+      setAvgRate(reviewsList.vote_average);
     } catch (error) {
       console.log("Get reviews error");
     }
   };
-  const deleteAComment = () => {
+  const deleteAComment = (rating) => {
     setTotalComments(totalComments - 1);
+    setAvgRate(
+      Math.round(
+        ((avgRate * totalComments - rating) / (totalComments - 1)) * 10
+      ) / 10
+    );
   };
-  const addNewComment = () => {
+  const addNewComment = (rating) => {
     setTotalComments(totalComments + 1);
+    setAvgRate(
+      Math.round(
+        ((avgRate * totalComments + rating) / (totalComments + 1)) * 10
+      ) / 10
+    );
   };
 
   return (
     <>
-      {!isReviewed && (
-        <WriteReview
-          id={id}
-          reviews={reviews}
-          setReviews={setReviews}
-          addNewComment={addNewComment}
-          isDetail={true}
-        />
-      )}
+      <WriteReview
+        id={id}
+        reviews={reviews}
+        setReviews={setReviews}
+        addNewComment={addNewComment}
+        isDetail={true}
+      />
+
       <View style={styles.header}>
         <View
           style={{
@@ -136,6 +147,7 @@ const Review = ({ id, avgVote }) => {
               reviews={reviews}
               setReviews={setReviews}
               deleteAComment={deleteAComment}
+              addNewComment={addNewComment}
               date={item.createdAt}
               id={id}
             />

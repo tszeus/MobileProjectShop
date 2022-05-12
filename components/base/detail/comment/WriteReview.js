@@ -27,7 +27,7 @@ const WriteComment = ({
 
   const handleReview = async () => {
     // if (!review === "") {
-    addNewComment();
+    addNewComment(rate);
     const date = new Date();
     setReviews([
       {
@@ -71,6 +71,7 @@ const WriteComment = ({
     navigation.goBack();
     setRate(0);
     setReview("");
+    route?.params?._handleEdit();
     try {
       await reviewsApi.editReview(route?.params?.commentId, {
         content: review,
