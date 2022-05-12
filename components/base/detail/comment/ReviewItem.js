@@ -16,12 +16,11 @@ const ReviewItem = ({
   reviews,
   setReviews,
   deleteAComment,
-  addNewComment,
   date,
   id,
 }) => {
   const navigation = useNavigation();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state?.user);
   const [more, setMore] = useState(false);
   const handleMore = () => {
     setMore(!more);
@@ -35,7 +34,6 @@ const ReviewItem = ({
       reviews,
       handleChange,
       deleteAComment,
-      _handleEdit,
       id,
     });
     setMore(false);
@@ -69,11 +67,6 @@ const ReviewItem = ({
     });
     console.log(data.content);
     setReviews(arrayOfReviews);
-  };
-
-  const _handleEdit = () => {
-    deleteAComment(rating);
-    addNewComment(rating);
   };
   return (
     <View style={styles.container}>
@@ -119,7 +112,7 @@ const ReviewItem = ({
             <View style={styles.moreBox}>
               {more ? (
                 <>
-                  {userId === user._id ? (
+                  {userId === user?._id ? (
                     <View style={styles.moreContainer}>
                       <TouchableOpacity onPress={handleEdit}>
                         <Text style={styles.actionMore}>Edit</Text>

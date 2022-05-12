@@ -1,7 +1,12 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import homeApi from "../components/api/homeApi";
+import Home from "../components/home/Home";
+import { homeAction } from "../redux/slice/homeSlice";
+import SplashScreen from "../screens/SplashScreen";
 import AccountNav from "./AccountNav";
 import CartNav from "./CartNav";
 import HomeNav from "./HomeNav";
@@ -11,8 +16,24 @@ const Tab = createBottomTabNavigator();
 
 function BottomNav() {
   const { listCart } = useSelector((state) => state.cart);
+  const [homeData, setHomeData] = useState([]); // Mảng type
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetchTypes();
+  }, []);
+  const fetchTypes = async () => {
+    try {
+      const categoriesResponse = await homeApi.getProductsHome().finally(() => {
+        setIsLoading(false);
+      });
+      dispatch(homeAction.fetchHomeData(categoriesResponse));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  return (
+  return !isLoading ? (
     <Tab.Navigator
       initialRouteName="home"
       screenOptions={({ route }) => ({
@@ -89,6 +110,8 @@ function BottomNav() {
         }}
       />
     </Tab.Navigator>
+  ) : (
+    <SplashScreen />
   );
 }
 

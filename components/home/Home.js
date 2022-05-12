@@ -12,82 +12,65 @@ import CategoryHome from "./CategoryHome";
 import homeApi from "./../api/homeApi";
 import ProductList from "./../base/ProductList";
 import SplashScreen from "../../screens/SplashScreen";
+import { useSelector } from "react-redux";
 
 const Home = ({ navigation }) => {
-  const [homeData, setHomeData] = useState([]); // Mảng type
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    fetchTypes();
-  }, []);
-  const fetchTypes = async () => {
-    try {
-      const categoriesResponse = await homeApi.getProductsHome().finally(() => {
-        setIsLoading(false);
-      });
-      setHomeData(categoriesResponse);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { homeData } = useSelector((state) => state.home);
   const categoryProducts = homeData.map((item) => ({
     _id: item._id,
     name: item.name,
   }));
   return (
     <>
-      {isLoading ? (
-        <SplashScreen />
-      ) : (
-        <View style={styles.homePage}>
-          <View style={styles.homeSearch}>
-            <View style={styles.searchIcon}>
-              <Ionicons name="search" size={16} color="#40BFFF" />
-            </View>
-            <TextInput
-              placeholder="Search Product"
-              onFocus={() => {
-                navigation.navigate("search", { clean: true });
-              }}
-            />
+      <View style={styles.homePage}>
+        <View style={styles.homeSearch}>
+          <View style={styles.searchIcon}>
+            <Ionicons name="search" size={16} color="#40BFFF" />
           </View>
-          <View style={styles.category}>
-            <CategoryHome navigation={navigation} types={categoryProducts} />
-          </View>
-
-          <FlatList
-            // style={{ marginBottom: 250 }}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
-            data={homeData}
-            renderItem={({ item }) => (
-              <View>
-                <View style={styles.productHeading}>
-                  <Text style={styles.productName}>{item.name}</Text>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("TypeFullProduct", {
-                        type: item.name,
-                        data: categoryProducts,
-                      });
-                    }}
-                  >
-                    <Text style={styles.productSeeMore}>See More</Text>
-                  </TouchableOpacity>
-                </View>
-                <ProductList
-                  navigation={navigation}
-                  data={item.data}
-                  horizontal={true}
-                  btnSeeMore={true}
-                  id={item?._id}
-                  type={item.name}
-                />
-              </View>
-            )}
+          <TextInput
+            placeholder="Search Product"
+            onFocus={() => {
+              navigation.navigate("search", { clean: true });
+            }}
           />
         </View>
-      )}
+        <View style={styles.category}>
+          <CategoryHome navigation={navigation} types={categoryProducts} />
+        </View>
+
+        <FlatList
+          // style={{ marginBottom: 250 }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item._id}
+          data={homeData}
+          renderItem={({ item }) => (
+            <View>
+              <View style={styles.productHeading}>
+                <Text style={styles.productName}>{item.name}</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("TypeFullProduct", {
+                      type: item.name,
+                      data: categoryProducts,
+                    });
+                  }}
+                >
+                  <Text style={styles.productSeeMore}>See More</Text>
+                </TouchableOpacity>
+              </View>
+              <ProductList
+                navigation={navigation}
+                data={item.data}
+                horizontal={true}
+                btnSeeMore={true}
+                id={item?._id}
+                type={item.name}
+              />
+            </View>
+          )}
+        />
+      </View>
     </>
   );
 };

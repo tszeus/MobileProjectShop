@@ -27,13 +27,13 @@ const Review = ({ id, avgVote }) => {
   //   });
   // };
 
-  // useEffect(() => {
-  //   let sum = 0;
-  //   reviews.forEach((item) => {
-  //     sum += item.rating;
-  //   });
-  //   setAvgRate(Math.round((sum / totalComments) * 10) / 10);
-  // }, [reviews]);
+  useEffect(() => {
+    let sum = 0;
+    reviews.forEach((item) => {
+      sum += item.rating;
+    });
+    setAvgRate(Math.round((sum / totalComments) * 10) / 10);
+  }, [reviews]);
 
   // useEffect(() => {
   //   checkUserReviewed(reviews);
@@ -50,7 +50,7 @@ const Review = ({ id, avgVote }) => {
       setTotalComments(reviewsList.total_comments);
       setReviews(reviewsList.data);
       // checkUserReviewed(reviewsList.data);
-      setAvgRate(reviewsList.vote_average);
+      // setAvgRate(reviewsList.vote_average);
     } catch (error) {
       console.log("Get reviews error");
     }
@@ -71,6 +71,19 @@ const Review = ({ id, avgVote }) => {
       ) / 10
     );
   };
+
+  // const handleEdit = (rating) => {
+  //   setAvgRate(
+  //     Math.round(
+  //       ((avgRate * totalComments - rating) / (totalComments - 1)) * 10
+  //     ) / 10
+  //   );
+  //   setAvgRate(
+  //     Math.round(
+  //       ((avgRate * totalComments + rating) / (totalComments + 1)) * 10
+  //     ) / 10
+  //   );
+  // };
 
   return (
     <>

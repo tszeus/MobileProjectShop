@@ -4,6 +4,7 @@ import TypeFullProduct from "./../screens/TypeFullProduct";
 import Search from "./../components/search/Search";
 import ProductDetail from "../components/base/detail/ProductDetail";
 import WriteReview from "../components/base/detail/comment/WriteReview";
+import LoginNav from "./LoginNav";
 const Stacks = createNativeStackNavigator();
 
 function HomeNav() {
@@ -13,7 +14,7 @@ function HomeNav() {
       <Stacks.Screen name="TypeFullProduct" component={TypeFullProduct} />
       <Stacks.Screen name="ProductDetail" component={ProductDetail} />
       <Stacks.Screen name="WriteReview" component={WriteReview} />
-
+      {/* <Stacks.Screen name="LoginNav" component={LoginNav} /> */}
       <Stacks.Screen name="Search" component={Search} />
     </Stacks.Navigator>
   );

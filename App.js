@@ -3,14 +3,8 @@ import { Provider } from "react-redux";
 import AppNav from "./navigation/AppNav";
 import { store } from "./redux/store";
 
-
-LogBox.ignoreLogs([
-  "Non-serializable values were found in the navigation state",
-]);
-
 export default function App() {
-
-  
+  LogBox.ignoreAllLogs();
   return (
     // <View>
     <Provider store={store}>
