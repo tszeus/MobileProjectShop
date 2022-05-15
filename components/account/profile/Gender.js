@@ -8,7 +8,7 @@ import { GenderConstant } from "../../../commons/constants/gender.constant";
 import { userAction } from "../../../redux/slice/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserAction } from "../../../redux/actions/userActions";
-import { unwrapResult } from "@reduxjs/toolkit";
+// import { unwrapResult } from "@reduxjs/toolkit";
 import { Picker } from "@react-native-picker/picker";
 
 const Gender = ({ navigation, route }) => {
@@ -30,12 +30,26 @@ const Gender = ({ navigation, route }) => {
   //   navigation.goBack();
   // };
 
+  // const save = async () => {
+  //   const userNew = await dispatch(
+  //     updateUserAction({
+  //       id: user._id,
+  //       data: { gender: selectedValue },
+  //     })
+  //   );
+  //   const result = unwrapResult(userNew);
+  //   dispatch(userAction.setUser(result));
+  //   navigation.goBack();
+  // };
+
   const save = async (data) => {
     try {
       const response = await dispatch(
         updateUserAction({
           id: user._id,
           data: { gender: selectedValue },
+
+          data: { gender: data.name },
         })
       );
       const userNew = unwrapResult(response);
