@@ -34,7 +34,7 @@ const Gender = ({ navigation, route }) => {
       const response = await dispatch(
         updateUserAction({
           id: user._id,
-          data: { gender: data.name },
+          data: { gender: selectedValue },
         })
       );
       const userNew = unwrapResult(response);

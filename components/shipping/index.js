@@ -37,6 +37,7 @@ function Shipping({ inCart }) {
     };
     getListShipping();
   }, [user]);
+  // console.log(inCart);
 
   const handleFinish = async () => {
     const totalItems = listPayment.reduce((totalItems, item) => {
@@ -64,7 +65,7 @@ function Shipping({ inCart }) {
       console.log(error);
     }
   };
-
+  console.log(inCart);
   return (
     <View>
       {listShipping.length > 0 ? (
@@ -76,14 +77,14 @@ function Shipping({ inCart }) {
                 currentIdShipping={currentIdShipping}
                 setCurrenIdShipping={setCurrenIdShipping}
               />
-              {inCart && (
-                <TouchableOpacity
-                  onPress={() => handleFinish()}
-                  style={styles.actionButton}
-                >
-                  <Text style={styles.textAction}>Finish</Text>
-                </TouchableOpacity>
-              )}
+              {/* {inCart && ( */}
+              <TouchableOpacity
+                onPress={() => handleFinish()}
+                style={styles.actionButton}
+              >
+                <Text style={styles.textAction}>Finish</Text>
+              </TouchableOpacity>
+              {/* )} */}
             </ScrollView>
           </View>
         ) : (

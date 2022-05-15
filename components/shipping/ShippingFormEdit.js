@@ -39,22 +39,23 @@ function ShippingFormEdit({ shippingItem }) {
     },
   });
   const onSubmit = async (data) => {
+    console.log("first");
     if (shippingItem) {
       if (!isDirty) {
-        navigation.navigate("Ship To");
+        navigation.navigate("Ship To", { inCard: true });
       } else {
         await dispatch(updateShippingAction({ id: shippingItem?._id, data }));
-        navigation.navigate("Ship To");
+        navigation.navigate("Ship To", { inCard: true });
       }
     } else {
-      console.log("add")
+      console.log("add");
       const newShipping = {
         ...data,
         user_id: user?._id,
         default: `${listShipping.length === 0 ? true : false}`,
       };
       await dispatch(addShippingAction(newShipping));
-      navigation.navigate("Ship To");
+      navigation.navigate("Ship To", { inCard: true });
     }
   };
 
