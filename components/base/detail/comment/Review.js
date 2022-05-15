@@ -36,16 +36,17 @@ const Review = ({ id, avgVote, setCurrentProduct, currentProduct }) => {
       setIsLoadingReview(true);
       const reviewsList = await reviewsApi.getReview(id, page).finally(() => {
         setIsLoadingReview(false);
-        setIsAdd(false);
-        setIsDelete(false);
-        setIsEdited(false);
       });
+
       setTotalComments(reviewsList.total_comments);
       setReviews(reviewsList.data);
       setAvgRate(reviewsList.vote_average);
     } catch (error) {
       console.log("Get reviews error");
     }
+    setIsAdd(false);
+    setIsDelete(false);
+    setIsEdited(false);
   };
   const handleDelete = () => {
     setIsDelete(true);
