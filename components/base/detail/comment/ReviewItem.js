@@ -41,13 +41,14 @@ const ReviewItem = ({
 
   const handleDelete = async () => {
     // deleteById();
-    _handleDelete();
-    setMore(false);
+
     try {
       await reviewsApi.deleteReview(commentId);
     } catch (error) {
       console.log("Delete Error");
     }
+    _handleDelete();
+    setMore(false);
   };
   const handleReport = () => {
     setMore(false);
