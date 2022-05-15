@@ -27,18 +27,6 @@ const WriteComment = ({
 
   const handleReview = async () => {
     if (user !== null) {
-      // const date = new Date();
-      // setReviews([
-      //   {
-      //     content: review,
-      //     rating: rate,
-      //     product_id: id,
-      //     createdAt: date.toISOString(),
-      //     user: user,
-      //   },
-      //   ...reviews,
-      // ]);
-
       try {
         await reviewsApi.postReview({
           user_id: user._id,
@@ -49,12 +37,12 @@ const WriteComment = ({
       } catch (error) {
         console.log("Add review error");
       }
+      handleAdd();
+      setRate(0);
+      setReview("");
     } else {
       navigation.navigate("LoginNav");
     }
-    handleAdd();
-    setRate(0);
-    setReview("");
   };
 
   const handleCancel = () => {
@@ -71,18 +59,9 @@ const WriteComment = ({
     } catch (error) {
       console.log("Submit error");
     }
-    // const date = new Date();
-    // const reviewItem = {
-    //   content: review,
-    //   rating: rate,
-    //   createdAt: date.toISOString(),
-    //   product_id: route?.params?.id,
-    //   user: user,
-    // };
     route?.params?._handleEdit();
     setRate(0);
     setReview("");
-    // route?.params?._handleEdit(rate);
   };
   return (
     <View style={styles.container}>

@@ -17,25 +17,39 @@ const Gender = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
-  const save = async () => {
-    const userNew = await dispatch(
-      updateUserAction({
-        id: user._id,
-        data: { field: route?.params?.field, value: selectedValue },
-      })
-    );
-    const result = unwrapResult(userNew);
-    dispatch(userAction.setUser(result));
-    navigation.goBack();
-  };
+  // const save = async () => {
+  //   const userNew = await dispatch(
+  //     updateUserAction({
+  //       id: user._id,
+  //       data: { gender: selectedValue },
+  //     })
+  //   );
+  //   const result = unwrapResult(userNew);
+  //   dispatch(userAction.setUser(result));
+  //   navigation.goBack();
+  // };
 
+  const save = async (data) => {
+    try {
+      const response = await dispatch(
+        updateUserAction({
+          id: user._id,
+          data: { gender: data.name },
+        })
+      );
+      const userNew = unwrapResult(response);
+      navigation.goBack();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   /**
    * Xử lý focus input mỗi khi màn hình được focus
    */
-  useEffect(() => {
-    // TODO fullName truyền từ profile động
-    setSelectedValue(route?.params?.value);
-  }, [isFocused]);
+  // useEffect(() => {
+  //   // TODO fullName truyền từ profile động
+  //   setSelectedValue(route?.params?.value);
+  // }, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
