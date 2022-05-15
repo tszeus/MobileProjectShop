@@ -15,7 +15,8 @@ const ReviewItem = ({
   commentId,
   reviews,
   setReviews,
-  deleteAComment,
+  _handleDelete,
+  _handleEdit,
   date,
   id,
 }) => {
@@ -32,16 +33,15 @@ const ReviewItem = ({
       content,
       commentId,
       reviews,
-      handleChange,
-      deleteAComment,
+      _handleEdit,
       id,
     });
     setMore(false);
   };
 
   const handleDelete = async () => {
-    deleteById();
-    deleteAComment(rating);
+    // deleteById();
+    _handleDelete();
     setMore(false);
     try {
       await reviewsApi.deleteReview(commentId);
@@ -53,21 +53,20 @@ const ReviewItem = ({
     setMore(false);
   };
 
-  const deleteById = () => {
-    const newReviews = reviews.filter((item) => item._id !== commentId);
-    setReviews(newReviews);
-  };
+  // const deleteById = () => {
+  //   const newReviews = reviews.filter((item) => item._id !== commentId);
+  //   setReviews(newReviews);
+  // };
 
-  const handleChange = (id, data) => {
-    const arrayOfReviews = [...reviews];
-    arrayOfReviews.forEach((item, index) => {
-      if (item._id === id) {
-        arrayOfReviews[index] = data;
-      }
-    });
-    console.log(data.content);
-    setReviews(arrayOfReviews);
-  };
+  // const handleChange = (id, data) => {
+  //   const arrayOfReviews = [...reviews];
+  //   arrayOfReviews.forEach((item, index) => {
+  //     if (item._id === id) {
+  //       arrayOfReviews[index] = data;
+  //     }
+  //   });
+  //   setReviews(arrayOfReviews);
+  // };
   return (
     <View style={styles.container}>
       <View style={styles.containerHeading}>

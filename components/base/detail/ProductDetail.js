@@ -1,25 +1,24 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import StarRating from "react-native-star-rating";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import ProductDescription from "./ProductDescription";
 import { useDispatch, useSelector } from "react-redux";
+import Notifycation from "../../../commons/Notifycation";
 import { productApi } from "../../api/productApi";
-import SizeChoose from "./colorsAndSizes/SizeChoose";
-import ColorChoose from "./colorsAndSizes/ColorChoose";
 import {
   addCartAction,
   updateCartAction,
 } from "./../../../redux/actions/cartAction";
-import Loading from "./../../../commons/Loading";
-import Notifycation from "../../../commons/Notifycation";
-import { unwrapResult } from "@reduxjs/toolkit";
-import Quantity from "./Quantity";
 import CarouselImage from "./Carousel";
+import ColorChoose from "./colorsAndSizes/ColorChoose";
+import SizeChoose from "./colorsAndSizes/SizeChoose";
 import Review from "./comment/Review";
+import ProductDescription from "./ProductDescription";
+import Quantity from "./Quantity";
 const ProductDetail = ({ route }) => {
   const sizes = route.params.item.sizes;
   const { _id } = route.params.item;
@@ -56,7 +55,7 @@ const ProductDetail = ({ route }) => {
               id: cartItem?._id,
               data: {
                 ...cartItem,
-                quantity: cartItem.quantity + 1,
+                quantity: cartItem.quantity + quantity,
               },
             })
           );
@@ -143,7 +142,11 @@ const ProductDetail = ({ route }) => {
   };
   return (
     <View style={styles.container}>
-      <Notifycation messages={messages} setMessages={setMessages} />
+      <Notifycation
+        messages={messages}
+        setMessages={setMessages}
+        style={{ zIndex: 1 }}
+      />
       <View style={styles.heading}>
         <TouchableOpacity
           onPress={() => {
@@ -163,33 +166,40 @@ const ProductDetail = ({ route }) => {
           <Ionicons name="search" size={22} color="#9098B1" />
         </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ paddingBottom: 300 }}
+      >
         <CarouselImage data={route.params.item.images} />
         <View style={styles.body} showsVerticalScrollIndicator={false}>
           <Text style={styles.productDetailNameBody}>
             {route.params.item.name}
           </Text>
           <View style={styles.rating}>
-            <StarRating
-              disabled={true}
-              maxStars={5}
-              rating={route.params.item.vote_average}
-              starSize={16}
-              starStyle={{}}
-              fullStarColor={"#FFC833"}
-              emptyStarColor={"#EBF0FF"}
-            />
+            {currentProduct?.vote_average ? (
+              <StarRating
+                disabled={true}
+                maxStars={5}
+                rating={currentProduct.vote_average}
+                starSize={16}
+                starStyle={{}}
+                fullStarColor={"#FFC833"}
+                emptyStarColor={"#EBF0FF"}
+              />
+            ) : (
+              <Text style={styles.specification}>No Reviews</Text>
+            )}
           </View>
           <View style={styles.price}>
             <Text
               style={styles.priceText}
-            >{`$${route.params.item.price}`}</Text>
+            >{`$${route.params.item.price}.00`}</Text>
           </View>
 
           <SizeChoose sizes={currentProduct?.sizes} setSize={setSize} />
           <ColorChoose colors={currentProduct?.colors} setColor={setColor} />
           <Quantity quantity={quantity} setQuantity={setQuantity} />
-          <ProductDescription />
+          <ProductDescription desc={route?.params?.description} />
           <TouchableOpacity onPress={() => handleAddToCart()}>
             <Text style={styles.addBtn}>Add To Cart</Text>
           </TouchableOpacity>
@@ -197,6 +207,8 @@ const ProductDetail = ({ route }) => {
             id={route.params.item._id}
             voteCount={route.params.item.vote_count}
             avgVote={route.params.item.vote_average}
+            setCurrentProduct={setCurrentProduct}
+            currentProduct={currentProduct}
           />
         </View>
         <View style={{ height: 75 }} />
@@ -272,5 +284,11 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 8,
     marginTop: 20,
+  },
+  specification: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#9098B1",
+    marginBottom: 12,
   },
 });

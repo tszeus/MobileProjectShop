@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: 20,
+    paddingBottom: 100,
   },
   goBackBox: {
     flexDirection: "row",

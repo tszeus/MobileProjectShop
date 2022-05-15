@@ -6,84 +6,60 @@ import WriteReview from "./WriteReview";
 import ReviewItem from "./ReviewItem";
 import reviewsApi from "../../../api/reviewsApi";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
-const Review = ({ id, avgVote }) => {
+const Review = ({ id, avgVote, setCurrentProduct, currentProduct }) => {
   const [reviews, setReviews] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
   const [avgRate, setAvgRate] = useState(avgVote);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
   const [page, setPage] = useState(1);
   const [isEdited, setIsEdited] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   const { user } = useSelector((state) => state.user);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchReviews();
 
-  // const checkUserReviewed = (array) => {
-  //   array.forEach((item) => {
-  //     if (item.user._id === user._id) {
-  //       setIsReviewed(true);
-
-  //       return;
-  //     }
-  //   });
-  // };
+      return () => {};
+    }, [page, isAdd, isDelete, isEdited])
+  );
 
   useEffect(() => {
-    let sum = 0;
-    reviews.forEach((item) => {
-      sum += item.rating;
-    });
-    setAvgRate(Math.round((sum / totalComments) * 10) / 10);
-  }, [reviews]);
+    setCurrentProduct({ ...currentProduct, vote_average: avgRate });
+  }, [avgRate]);
 
-  // useEffect(() => {
-  //   checkUserReviewed(reviews);
-  // }, [totalComments]);
-  // Get reviews
-  useEffect(() => {
-    fetchReviews();
-  }, [page]);
   const fetchReviews = async () => {
     try {
+      setIsLoadingReview(true);
       const reviewsList = await reviewsApi.getReview(id, page).finally(() => {
         setIsLoadingReview(false);
+        setIsAdd(false);
+        setIsDelete(false);
+        setIsEdited(false);
       });
       setTotalComments(reviewsList.total_comments);
       setReviews(reviewsList.data);
-      // checkUserReviewed(reviewsList.data);
-      // setAvgRate(reviewsList.vote_average);
+      setAvgRate(reviewsList.vote_average);
     } catch (error) {
       console.log("Get reviews error");
     }
   };
-  const deleteAComment = (rating) => {
-    setTotalComments(totalComments - 1);
-    setAvgRate(
-      Math.round(
-        ((avgRate * totalComments - rating) / (totalComments - 1)) * 10
-      ) / 10
-    );
+  const handleDelete = () => {
+    setIsDelete(true);
+    console.log("delete");
   };
-  const addNewComment = (rating) => {
-    setTotalComments(totalComments + 1);
-    setAvgRate(
-      Math.round(
-        ((avgRate * totalComments + rating) / (totalComments + 1)) * 10
-      ) / 10
-    );
+  const handleAdd = () => {
+    setIsAdd(true);
+    console.log("add");
   };
 
-  // const handleEdit = (rating) => {
-  //   setAvgRate(
-  //     Math.round(
-  //       ((avgRate * totalComments - rating) / (totalComments - 1)) * 10
-  //     ) / 10
-  //   );
-  //   setAvgRate(
-  //     Math.round(
-  //       ((avgRate * totalComments + rating) / (totalComments + 1)) * 10
-  //     ) / 10
-  //   );
-  // };
+  const _handleEdit = () => {
+    setIsEdited(true);
+    console.log("edit");
+  };
 
   return (
     <>
@@ -91,7 +67,7 @@ const Review = ({ id, avgVote }) => {
         id={id}
         reviews={reviews}
         setReviews={setReviews}
-        addNewComment={addNewComment}
+        handleAdd={handleAdd}
         isDetail={true}
       />
 
@@ -159,8 +135,8 @@ const Review = ({ id, avgVote }) => {
               commentId={item._id}
               reviews={reviews}
               setReviews={setReviews}
-              deleteAComment={deleteAComment}
-              addNewComment={addNewComment}
+              _handleDelete={handleDelete}
+              _handleEdit={_handleEdit}
               date={item.createdAt}
               id={id}
             />

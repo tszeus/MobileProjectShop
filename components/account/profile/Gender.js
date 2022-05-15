@@ -9,7 +9,7 @@ import { userAction } from "../../../redux/slice/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserAction } from "../../../redux/actions/userActions";
 import { unwrapResult } from "@reduxjs/toolkit";
-import Picker from "react-native-picker";
+import { Picker } from "@react-native-picker/picker";
 
 const Gender = ({ navigation, route }) => {
   const user = useSelector((state) => state.user.user);
@@ -26,6 +26,7 @@ const Gender = ({ navigation, route }) => {
     );
     const result = unwrapResult(userNew);
     dispatch(userAction.setUser(result));
+    navigation.goBack();
   };
 
   /**
@@ -55,10 +56,7 @@ const Gender = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.button}
         activeOpacity={0.5}
-        onPress={() => {
-          save();
-          navigation.goBack();
-        }}
+        onPress={save}
       >
         <Text style={styles.textButton}>Save</Text>
       </TouchableOpacity>

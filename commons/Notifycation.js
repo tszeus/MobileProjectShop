@@ -1,22 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
-import {
-  Animated,
-  Button,
-  Text,
-  View,
-} from 'react-native';
+import { Animated, Button, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-
-
 const Message = (props) => {
-  const opacity = useRef(new Animated.Value(0))
-    .current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.sequence([
@@ -52,9 +40,9 @@ const Message = (props) => {
         marginBottom: 5,
         backgroundColor: props.message.color,
         padding: 10,
-        paddingVertical:20,
+        paddingVertical: 20,
         borderRadius: 4,
-        shadowColor: 'white',
+        shadowColor: "white",
         shadowOffset: {
           width: 0,
           height: 3,
@@ -64,30 +52,29 @@ const Message = (props) => {
         elevation: 6,
       }}
     >
-      <View style={{alignItems:'center',flexDirection:'row'}}>
-      <Icon
-        name={props.message.icon}
-        size={20}
-        color="white"
-        style={{marginRight:10}}
-      />
-      <Text style={{color:"white"}}>{props.message.content}</Text>
-     
+      <View style={{ alignItems: "center", flexDirection: "row" }}>
+        <Icon
+          name={props.message.icon}
+          size={20}
+          color="white"
+          style={{ marginRight: 10 }}
+        />
+        <Text style={{ color: "white" }}>{props.message.content}</Text>
       </View>
     </Animated.View>
   );
 };
 
-export default ({messages,setMessages}) => {
-  
+export default ({ messages, setMessages }) => {
   return (
     <>
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 45,
           left: 0,
           right: 0,
+          zIndex: 2,
         }}
       >
         {messages.map((message) => (
@@ -96,17 +83,12 @@ export default ({messages,setMessages}) => {
             message={message}
             onHide={() => {
               setMessages((messages) =>
-                messages.filter(
-                  (currentMessage) =>
-                    currentMessage !== message
-                )
+                messages.filter((currentMessage) => currentMessage !== message)
               );
             }}
           />
         ))}
       </View>
-
-    
     </>
   );
 };

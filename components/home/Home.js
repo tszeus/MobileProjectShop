@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     paddingTop: 50,
+    paddingBottom: 70,
     // flexDirection: "column",
     // justifyContent: "flex-start",
   },

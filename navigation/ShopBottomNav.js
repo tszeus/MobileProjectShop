@@ -18,6 +18,7 @@ function BottomNav() {
   const { listCart } = useSelector((state) => state.cart);
   const [homeData, setHomeData] = useState([]); // Mảng type
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     fetchTypes();
@@ -44,7 +45,13 @@ function BottomNav() {
           if (route.name !== "account")
             return <Ionicons name={iconName} size={28} color={color} />;
           else
-            return <MaterialIcons name="account-box" size={28} color={color} />;
+            return (
+              <MaterialIcons
+                name={user ? "account-box" : "login"}
+                size={28}
+                color={color}
+              />
+            );
         },
         tabBarActiveTintColor: "#40BFFF",
         tabBarInactiveTintColor: "#9098B1",
@@ -55,7 +62,7 @@ function BottomNav() {
           right: 0,
           paddingVertical: 10,
           paddingBottom: 10,
-          height: 70,
+          height: 65,
         },
       })}
     >
@@ -99,16 +106,29 @@ function BottomNav() {
               }
         }
       />
-      <Tab.Screen
-        name="account"
-        component={AccountNav}
-        options={{
-          tabBarLabel: "Account",
-          tabBarLabelStyle: {
-            fontSize: 14,
-          },
-        }}
-      />
+      {user ? (
+        <Tab.Screen
+          name="account"
+          component={AccountNav}
+          options={{
+            tabBarLabel: "Account",
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="account"
+          component={AccountNav}
+          options={{
+            tabBarLabel: "Login",
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+          }}
+        />
+      )}
     </Tab.Navigator>
   ) : (
     <SplashScreen />
