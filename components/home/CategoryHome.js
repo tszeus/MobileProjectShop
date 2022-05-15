@@ -4,10 +4,6 @@ import React from "react";
 const CategoryHome = ({ navigation, types }) => {
   const categoryUrls = [
     {
-      name: "Nike",
-      url: require("../../static/images/nike.png"),
-    },
-    {
       name: "Puma",
       url: require("../../static/images/puma.png"),
     },
@@ -18,6 +14,10 @@ const CategoryHome = ({ navigation, types }) => {
     {
       name: "Vans",
       url: require("../../static/images/vans.png"),
+    },
+    {
+      name: "Nike",
+      url: require("../../static/images/nike.png"),
     },
   ];
 
@@ -38,7 +38,7 @@ const CategoryHome = ({ navigation, types }) => {
           >
             <View>
               <Image
-                style={{ height: 50, width: 50 }}
+                style={{ height: 44, width: 44 }}
                 source={categoryUrl.url}
               />
             </View>

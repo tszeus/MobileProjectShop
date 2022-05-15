@@ -13,6 +13,7 @@ import OrderDetail from "../components/base/detail/OrderDetail";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ShipToScreen from "../screens/ShipToScreen";
 import Address from "../components/account/address/Address";
+import AccountScreen from "../screens/AccountScreen";
 
 const Stacks = createNativeStackNavigator();
 
@@ -22,7 +23,7 @@ function AccountNav() {
       initialRouteName="Account"
       screenOptions={{ headerShown: false }}
     >
-      <Stacks.Screen name="Account" component={Account} />
+      <Stacks.Screen name="Account" component={AccountScreen} />
       <Stacks.Screen name="Profile" component={Profile} />
       <Stacks.Screen name="Order" component={Order} />
       {/* <Stacks.Screen name="Address" component={ShipToScreen} /> */}

@@ -20,12 +20,12 @@ const Nav = () => {
   useEffect(() => {
     const fetchToken = async () => {
       const token = await SecureStore.getItemAsync("token");
-      console.log(token);
       if (token) {
         setToken(token);
         const { _id } = jwt_decode(token);
         dispatch(getUserbyIdAction(_id));
         dispatch(fetchListCartAction(_id));
+        // console.log(_id);
       } else {
         console.log("Da dang xuat");
       }

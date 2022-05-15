@@ -27,28 +27,41 @@ export default function ProductItem({ item, type = "Puma" }) {
       <View style={styles.item}>
         <View style={styles.itemImage}>
           <Image
-            style={{ height: 148, width: 148, borderRadius: 6 }}
+            style={{ height: 140, width: 140, borderRadius: 6 }}
             source={{
-              uri: item && item.images && item.images.length > 0 ? item.images[0] : "https://res.cloudinary.com/thhh/image/upload/v1650387521/mwy0iafro8qz2b8dynad.jpg",
+              uri:
+                item && item.images && item.images.length > 0
+                  ? item.images[0]
+                  : "https://res.cloudinary.com/thhh/image/upload/v1650387521/mwy0iafro8qz2b8dynad.jpg",
             }}
           />
         </View>
         <View style={styles.itemDisc}>
           <View>
-            <Text style={styles.itemName}>{`${item.name}`}</Text>
+            <Text
+              style={styles.itemName}
+              numberOfLines={1}
+            >{`${item.name}`}</Text>
           </View>
           <View style={styles.rating}>
-            <StarRating
-              disabled={true}
-              maxStars={5}
-              rating={3.5}
-              starSize={13}
-              starStyle={{}}
-              fullStarColor={"#ffce3d"}
-            />
+            {item?.vote_average ? (
+              <StarRating
+                disabled={true}
+                maxStars={5}
+                rating={item?.vote_average}
+                starSize={16}
+                starStyle={{}}
+                fullStarColor={"#FFC833"}
+                emptyStarColor={"#EBF0FF"}
+              />
+            ) : (
+              <Text style={styles.specification}>No Reviews</Text>
+            )}
           </View>
           <View>
-            <Text style={styles.itemPrice}>{`$${item.price}`}</Text>
+            <Text style={styles.itemPrice}>{`$${Math.round(
+              (item.price * 10) / 10
+            )}.00`}</Text>
           </View>
           <View style={styles.saleBox}>
             <Text style={styles.itemOldPrice}>{`$${
@@ -63,15 +76,19 @@ export default function ProductItem({ item, type = "Puma" }) {
 }
 
 const styles = StyleSheet.create({
-  productItem: { marginBottom: 16, justifyContent: "space-around" },
+  productItem: {
+    marginBottom: 16,
+    justifyContent: "space-around",
+  },
   itemImage: { borderRadius: 5, paddingBottom: 16 },
   itemDisc: { justifyContent: "flex-start" },
   item: {
     borderColor: "#EBF0FF",
     borderWidth: 1,
-    width: 180,
+    maxWidth: 170,
+    width: 170,
     // height: 238,
-    marginRight: 16,
+    marginHorizontal: 8,
     // alignItems: "center",
     // justifyContent: "flex-start",
     padding: 16,
@@ -105,5 +122,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#FB7181",
     fontWeight: "bold",
+  },
+  specification: {
+    fontSize: 12,
+    // fontWeight: "bold",
+    color: "#9098B1",
+    // marginBottom: 12,
   },
 });

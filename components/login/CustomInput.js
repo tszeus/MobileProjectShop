@@ -20,7 +20,8 @@ const CustomInput = ({
   placeholder,
   iconName,
   isHaveVisibility,
-  autoFocus
+  autoFocus,
+  defaultValue,
 }) => {
   const renderVisibility = () => (
     <Pressable
