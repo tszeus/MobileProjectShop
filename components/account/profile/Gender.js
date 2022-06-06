@@ -13,10 +13,11 @@ import { Picker } from "@react-native-picker/picker";
 
 const Gender = ({ navigation, route }) => {
   const user = useSelector((state) => state.user.user);
+  console.log(user);
   const [selectedValue, setSelectedValue] = useState(0);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-
+  const getIndex = { Nam: 0, Nu: 1, Khac: 2 };
   // const save = async () => {
   //   const userNew = await dispatch(
   //     updateUserAction({
