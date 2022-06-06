@@ -11,12 +11,9 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
-import {
-  ALERT_TYPE, Root,
-  Toast
-} from "react-native-alert-notification";
+import { ALERT_TYPE, Root, Toast } from "react-native-alert-notification";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
@@ -28,7 +25,7 @@ import { userAction } from "../../redux/slice/userSlice";
 const ResgisterForm = ({ navigation }) => {
   const [toggleVisibilityPassword, setToggleVisibilityPassword] =
     useState(false);
-    const [err, seterr] = useState();
+  const [err, seterr] = useState();
 
   const dispatch = useDispatch();
   const naviagtion = useNavigation();
@@ -56,7 +53,7 @@ const ResgisterForm = ({ navigation }) => {
     try {
       const user = await dispatch(registerAction(dataSubmit));
       const result = unwrapResult(user);
-      dispatch(userAction.setUser(result));
+      // dispatch(userAction.setUser(result));
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: "SUCCESS",
@@ -68,7 +65,7 @@ const ResgisterForm = ({ navigation }) => {
         password: data.password,
       });
     } catch (error) {
-      seterr(error)
+      seterr(error);
     }
   };
 
@@ -78,9 +75,7 @@ const ResgisterForm = ({ navigation }) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-     
-    },
+    defaultValues: {},
   });
 
   return (
@@ -94,19 +89,13 @@ const ResgisterForm = ({ navigation }) => {
           <Text style={styles.welcome}>Let's Get Started</Text>
           <Text style={styles.title}>Create a new account</Text>
         </View>
-        <KeyboardAvoidingView
-        >
-           {err && (
-          <View style={styles.boxErr}>
-            <Icon
-              style={styles.icon}
-              name="warning"
-              size={20}
-              color="red"
-            />
-            <Text style={styles.textErr}>{err}</Text>
-          </View>
-        )}
+        <KeyboardAvoidingView>
+          {err && (
+            <View style={styles.boxErr}>
+              <Icon style={styles.icon} name="warning" size={20} color="red" />
+              <Text style={styles.textErr}>{err}</Text>
+            </View>
+          )}
           <InputForm
             placeholder="Full name"
             iconname="user"
@@ -323,11 +312,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   textErr: {
     color: "red",
-    marginLeft:10
+    marginLeft: 10,
   },
 });

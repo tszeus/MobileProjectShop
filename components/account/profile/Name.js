@@ -13,6 +13,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 const Name = ({ navigation, route }) => {
   const user = useSelector((state) => state.user.user);
+  // console.log(user);
   const [index, setIndex] = useState(0);
   //   const [fullNameNew, setFullNameNew] = useState();
   const [indexInput, setIndexInput] = useState(10);
@@ -22,8 +23,8 @@ const Name = ({ navigation, route }) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { name: route?.params?.fullName } });
-
+  } = useForm({ defaultValues: { name: user.fullName } });
+  // console.log(user.user.fullName);
   const save = async (data) => {
     try {
       const response = await dispatch(
